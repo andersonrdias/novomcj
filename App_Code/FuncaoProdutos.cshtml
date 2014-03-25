@@ -1,0 +1,67 @@
+﻿@functions {
+    
+
+
+
+
+public static string Categoria_PesqCodigo (int CodCategoria)
+{
+var db = Database.Open("CeliaJoias");
+var row = db.QuerySingle("select * from Categoria where CodCategoria = "+CodCategoria);
+string Resultado = row.Titulo;  
+return Resultado;
+}
+
+
+
+
+public static string Fabricante_PesqCodigo (int CodFabricante)
+{
+var db = Database.Open("CeliaJoias");
+var row = db.QuerySingle("select * from Fabricantes where CodFabricante = "+CodFabricante);
+string Resultado = row.Nome;  
+return Resultado;
+}
+
+
+
+public static string Produto_Titulo (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQuery = "SELECT titulo FROM Produtos WHERE CodProduto = @0";
+  return db.QuerySingle(sqlQuery, produtoID).titulo;
+}
+
+public static decimal Produto_Preco (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQuery = "SELECT Preco_Venda FROM Produtos WHERE CodProduto = @0";
+  return db.QuerySingle(sqlQuery, produtoID).Preco_Venda;
+}
+
+
+public static string Produto_Categoria (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQuery = "SELECT Categoria FROM Produtos WHERE CodProduto = @0";
+ return FuncaoProdutos.Categoria_PesqCodigo( db.QuerySingle(sqlQuery, produtoID).Categoria);
+}
+
+
+public static string Produto_Imagem (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQuery = "SELECT Imagem01 FROM Produtos WHERE CodProduto = @0";
+ return  db.QuerySingle(sqlQuery, produtoID).Imagem01;
+}
+
+
+
+
+
+
+
+
+
+}
+
