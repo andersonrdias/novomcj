@@ -22,7 +22,7 @@ var db = Database.Open("CeliaJoias");
 //--------------------------------------------------------------------------------------------------
 //Produtos em Destaque
 
-var ativarProdutosDestaque = false;
+var ativarProdutosDestaque = true;
 
 
 var prodDest_produtosLinha = 3;
@@ -58,15 +58,20 @@ if(listaDestaque.Count < 3){
 
 
 //--------------------------------------------------------------------------------------------------
-//Produtos Novos
+//Produtos c/ Promocoes
+var ativarProdutosPromocao = true;
 
+
+
+//--------------------------------------------------------------------------------------------------
+//Produtos Novos
+var ativarNovosProdutos = true;
 
 //--------------------------------------------------------------------------------------------------
 //Produtos Mais Populares
+var ativarProdutosPopulares = true;
 
 
-//--------------------------------------------------------------------------------------------------
-//Produtos c/ Promocoes
 
     
 }
@@ -117,74 +122,7 @@ if(listaDestaque.Count < 3){
   <body>
    
     
-     
-    <!--  ==========  -->
-    <!--  = Header =  -->
-    <!--  ==========  -->
-    <header id="header">
-        <div class="container">
-            <div class="row">
-                
-                <!--  ==========  -->
-                <!--  = Logo =  -->
-                <!--  ==========  -->
-                <div class="span7">
-                    <a class="brand" href="~/">
-                        <img src="images/logo.png" alt="Webmarket Logo" width="48" height="48" /> 
-                        <span class="pacifico">Célia Jóias</span> 
-                        <span class="tagline">Jóias em ouro 18K</span> 
-                    </a>
-                </div>
-                
-                <!--  ==========  -->
-                <!--  = Social Icons =  -->
-                <!--  ==========  -->
-                <div class="span5">
-                    <div class="top-right">
-                        <div class="icons">
-                            <a href="http://www.facebook.com/ProteusNet"><span class="zocial-facebook"></span></a>
-                            <a href="skype:primozcigler?call"><span class="zocial-skype"></span></a>
-                            <a href="https://twitter.com/proteusnetcom"><span class="zocial-twitter"></span></a>
-                            <a href="http://eepurl.com/xFPYD"><span class="zocial-rss"></span></a>
-                            <a href="#"><span class="zocial-wordpress"></span></a>
-                            <a href="#"><span class="zocial-android"></span></a>
-                            <a href="#"><span class="zocial-html5"></span></a>
-                            <a href="#"><span class="zocial-windows"></span></a>
-                            <a href="#"><span class="zocial-apple"></span></a>
-                        </div>
-                        <div class="register">
-                            <a href="#loginModal" role="button" data-toggle="modal">Faça o seu Login</a> ou 
-                            <a href="#registerModal" role="button" data-toggle="modal">Cadastre-se</a>
-                        </div>
-                    </div>
-                </div> <!-- /social icons -->
-            </div>
-        </div>
-    </header>
-    
-    <!--  ==========  -->
-    <!--  = Main Menu / navbar =  -->
-    <!--  ==========  -->
-    <div class="navbar navbar-static-top" id="stickyNavbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class="row">
-            <div class="span9">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-
-   @RenderPage("~/Shared/Layout/_menu.cshtml")              
-
-            </div>
-            
-   @RenderPage("~/Shared/Layout/_carrinho.cshtml")   
-          </div>
-        </div>
-      </div>
-    </div> <!-- /main menu -->
+     @RenderPage("~/Shared/Layout/_top.cshtml")  
     
      
     
@@ -365,18 +303,22 @@ if(listaDestaque.Count < 3){
         <!--  ==========  -->
         <!--  = Featured Items =  -->
         <!--  ==========  -->
+        
         <div class="row featured-items blocks-spacer">
             <div class="span12">
                 
                 <!--  ==========  -->
                 <!--  = Title =  -->
                 <!--  ==========  -->
+                 <hr />
             	<div class="main-titles lined">
+                   
             	    <h2 class="title"><span class="light">Produtos</span> em Destaque</h2>
             	    <div class="arrows">
                         <a href="#" class="icon-chevron-left" id="featuredItemsLeft"></a>
                         <a href="#" class="icon-chevron-right" id="featuredItemsRight"></a>
                     </div>
+                    
             	</div>
             </div>
    
@@ -450,12 +392,171 @@ if(listaDestaque.Count < 3){
         </text>
 } 
 
-
+@if(ativarProdutosPromocao){
+    //Produtos em Promoção - inicio
+    <text>
     
-    <!--  ==========  -->
+    <div class="most-popular blocks-spacer">
+    	<div class="container">
+    	    
+    	    <!--  ==========  -->
+			<!--  = Title =  -->
+			<!--  ==========  -->
+    	    <div class="row">
+                
+    	    	<div class="span12">
+                    <hr />
+    	    	    <div class="main-titles lined">
+    	                <h2 class="title"><span class="light">Promoções</span> Especiais</h2>
+    	            </div>
+    	    	</div>
+    	    </div> <!-- /title -->
+    	    
+	    	<div class="row popup-products">
+	    	     
+	    	     
+	    	            
+		        <!--  ==========  -->
+				<!--  = Product =  -->
+				<!--  ==========  -->
+                <div class="span3">
+                    <div class="product">
+                        <div class="product-img">
+                            <div class="picture">
+                                <img src="images/dummy/most-popular-products/popular-1.jpg" alt="" width="540" height="412" />
+                                <div class="img-overlay">
+                                    <a href="#" class="btn more btn-primary">More</a>
+                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main-titles no-margin">
+                            <h4 class="title">$32</h4>
+                            <h5 class="no-margin">Horsefeathers 142</h5>
+                        </div>
+                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
+                        <p class="center-align stars">
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star"></span>
+                            <span class="icon-star"></span>
+                            <span class="icon-star"></span>
+                            <span class="icon-star"></span>
+                             
+                        </p>
+                    </div>
+                </div> <!-- /product -->
+                 
+	    	     
+	    	            
+		        <!--  ==========  -->
+				<!--  = Product =  -->
+				<!--  ==========  -->
+                <div class="span3">
+                    <div class="product">
+                        <div class="product-img">
+                            <div class="picture">
+                                <img src="images/dummy/most-popular-products/popular-2.jpg" alt="" width="540" height="412" />
+                                <div class="img-overlay">
+                                    <a href="#" class="btn more btn-primary">More</a>
+                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main-titles no-margin">
+                            <h4 class="title">$32</h4>
+                            <h5 class="no-margin">Horsefeathers 301</h5>
+                        </div>
+                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
+                        <p class="center-align stars">
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                             
+                        </p>
+                    </div>
+                </div> <!-- /product -->
+                 
+	    	     
+	    	            
+		        <!--  ==========  -->
+				<!--  = Product =  -->
+				<!--  ==========  -->
+                <div class="span3">
+                    <div class="product">
+                        <div class="product-img">
+                            <div class="picture">
+                                <img src="images/dummy/most-popular-products/popular-3.jpg" alt="" width="540" height="412" />
+                                <div class="img-overlay">
+                                    <a href="#" class="btn more btn-primary">More</a>
+                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main-titles no-margin">
+                            <h4 class="title">$32</h4>
+                            <h5 class="no-margin">Horsefeathers 409</h5>
+                        </div>
+                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
+                        <p class="center-align stars">
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                             
+                        </p>
+                    </div>
+                </div> <!-- /product -->
+                 
+	    	     
+	    	            
+		        <!--  ==========  -->
+				<!--  = Product =  -->
+				<!--  ==========  -->
+                <div class="span3">
+                    <div class="product">
+                        <div class="product-img">
+                            <div class="picture">
+                                <img src="images/dummy/most-popular-products/popular-4.jpg" alt="" width="540" height="412" />
+                                <div class="img-overlay">
+                                    <a href="#" class="btn more btn-primary">More</a>
+                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main-titles no-margin">
+                            <h4 class="title">$32</h4>
+                            <h5 class="no-margin">Horsefeathers 186</h5>
+                        </div>
+                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
+                        <p class="center-align stars">
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star stars-clr"></span>
+                            <span class="icon-star"></span>
+                            <span class="icon-star"></span>
+                            <span class="icon-star"></span>
+                             
+                        </p>
+                    </div>
+                </div> <!-- /product -->
+                    	    </div>
+    	</div>
+    </div> 
+
+    </text>
+    //Produtos em promoção - final
+}
+
+
+@if(ativarNovosProdutos){
+    <text>
+        <!--  ==========  -->
     <!--  = New Products =  -->
     <!--  ==========  -->
-    <div class="boxed-area blocks-spacer">
+    
+        <div class="boxed-area blocks-spacer">
         <div class="container">
             
             <!--  ==========  -->
@@ -463,6 +564,7 @@ if(listaDestaque.Count < 3){
             <!--  ==========  -->
             <div class="row">
                 <div class="span12">
+                    <hr />
                     <div class="main-titles lined">
                     	<h2 class="title"><span class="light">New</span> Products in the Shop</h2>
                     </div>
@@ -737,11 +839,24 @@ if(listaDestaque.Count < 3){
             	 
             </div>
         </div>
-    </div> <!-- /new products -->
+    </div> 
+    <!-- /new products -->
+    </text>
+}
+
+
+
+
     
-    <!--  ==========  -->
+
+
+
+    
+@if(ativarProdutosPopulares){
+<!--  ==========  -->
     <!--  = Most Popular products =  -->
     <!--  ==========  -->
+    
     <div class="most-popular blocks-spacer">
     	<div class="container">
     	    
@@ -750,8 +865,9 @@ if(listaDestaque.Count < 3){
 			<!--  ==========  -->
     	    <div class="row">
     	    	<div class="span12">
+                    <hr />
     	    	    <div class="main-titles lined">
-    	                <h2 class="title"><span class="light">Most</span> Popular Products</h2>
+    	                <h2 class="title"><span class="light">Produtos</span> Populares</h2>
     	            </div>
     	    	</div>
     	    </div> <!-- /title -->
@@ -888,6 +1004,9 @@ if(listaDestaque.Count < 3){
                     	    </div>
     	</div>
     </div> <!-- /most popular -->
+        
+
+}
     
     <!--  ==========  -->
     <!--  = Lastest News =  -->
