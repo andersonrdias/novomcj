@@ -1,0 +1,23 @@
+﻿@{
+
+WebSecurity.InitializeDatabaseConnection("CeliaJoias", "UserProfile", "UserId", "Email", autoCreateTables: true);
+
+
+//Facebook
+//Facebook.Initialize("{227267757439906}", "{5d47424a93298852801574a544b4f03c}");
+
+//Email
+WebMail.SmtpServer = "mail.celiajoias.com";    //"<endereço do servidor smtp>";
+WebMail.SmtpPort = 587;     //"<numero da porta>"; 587
+WebMail.EnableSsl = false;    //"<true ou false>";
+WebMail.UserName = "contato@celiajoias.com";     //"<usuário da conta de email>";
+WebMail.From = "contato@celiajoias.com";         //<conta de email a partir da qual vamos enviar o email>";
+WebMail.Password = "linda555";     //"<senha da conta de email>";
+
+
+
+
+
+    
+}
+
