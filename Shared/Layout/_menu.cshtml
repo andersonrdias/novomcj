@@ -25,7 +25,7 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                     </li>
                     
                     <li class="dropdown">
-                        <a href="shop.html" class="dropdown-toggle"> Produtos <b class="caret"></b> </a>
+                        <a href="~/produtos" class="dropdown-toggle"> Produtos <b class="caret"></b> </a>
                         <ul class="dropdown-menu">
                             @foreach (var categoria in db.Query(slqSelect))
                             {
@@ -58,8 +58,8 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                             </li>
                         </ul>
                     </li>
-                    <li><a href="about-us.html">Quem Somos</a></li>
-                    <li><a href="contact.html">Fale Conosco</a></li>
+                    <li><a href="/sobre">Quem Somos</a></li>
+                    <li><a href="/contato">Fale Conosco</a></li>
                   </ul>
                   
                   <!--  ==========  -->
