@@ -344,18 +344,18 @@ var ativarProdutosPopulares = true;
     	                            <div class="product">
     	                                <div class="product-img featured">
     	                                    <div class="picture">
-    	                                        <img  src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(ProdutosDestaque[produtoinicial])" alt="@FuncaoProdutos.Produto_Titulo(ProdutosDestaque[produtoinicial]) width="300" height="300" />
+    	                                        <img width="150" height="150" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(ProdutosDestaque[produtoinicial])" alt="@FuncaoProdutos.Produto_Titulo(ProdutosDestaque[produtoinicial])"  />
     	                                        <div class="img-overlay">
-    	            	                            <a href="#" class="btn more btn-primary">Detalhes</a>
+    	            	                            <a href="~/produto/@ProdutosDestaque[produtoinicial]" class="btn more btn-primary">Detalhes</a>
     	            	                            <a href="#" class="btn buy btn-danger">Comprar</a>
     	                                        </div>
     	                                    </div>
     	                                </div>
     	                                <div class="main-titles">
-    	                                    <h4 class="title">@produtoinicial</h4>
+    	                                    <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial]))</h4>
     	                                    <h5 class="no-margin">@FuncaoProdutos.Produto_Titulo(ProdutosDestaque[produtoinicial])</h5>
     	                                </div>
-    	                                <p class="desc"> xxxxx59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
+    	                                <p class="desc">@FuncaoProdutos.Produto_Descricao(ProdutosDestaque[produtoinicial])</p>
     	                                <p class="center-align stars">
                                             <span class="icon-star stars-clr"></span>
                                             <span class="icon-star"></span>

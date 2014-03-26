@@ -56,6 +56,12 @@ public static string Produto_Imagem (int produtoID)
 }
 
 
+public static string Produto_Descricao (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQuery = "SELECT Descricao FROM Produtos WHERE CodProduto = @0";
+ return  db.QuerySingle(sqlQuery, produtoID).Descricao;
+}
 
 
 
