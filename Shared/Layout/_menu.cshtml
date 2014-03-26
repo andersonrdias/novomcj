@@ -1,5 +1,12 @@
 ﻿@{
     
+var db = Database.Open("CeliaJoias");
+
+//Categorias
+var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
+
+
+    
 }
 
                 <!--  ==========  -->
@@ -18,23 +25,16 @@
                     </li>
                     
                     <li class="dropdown">
-                        <a href="shop.html" class="dropdown-toggle"> Shop <b class="caret"></b> </a>
+                        <a href="shop.html" class="dropdown-toggle"> Produtos <b class="caret"></b> </a>
                         <ul class="dropdown-menu">
-                            <li><a href="shop.html">Default Layout</a></li>
-                            <li><a href="shop-no-sidebar.html">Full Width</a></li>
-                            <li><a href="product.html">Single Product</a></li>
-                            <li><a href="shop-search.html">Search Results</a></li>
+                            @foreach (var categoria in db.Query(slqSelect))
+                            {
+                            <li><a href="~/categoria/@categoria.Apelido">@categoria.Titulo</a></li>
+                            }
+ 
+
                         </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="blog.html" class="dropdown-toggle">Blog <b class="caret"></b> </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="blog.html">Default Layout</a></li>
-                            <li><a href="blog-single.html">Single Post</a></li>
-                            <li><a href="blog-search.html">Search Results</a></li>
-                            <li><a href="404.html">404 Page</a></li>
-                        </ul>
-                    </li>
+                    </li>                   
                     <li class="dropdown">
                         <a href="features.html" class="dropdown-toggle">Lançamentos <b class="caret"></b> </a>
                         <ul class="dropdown-menu">
