@@ -59,7 +59,7 @@ if(listaDestaque.Count < 3){
 
 //--------------------------------------------------------------------------------------------------
 //Produtos c/ Promocoes
-var ativarProdutosPromocao = true;
+var ativarProdutosPromocao = false;
 
 
 
@@ -67,9 +67,28 @@ var ativarProdutosPromocao = true;
 //Produtos Novos
 var ativarNovosProdutos = true;
 
+var SelectProdutosNovos = "select TOP 10 * from Produtos where Ativo = 'true' order by CodProduto Desc";  //select * from Produtos where Ativo = 'true' and DataCadastro  > '10/01/2013'
+List<int> listaNovos = new List<int>();
+foreach (var row in db.Query(SelectProdutosNovos)) {	
+listaNovos.Add(row.CodProduto);
+}
+Random rnd2 = new Random();
+var EmbaralharListaNovos = from item in listaNovos
+                     orderby rnd2.Next()
+                     select item;
+
+List<int> ProdutosNovos = new List<int>();
+
+foreach (var row in EmbaralharListaNovos) {	
+      ProdutosNovos.Add(row);
+}
+
+
+
+
 //--------------------------------------------------------------------------------------------------
 //Produtos Mais Populares
-var ativarProdutosPopulares = true;
+var ativarProdutosPopulares = false;
 
 
 
@@ -438,33 +457,31 @@ var ativarProdutosPopulares = true;
                 <div class="span12">
                     <hr />
                     <div class="main-titles lined">
-                    	<h2 class="title"><span class="light">New</span> Products in the Shop</h2>
+                    	<h2 class="title"><span class="light">Produtos em</span> Lançamento</h2>
                     </div>
                 </div>
             </div> <!-- /title -->
             
             <div class="row popup-products blocks-spacer">
                   
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
+                @for(int i=0; i<8; i++){ 
+                <text>  
             	<div class="span3">
             	    <div class="product">
             	        <div class="product-img">
                             <div class="picture">
-                                <img src="images/dummy/products/product-6.jpg" alt="" width="540" height="374" />
+                                <img src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(ProdutosNovos[i])" alt="" width="300" height="200" />
                                 <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
+                                    <a href="~/produto/@ProdutosNovos[i]" class="btn more btn-primary">Detalhes</a>
+                                    <a href="#" class="btn buy btn-danger">Comprar</a>
                                 </div>
                             </div>
                         </div>
                         <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 492</h5>
+                            <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosNovos[i]))</h4>
+                            <h5 class="no-margin">@FuncaoProdutos.Produto_Titulo(ProdutosNovos[i])</h5>
                         </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
+                        <p class="desc">@FuncaoProdutos.Produto_Descricao(ProdutosNovos[i])</p>
                         <p class="center-align stars">
                             <span class="icon-star stars-clr"></span>
                             <span class="icon-star stars-clr"></span>
@@ -474,239 +491,20 @@ var ativarProdutosPopulares = true;
                              
                         </p>
             	    </div>
-            	</div> <!-- /product -->
-            	
-            	 
+            	</div>
+            	</text>
+                if( i == 3){
+                <text>
+                <div class="clearfix"></div> 
+                </text>    
+                 }
+            	 }
             	  
                  
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-7.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 399</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
+                            	
             	
-            	 
             	  
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-8.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 218</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
-            	
-            	 
-            	  
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-9.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 361</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
-            	
-            	<div class="clearfix"></div> 
-            	  
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-10.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 337</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
-            	
-            	 
-            	  
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-11.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 373</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
-            	
-            	 
-            	  
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-12.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 60</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
-            	
-            	 
-            	  
-                 
-                <!--  ==========  -->
-                <!--  = Product =  -->
-                <!--  ==========  -->   
-            	<div class="span3">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img src="images/dummy/products/product-13.jpg" alt="" width="540" height="374" />
-                                <div class="img-overlay">
-                                    <a href="#" class="btn more btn-primary">More</a>
-                                    <a href="#" class="btn buy btn-danger">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">$32</h4>
-                            <h5 class="no-margin">Horsefeathers 181</h5>
-                        </div>
-                        <p class="desc">59% Cotton Lorem Ipsum Dolor Sit Amet esed ultrices sapien nunc nam frignila</p>
-                        <p class="center-align stars">
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star stars-clr"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                             
-                        </p>
-            	    </div>
-            	</div> <!-- /product -->
-            	
+                
             	 
             	 
             </div>
