@@ -144,29 +144,22 @@ var qtdeTag =  ListaTag.Length;
                         <div id="jCrumbs" class="breadCrumb module">
                             <ul>
                                 <li>
-                                    <a href="#"><i class="icon-home"></i></a>
+                                    <a href="~/sistema/"><i class="icon-home"></i></a>
                                 </li>
                                 <li>
-                                    <a href="#">Sports & Toys</a>
+                                    <a href="~/sistema/produtos/">Produtos</a>
                                 </li>
                                 <li>
-                                    <a href="#">Toys & Hobbies</a>
+                                    <a href="">Visualizar</a>
                                 </li>
                                 <li>
-                                    <a href="#">Learning & Educational</a>
-                                </li>
-                                <li>
-                                    <a href="#">Astronomy & Telescopes</a>
-                                </li>
-                                <li>
-                                    Telescope 3735SX 
+                                    @produto.Titulo
                                 </li>
                             </ul>
                         </div>
                     </nav>
                     <div class="row-fluid">
-						<div class="span12">
-                              <h3 class="heading">@produto.Titulo </h3>
+						<div class="span12">                            
 							<div class="tabbable">
 								<ul class="nav nav-tabs">
 									<li class="active"><a href="#tab_dr1" data-toggle="tab">Informações</a></li>
@@ -193,6 +186,10 @@ var qtdeTag =  ListaTag.Length;
 										                    <ul>
 											                    <li class="v-heading">
 												                    Informações 
+											                    </li>
+											                    <li>
+												                    <span class="item-key">Nome:</span>
+												                    <div class="vcard-item">@produto.Titulo</div>
 											                    </li>
 											                    <li>
 												                    <span class="item-key">Preço:</span>
@@ -263,7 +260,7 @@ var qtdeTag =  ListaTag.Length;
 											                    <li class="v-heading">
 												                    Últimas negociações <span>(vendas)</span>
 											                    </li>
-											                    @if(totalpedidos > 0){
+											                    @if(totalpedidos > 1){
                                                                 <text>
                                                                  <li>
 												                    <ul class="unstyled sepH_b item-list">

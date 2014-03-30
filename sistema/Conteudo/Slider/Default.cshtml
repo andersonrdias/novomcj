@@ -1,0 +1,233 @@
+﻿@{
+    
+
+var db = Database.Open("CeliaJoias");
+var selectQueryStringProdutos = "select * from Produtos order by Titulo";
+
+
+var produtos = db.Query(selectQueryStringProdutos);
+
+
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Produtos</title>
+    
+        <!-- Bootstrap framework -->
+            <link rel="stylesheet" href="~/sistema/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/sistema/bootstrap/css/bootstrap-responsive.min.css" />
+        <!-- gebo blue theme-->
+            <link rel="stylesheet" href="~/sistema/css/blue.css" id="link_theme" />
+        <!-- breadcrumbs-->
+            <link rel="stylesheet" href="~/sistema/lib/jBreadcrumbs/css/BreadCrumb.css" />
+        <!-- tooltips-->
+            <link rel="stylesheet" href="~/sistema/lib/qtip2/jquery.qtip.min.css" />
+        <!-- notifications -->
+            <link rel="stylesheet" href="~/sistema/lib/sticky/sticky.css" />
+        <!-- code prettify -->
+            <link rel="stylesheet" href="~/sistema/lib/google-code-prettify/prettify.css" />    
+        <!-- notifications -->
+            <link rel="stylesheet" href="~/sistema/lib/sticky/sticky.css" />    
+        <!-- splashy icons -->
+            <link rel="stylesheet" href="~/sistema/img/splashy/splashy.css" />
+		<!-- colorbox -->
+            <link rel="stylesheet" href="~/sistema/lib/colorbox/colorbox.css" />
+			
+        <!-- main styles -->
+            <link rel="stylesheet" href="~/sistema/css/style.css" />
+			
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans" />
+	
+        <!-- Favicon -->
+            <link rel="shortcut icon" href="favicon.ico" />
+		
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="~/sistema/css/ie.css" />
+            <script src="~/sistema/js/ie/html5.js"></script>
+			<script src="~/sistema/js/ie/respond.min.js"></script>
+        <![endif]-->
+		
+		<script>
+			//* hide all elements & show preloader
+			document.documentElement.className += 'js';
+		</script>
+    <!-- Shared on MafiaShare.net  --><!-- Shared on MafiaShare.net  --></head>
+    <body>
+		<div id="loading_layer" style="display:none"><img src="~/sistema/img/ajax_loader.gif" alt="" /></div>
+		<div class="style_switcher">
+			<div class="sepH_c">
+				<p>Colors:</p>
+				<div class="clearfix">
+					<a href="javascript:void(0)" class="style_item jQclr blue_theme style_active" title="blue">blue</a>
+					<a href="javascript:void(0)" class="style_item jQclr dark_theme" title="dark">dark</a>
+					<a href="javascript:void(0)" class="style_item jQclr green_theme" title="green">green</a>
+					<a href="javascript:void(0)" class="style_item jQclr brown_theme" title="brown">brown</a>
+					<a href="javascript:void(0)" class="style_item jQclr eastern_blue_theme" title="eastern_blue">eastern blue</a>
+					<a href="javascript:void(0)" class="style_item jQclr tamarillo_theme" title="tamarillo">tamarillo</a>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Backgrounds:</p>
+				<div class="clearfix">
+					<span class="style_item jQptrn style_active ptrn_def" title=""></span>
+					<span class="ssw_ptrn_a style_item jQptrn" title="ptrn_a"></span>
+					<span class="ssw_ptrn_b style_item jQptrn" title="ptrn_b"></span>
+					<span class="ssw_ptrn_c style_item jQptrn" title="ptrn_c"></span>
+					<span class="ssw_ptrn_d style_item jQptrn" title="ptrn_d"></span>
+					<span class="ssw_ptrn_e style_item jQptrn" title="ptrn_e"></span>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Layout:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_layout" id="ssw_layout_fluid" value="" checked /> Fluid</label>
+					<label class="radio inline"><input type="radio" name="ssw_layout" id="ssw_layout_fixed" value="gebo-fixed" /> Fixed</label>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Sidebar position:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_sidebar" id="ssw_sidebar_left" value="" checked /> Left</label>
+					<label class="radio inline"><input type="radio" name="ssw_sidebar" id="ssw_sidebar_right" value="sidebar_right" /> Right</label>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Show top menu on:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_menu" id="ssw_menu_click" value="" checked /> Click</label>
+					<label class="radio inline"><input type="radio" name="ssw_menu" id="ssw_menu_hover" value="menu_hover" /> Hover</label>
+				</div>
+			</div>
+			
+			<div class="gh_button-group">
+				<a href="#" id="showCss" class="btn btn-primary btn-mini">Show CSS</a>
+				<a href="#" id="resetDefault" class="btn btn-mini">Reset</a>
+			</div>
+			<div class="hide">
+				<ul id="ssw_styles">
+					<li class="small ssw_mbColor sepH_a" style="display:none">body {<span class="ssw_mColor sepH_a" style="display:none"> color: #<span></span>;</span> <span class="ssw_bColor" style="display:none">background-color: #<span></span> </span>}</li>
+					<li class="small ssw_lColor sepH_a" style="display:none">a { color: #<span></span> }</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="maincontainer" class="clearfix">
+			<!-- header -->
+            @RenderPage("~/Sistema/Shared/Layout/_Top.cshtml")  
+            
+            <!-- main content -->
+            <div id="contentwrapper">
+                <div class="main_content">
+                    
+                    <nav>
+                        <div id="jCrumbs" class="breadCrumb module">
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="icon-home"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#">Sports & Toys</a>
+                                </li>
+                                <li>
+                                    <a href="#">Toys & Hobbies</a>
+                                </li>
+                                <li>
+                                    <a href="#">Learning & Educational</a>
+                                </li>
+                                <li>
+                                    <a href="#">Astronomy & Telescopes</a>
+                                </li>
+                                <li>
+                                    Telescope 3735SX 
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <h3 class="heading">Relação de Produtos</h3>
+                            <table class="table table-striped table-bordered dTableR" id="dt_a">
+                                <thead>
+                                   
+                                    <tr>
+                                        <th>Imagem</th>
+                                        <th>Nome do Produto</th>
+                                        <th>Categoria</th>
+                                        <th>Situação</th>
+                                        <th>Preço</th>
+                                    </tr>
+                                    
+                                </thead>
+                                <tbody>
+                                  @foreach (var item in produtos) {   
+                                <tr>
+										<td style="width:60px">
+											<a href="/images/produtos/@item.Imagem01" title="@item.Titulo" class="cbox_single thumbnail">
+												<img alt="" src="/images/produtos/mini_@item.Imagem01" style="height:50px;width:50px">
+											</a>
+										</td>
+                                        <td><a href="/sistema/produtos/visualizar/@item.CodProduto">@item.Titulo</a></td>
+                                        <td>@FuncaoProdutos.Produto_Categoria(item.CodProduto)</td>
+                                        <td class="center">@if(item.Ativo){<text><font color="green">Produto Ativo</font> </text>}else{<text><font color="red">Desativado</font></text>} @if(item.Destaque){<text> <br> <font color="blue">Produto em Destaque</font> </text>}</td>
+                                        <td class="center">@String.Format("{0:C}", item.Preco_Venda)</td>
+                                    </tr>
+                                 }
+                                                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+       
+                        
+                </div>
+            </div>
+            
+            @RenderPage("~/Sistema/Shared/Layout/_MenuLateral.cshtml")  
+            
+            <script src="~/sistema/js/jquery.min.js"></script>
+			<!-- smart resize event -->
+			<script src="~/sistema/js/jquery.debouncedresize.min.js"></script>
+			<!-- hidden elements width/height -->
+			<script src="~/sistema/js/jquery.actual.min.js"></script>
+			<!-- js cookie plugin -->
+			<script src="~/sistema/js/jquery.cookie.min.js"></script>
+			<!-- main bootstrap js -->
+			<script src="~/sistema/bootstrap/js/bootstrap.min.js"></script>
+			<!-- tooltips -->
+			<script src="~/sistema/lib/qtip2/jquery.qtip.min.js"></script>
+			<!-- jBreadcrumbs -->
+			<script src="~/sistema/lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>
+			<!-- sticky messages -->
+            <script src="~/sistema/lib/sticky/sticky.min.js"></script>
+			<!-- fix for ios orientation change -->
+			<script src="~/sistema/js/ios-orientationchange-fix.js"></script>
+			<!-- scrollbar -->
+			<script src="~/sistema/lib/antiscroll/antiscroll.js"></script>
+			<script src="~/sistema/lib/antiscroll/jquery-mousewheel.js"></script>
+			<!-- lightbox -->
+            <script src="~/sistema/lib/colorbox/jquery.colorbox.min.js"></script>
+            <!-- common functions -->
+			<script src="~/sistema/js/gebo_common.js"></script>
+            
+            <!-- datatable -->
+            <script src="~/sistema/lib/datatables/jquery.dataTables.min.js"></script>
+            <script src="~/sistema/lib/datatables/extras/Scroller/media/js/Scroller.min.js"></script>
+            <!-- datatable functions -->
+            <script src="~/sistema/js/gebo_datatables.js"></script>
+            
+			<script>
+				$(document).ready(function() {
+					//* show all elements & remove preloader
+					setTimeout('$("html").removeClass("js")',1000);
+				});
+			</script>
+		
+		</div>
+	</body>
+</html>
