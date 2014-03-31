@@ -118,19 +118,40 @@ if (produto == null)
                 <div class="span5">
                     <div class="product-preview">
                         <div class="picture">
-                            <img src="/images/dummy/products/shirt-1.jpg" alt="" width="940" height="940" id="mainPreviewImg" />
+                            <img src="~/images/produtos/@produto.Imagem01" alt="" width="940" height="940" id="mainPreviewImg" />
                         </div>
+
+
                         <div class="thumbs clearfix">
+                        @if(produto.Imagem01 != "" && produto.Imagem01 != null){
+                            <text>
                             <div class="thumb active">
-                                <a href="#mainPreviewImg"><img src="/images/dummy/products/shirt-1.jpg" alt="" width="940" height="940" /></a>
+                            <a href="#mainPreviewImg"><img src="~/images/produtos/@produto.Imagem01" alt="" width="940" height="940" /></a>
                             </div>
+                            </text>
+                        }
+                        @if(produto.Imagem02 != "" && produto.Imagem02 != null){
+                            <text>
                             <div class="thumb">
-                                <a href="#mainPreviewImg"><img src="/images/dummy/products/shirt-2.jpg" alt="" width="940" height="940" /></a>
+                                <a href="#mainPreviewImg"><img src="~/images/produtos/@produto.Imagem02" alt="" width="940" height="940" /></a>
                             </div>
+                            </text>
+                        }
+                        @if(produto.Imagem03 != "" && produto.Imagem03 != null){
+                            <text>
                             <div class="thumb">
-                                <a href="#mainPreviewImg"><img src="/images/dummy/products/shirt-3.jpg" alt="" width="940" height="940" /></a>
+                                <a href="#mainPreviewImg"><img src="~/images/produtos/@produto.Imagem03" alt="" width="940" height="940" /></a>
                             </div>
+                            </text>
+                        }                            
+                        
                         </div>
+
+                      
+
+
+
+
                     </div>
                 </div>
                 
@@ -207,20 +228,13 @@ if (produto == null)
                                 <!-- AddThis Button END -->
                             </div>
                            
+                        </div>                        
                         </div>
-                        
-                    </div>
-                </div>
-            </div>
-            
-            <!--  ==========  -->
-            <!--  = Tabs with more info =  -->
-            <!--  ==========  -->
-            <div class="row">
-                <div class="span12">
+                         <div class="row">
+                <div class="span7">
                     <ul id="myTab" class="nav nav-tabs">
                         <li class="active">
-                            <a href="#tab-1" data-toggle="tab">Details</a>
+                            <a href="#tab-1" data-toggle="tab">DETALHES </a>
                         </li>
                         <li>
                             <a href="#tab-2" data-toggle="tab">SIZING CHART</a>
@@ -229,7 +243,7 @@ if (produto == null)
                             <a href="#tab-3" data-toggle="tab">COMMENTS</a>
                         </li>
                         <li>
-                            <a href="#tab-4" data-toggle="tab">SHIPPING DETAILS</a>
+                            <a href="#tab-4" data-toggle="tab">DÚVIDAS SOBRE MEDIDAS?</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -255,13 +269,88 @@ if (produto == null)
                             </p>
                         </div>
                         <div class="fade tab-pane" id="tab-4">
-                            <p>
-                                Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr. Another text here ...
-                            </p>
+                            <h4>Medida para anel ou aliança</h4>
+                            <p>Escolha entre os 3 metodos abaixo para descobrir o tamanho do aro para o seu anel ou aliança.</p>
+                           <div id="accordion2" class="accordion">
+                                <div class="accordion-group accordion-style-2 active">
+                                    <div class="accordion-heading">
+                                        <a href="#collapseOne" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle">
+                                            <span class="bg-for-icon"><i class="icon-minus"></i><i class="icon-plus"></i></span>
+                                            Toggle Open
+                                        </a>
+                                    </div>
+                                    <div class="accordion-body in collapse" id="collapseOne" style="height: auto;">
+                                        <div class="accordion-inner">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat mauris eget magna egestas porta. Curabitur sagittis sagittis neque rutrum congue. Donec lobortis dui sagittis, ultrices nunc ornare, ultricies elit. Curabitur tristique felis pulvinar nibh porta, sit amet interdum ligula placerat. Maecenas auctor, sem nec eleifend blandit...
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-group accordion-style-2">
+                                    <div class="accordion-heading">
+                                        <a href="#collapseTwo" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle"> 
+                                            <span class="bg-for-icon"><i class="icon-minus"></i><i class="icon-plus"></i></span>
+                                            Toggle Closed
+                                        </a>
+                                    </div>
+                                    <div class="accordion-body collapse" id="collapseTwo" style="height: 0px;">
+                                        <div class="accordion-inner">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat mauris eget magna egestas porta. Curabitur sagittis sagittis neque rutrum congue. Donec lobortis dui sagittis, ultrices nunc ornare, ultricies elit. Curabitur tristique felis pulvinar nibh porta, sit amet interdum ligula placerat. Maecenas auctor, sem nec eleifend blandit...
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="accordion-group accordion-style-2">
+                                    <div class="accordion-heading">
+                                        <a href="#collapse3" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle"> 
+                                            <span class="bg-for-icon"><i class="icon-minus"></i><i class="icon-plus"></i></span>
+                                            Impressão de Aros
+                                        </a>
+                                    </div>
+                                    <div class="accordion-body collapse" id="collapse3" style="height: 0px;">
+                                        <div class="accordion-inner">
+                                            <ol>
+                                            <li>Imprima o modelo abaixo com os tamanhos dos aros, para isso clique sobre a imagem com o número das alianças;</li>
+                                            <li>Pegue um anel que lhe sirva e que seja referente ao dedo que deseja usar a aliança;</li>
+                                            <li>Coloque o anel sobre os aros da folha impressa;</li>
+                                            <li>A parte de dentro do círculo do seu anel deverá ficar exatamente em cima do círculo interno do anel impresso, onde as setas serão o limite.</li>
+                                            <li>Feito esse processo, é só ver o seu número correto de aro e nos enviar.</li>
+                                            </ol> 
+                                            <p>
+                                            Após imprimir a imagem abaixo com os aros é importante que você confira se o risco abaixo mede realmente 2 cm, se não tiver exatamente 2 cm é porque a ficha com os aros foi impressa de forma incorreta com a resolução menor ou maior, neste caso não use esse método.
+                                            </p>
+                                            <p>
+                                            Não coloque o anel ou aliança sobre o monitor, pois o tamanho que aparece retire em sua tela não coincide com o tamanho real, é necessário imprimir a imagem.
+                                            Este é um método que possui chances de erro se não for feito corretamente, por isto tome muito cuidado, a informação correta de seu aro é de sua responsabilidade.
+                                            </p>
+
+                                            <a data-toggle="modal" role="button" href="#impressaoModal" data-dismiss="modal"><button class="btn btn-large bold"> MODELO </button></a>
+                                            
+                                            
+
+                                            <div class="span6 push-down-20">
+                	            <div class="picture">
+                	                <a class="add-prettyphoto" href="/images/numero-do-aro.gif"><img width="64" height="64" alt="" src="/images/numero-do-aro.gif" class="rounded"></a>
+            	                </div>
+                	        </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+                    
+                </div>
+            </div>
+            
+            <!--  ==========  -->
+            <!--  = Tabs with more info =  -->
+            <!--  ==========  -->
+           
         </div>
     </div> <!-- /container -->
     
@@ -277,7 +366,7 @@ if (produto == null)
             <div class="row">
                 <div class="span12">
                     <div class="main-titles lined">
-                    	<h2 class="title"><span class="light">Related</span> Products</h2>
+                    	<h2 class="title"><span class="light">Produtos </span> Relacionados</h2>
                     </div>
                 </div>
             </div>
@@ -413,7 +502,18 @@ if (produto == null)
     </div>
     
 	
-     
+            <!--  = Imprimir modelo =  numero-do-aro.gif   -->
+    <div id="impressaoModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="registerModalLabel"><span class="light">Register</span> To Webmarket</h3>
+        </div>
+        <div class="modal-body">
+        <p> <img width="100%" height="100%" alt="" src="/images/numero-do-aro.gif" class="rounded">
+        </p>
+            
+        </div>
+    </div> 
     
      
     <!--  ==========  -->
