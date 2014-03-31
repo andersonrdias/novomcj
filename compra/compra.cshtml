@@ -1,0 +1,66 @@
+﻿@{
+
+
+var valorPromocao = 500;
+
+var urlredirecionamento = "/";
+
+// Cria um carrinho vazio na sessão se ele não exitir
+if (Session["carrinho"] == null)
+{
+   Session["carrinho"] = new Carrinho();
+}
+// Pega o carrinho atual da Sessão
+Carrinho carrinho = (Carrinho)Session["carrinho"];
+
+
+
+if (IsPost)
+{
+    if (Request["produtoID"] != null)
+    {
+       //formulário postado pela página Detalhes do produto 
+       var _produtoID = Request["produtoID"];
+       var _descricao = Request["descricao"];
+       var _preco = Request["preco"];
+       carrinho.AdicionarItem(_produtoID.AsInt(), _descricao, _preco.AsDecimal());
+       urlredirecionamento =  Request["url"];   
+    }
+    else if (Request["removerIndice"] != null)
+    {
+        // Formulario postado pelo botão Remover Item do Carrinho
+        var removerIndice = Request["removerIndice"].AsInt();
+        carrinho.RemoverItem(removerIndice);
+         urlredirecionamento =  Request["url"];  
+    }
+    
+
+Response.Redirect(urlredirecionamento);
+
+}
+
+
+
+
+
+ int i = 0;
+
+
+
+
+  
+
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        compra
+    </body>
+</html>

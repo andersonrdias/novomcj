@@ -181,7 +181,14 @@ if (produto == null)
                         <!--  ==========  -->
                         <!--  = Add to cart form =  -->
                         <!--  ==========  -->
-                        <form action="#" class="form form-inline clearfix" />
+
+                        <form action="/compra/compra" class="form form-inline clearfix" method="post">
+
+                                     <input type="hidden" name="produtoid" size="2" value="@produto.CodProduto" />
+                                     <input type="hidden" name="preco" size="2" value="@produto.Preco_Venda" />
+                                     <input type="hidden" name="quantidade" size="2" value="1" />
+                                     <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />
+
                             <div class="numbered">
                             	<input type="text" name="num" value="1" class="tiny-size" />
                             	<span class="clickable add-one icon-plus-sign-alt"></span>
