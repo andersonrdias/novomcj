@@ -237,8 +237,17 @@ var ativarProdutosPopulares = false;
     	                                    <div class="picture">
     	                                        <img width="150" height="150" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(ProdutosDestaque[produtoinicial])" alt="@FuncaoProdutos.Produto_Titulo(ProdutosDestaque[produtoinicial])"  />
     	                                        <div class="img-overlay">
-    	            	                            <a href="~/produto/@ProdutosDestaque[produtoinicial]" class="btn more btn-primary">Detalhes</a>
-    	            	                            <a href="#" class="btn buy btn-danger">Comprar</a>
+    	            	                            
+                                                     <a href="~/produto/@ProdutosDestaque[produtoinicial]" class="btn more btn-primary"><i class="icon-search"></i> &nbsp; Detalhes</a>
+                  
+                                                     <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
+                                                     <input type="hidden" name="produtoid" size="2" value="@ProdutosDestaque[produtoinicial]" />
+                                                     <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial])" />
+                                                     <input type="hidden" name="quantidade" size="2" value="1" />
+                                                     <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
+                                                      <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
+                                                     </form>
+                                                    
     	                                        </div>
     	                                    </div>
     	                                </div>
@@ -473,7 +482,13 @@ var ativarProdutosPopulares = false;
                                 <img src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(ProdutosNovos[i])" alt="" width="300" height="200" />
                                 <div class="img-overlay">
                                     <a href="~/produto/@ProdutosNovos[i]" class="btn more btn-primary">Detalhes</a>
-                                    <a href="#" class="btn buy btn-danger">Comprar</a>
+                                    <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
+                                    <input type="hidden" name="produtoid" size="2" value="@ProdutosNovos[i]" />
+                                    <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(@ProdutosNovos[i])" />
+                                    <input type="hidden" name="quantidade" size="2" value="1" />
+                                    <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
+                                    <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
+                                    </form>
                                 </div>
                             </div>
                         </div>
