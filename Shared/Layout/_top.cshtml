@@ -47,9 +47,9 @@
                             Ola @WebSecurity.CurrentUserName <br> <br>
                            
                             <form id="logoutForm" action="~/conta/sair" method="post">
-                             <a class="btn btn-warning push-down-10" href="#registerModal" role="button" data-toggle="modal">Cadastre-se</a> 
+                             <a class="btn  push-down-10" href="/conta/" role="button" data-toggle="modal">Minha Conta</a> 
                                 @AntiForgery.GetHtml()
-                                <a class="btn btn-warning push-down-10" href="javascript:document.getElementById('logoutForm').submit()">Logoff</a>
+                                <a class="btn btn-danger push-down-10" href="javascript:document.getElementById('logoutForm').submit()">Logoff</a>
                             </form>
                         </div>                        
                          </text>}
