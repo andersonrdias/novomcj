@@ -6,36 +6,37 @@
     <div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="loginModalLabel"><span class="light">Login</span> To Webmarket</h3>
+            <h3 id="loginModalLabel"><span class="light">Bem Vindo ao </span> Célia Jóias!</h3>
         </div>
         <div class="modal-body">
-            <form method="post" action="#" />
+            <form method="post" action="~/conta/acesso" >
                 <div class="control-group">
                     <label class="control-label hidden shown-ie8" for="inputEmail">Username</label>
                     <div class="controls">
-                        <input type="text" class="input-block-level" id="inputEmail" placeholder="Username" />
+                        <input type="text" class="input-block-level" id="email" name="email" placeholder="email" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label hidden shown-ie8" for="inputPassword">Password</label>
                     <div class="controls">
-                        <input type="password" class="input-block-level" id="inputPassword" placeholder="Senha" />
+                        <input type="password" class="input-block-level" id="senha" name="senha" placeholder="senha" />
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
                         <label class="checkbox">
                             <input type="checkbox" />
-                            Remember me 
+                            Lembra-me
                         </label>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary input-block-level bold higher">
-                    SIGN IN
+                    ENTRAR
                 </button>
             </form>
             <p class="center-align push-down-0">
-                <a href="#" data-dismiss="modal">Forgot your password?</a>
+                <a href="/conta/acesso">Esqueceu a senha?</a> <br>
+                 <a data-toggle="modal" role="button" href="#registerModal" data-dismiss="modal">Ainda não é cadastrado?</a>
             </p>
         </div>
     </div>
@@ -44,7 +45,7 @@
     <div id="registerModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="registerModalLabel"><span class="light">Register</span> To Webmarket</h3>
+            <h3 id="registerModalLabel"><span class="light">Quero me Cadastrar no site  </span> Célia Jóias</h3>
         </div>
         <div class="modal-body">
             <form method="post" action="#" />
@@ -66,12 +67,18 @@
                         <input type="password" class="input-block-level" id="inputPasswordRegister" placeholder="Password" />
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label hidden shown-ie8" for="cep">CEP</label>
+                    <div class="controls">
+                        <input type="text" class="input-block-level" id="cep" placeholder="cep" />
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-danger input-block-level bold higher">
-                    REGISTER
+                    CADASTRAR
                 </button>
             </form>
             <p class="center-align push-down-0">
-                <a data-toggle="modal" role="button" href="#loginModal" data-dismiss="modal">Already Registered?</a>
+                <a data-toggle="modal" role="button" href="#loginModal" data-dismiss="modal">Já é cadastrado?</a>
             </p>
             
         </div>

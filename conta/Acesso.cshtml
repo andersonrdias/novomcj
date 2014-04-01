@@ -1,18 +1,46 @@
 ﻿@{
+
+ var email = "";
+  var senha = "";
+  if(IsPost)
+  {
+    email = Request["email"];
+    senha = Request["senha"];
+    var lembrarme = Request["lembrarme"].AsBool();
+    // Validação
+    if (email.IsEmpty()) {
+        ModelState.AddError("email", "Nome do usuário não pode estar em branco.");
+    }
+    if (senha.IsEmpty()) {
+        ModelState.AddError("senha", "A senha deve ser informada.");
+    }
+    // tenta fazer o login
+    if(ModelState.IsValid)
+    {
+       if(WebSecurity.Login(email, senha, lembrarme))
+       {
+           if (Request.QueryString["sender"] != null)
+           {
+              Response.Redirect(Request.QueryString["sender"]);
+           }
+           else
+           {
+               
+              // carrinho.DefinirUF_Entrega(FuncaoEntrega.PesquisarUF(email));
+               Response.Redirect("~/");
+
+            }
+        }
+        else
+        {
+           ModelState.AddFormError("Não foi possível realizar o login.");
+        }
+     }
+  }
     
-//Redirecionamento
-if (!WebSecurity.IsAuthenticated)
-{
-   Response.Redirect("~/conta/acesso");
 }
 
 
-
-
-
-
-    
-}
 
  
 <!DOCTYPE html>
@@ -22,7 +50,7 @@ if (!WebSecurity.IsAuthenticated)
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8" />
-    <title>Célia Jóias - Acesso ao site</title>
+    <title>Célia Jóias - Minha Conta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="ProteusThemes" />
@@ -79,6 +107,10 @@ if (!WebSecurity.IsAuthenticated)
                         <li>
                             <a href="">Conta</a>
                         </li>
+                        <li><span class="icon-chevron-right"></span></li>
+                        <li>
+                            <a href="">Acesso</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -103,53 +135,115 @@ if (!WebSecurity.IsAuthenticated)
                 <!--  ==========  -->
                 <!--  = Main content =  -->
                 <!--  ==========  -->
-                <section class="span8 blog">
+                <section class="span9 blog">
                     
                     <!--  ==========  -->
                     <!--  = Sticky Post =  -->
                     <!--  ==========  -->
-                    <article class="post format-standard sticky">
-                        <div class="post-inner">
-                            <div class="post-title">
-                            	<h2><a href="#"><span class="light">Sticky</span> Post</a></h2>
-                            	<div class="metadata">
-                            	    May 11, 2013 /
-                            	    <a href="http://localhost/themeforest/wp-theme/2008/09/layout-test/#comments">No comments</a> /
-                            	    Posted in: <a rel="category tag" title="View all posts in aciform" href="#">Webmarket</a>
-                            	</div>
+
+                    <section class="span4 blog">
+
+                                        <article class="post format-standard sticky">
+                                            <div class="post-inner">
+
+                    @Html.ValidationSummary(true)
+
+
+                        <div>
+                            <div class="modal-header">
+                                <h3 id="loginModalLabel"><span class="light"> </span>Já sou cadastrado no site</h3>
                             </div>
-                            
-                            <p class="push-down-25">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat mauris eget magna egestas porta. Curabitur sagittis sagittis neque rutrum congue. dit...
-                            </p>
-                            
-                            <a href="blog-single.html" class="btn btn-primary bold higher">CONTINUE READING</a>
-                        </div>
-                    </article>
-                    
-                    <!--  ==========  -->
-                    <!--  = Post with Video =  -->
-                    <!--  ==========  -->
-                    <article class="post format-video">
-                        <div class="post-inner">
-                            <iframe src="http://player.vimeo.com/video/8161506?title=0&amp;byline=0&amp;color=00becc" width="620" height="349" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
-                            <div class="post-title">
-                            	<h2><a href="#"><span class="light">Post</span> With a Video</a></h2>
-                            	<div class="metadata">
-                            	    September 4, 2013 /
-                            	    <a href="http://localhost/themeforest/wp-theme/2008/09/layout-test/#comments">No comments</a> /
-                            	    Posted in: <a rel="category tag" title="View all posts in aciform" href="#">Webmarket</a>
-                            	</div>
+                            <div class="modal-body">
+                                @Html.ValidationSummary(true)
+                                <form method="post" action="@Request.QueryString" >
+                                    <div class="control-group">
+                                        <label class="control-label hidden shown-ie8" for="inputEmail">Username</label>
+                                        <div class="controls">
+                                            <input type="text" class="input-block-level" id="email"  name="email" placeholder="email" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label hidden shown-ie8" for="inputPassword">Password</label>
+                                        <div class="controls">
+                                            <input type="password" class="input-block-level" id="senha"  name="senha" placeholder="senha" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <label class="checkbox">
+                                                <input type="checkbox" />
+                                                Remember me 
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" value="Login" class="btn btn-primary input-block-level bold higher">
+                                        ENTRAR
+                                    </button>
+                                </form>
+                                <p class="center-align push-down-0">
+                                    <a href="#" data-dismiss="modal">Forgot your password?</a>
+                                </p>
                             </div>
-                            
-                            <p class="push-down-25">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat mauris eget magna egestas porta. Curabitur sagittis sagittis neque rutrum congue. Donec lobortis dui sagittis, ultrices nunc ornare, ultricies elit. Curabitur tristique felis pulvinar nibh porta, sit amet interdum ligula placerat. Maecenas auctor, sem nec eleifend blandit...
-                            </p>
-                            
-                            <a href="blog-single.html" class="btn btn-primary bold higher">CONTINUE READING</a>
                         </div>
-                    </article>
+    
+
+
+                                            </div>
+                                        </article>
+                    </section>
+                    <section class="span4 blog">
+
+                                        <article class="post format-standard sticky">
+                                            <div class="post-inner">
+
+                    @Html.ValidationSummary(true)
+
+
+                        <div>
+                            <div class="modal-header">
+                                <h3 id="loginModalLabel"><span class="light"> </span>Já sou cadastrado no site</h3>
+                            </div>
+                            <div class="modal-body">
+                                @Html.ValidationSummary(true)
+                                <form method="post" action="@Request.QueryString" >
+                                    <div class="control-group">
+                                        <label class="control-label hidden shown-ie8" for="inputEmail">Username</label>
+                                        <div class="controls">
+                                            <input type="text" class="input-block-level" id="email"  name="email" placeholder="email" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label hidden shown-ie8" for="inputPassword">Password</label>
+                                        <div class="controls">
+                                            <input type="password" class="input-block-level" id="senha"  name="senha" placeholder="senha" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <label class="checkbox">
+                                                <input type="checkbox" />
+                                                Remember me 
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" value="Login" class="btn btn-primary input-block-level bold higher">
+                                        ENTRAR
+                                    </button>
+                                </form>
+                                <p class="center-align push-down-0">
+                                    <a href="#" data-dismiss="modal">Forgot your password?</a>
+                                </p>
+                            </div>
+                        </div>
+    
+
+
+                                            </div>
+                                        </article>
+                    </section>
+
                     
+
                     <!--  ==========  -->
                     <!--  = Post with Image =  -->
                     <!--  ==========  -->
