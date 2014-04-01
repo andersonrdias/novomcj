@@ -37,10 +37,24 @@
                             <a href="#"><span class="zocial-windows"></span></a>
                             <a href="#"><span class="zocial-apple"></span></a>
                         </div>
+                         @if (!WebSecurity.IsAuthenticated) {<text> 
                         <div class="register">
-                            <a href="#loginModal" role="button" data-toggle="modal">Faça o seu Login</a> ou 
+                            <a href="#loginModal"  role="button" data-toggle="modal">Faça o seu Login</a> ou 
                             <a href="#registerModal" role="button" data-toggle="modal">Cadastre-se</a>
-                        </div>
+                        </div>                           
+                         </text>} else {<text>
+                        <div class="register">
+                            Ola @WebSecurity.CurrentUserName <br> <br>
+                           
+                            <form id="logoutForm" action="~/conta/sair" method="post">
+                             <a class="btn btn-warning push-down-10" href="#registerModal" role="button" data-toggle="modal">Cadastre-se</a> 
+                                @AntiForgery.GetHtml()
+                                <a class="btn btn-warning push-down-10" href="javascript:document.getElementById('logoutForm').submit()">Logoff</a>
+                            </form>
+                        </div>                        
+                         </text>}
+
+
                     </div>
                 </div> <!-- /social icons -->
             </div>

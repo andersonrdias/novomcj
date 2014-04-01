@@ -1,0 +1,20 @@
+﻿@{
+    WebSecurity.RequireAuthenticatedUser();
+
+    if (IsPost) {
+        // Confirmar se a solicitação foi enviada pelo usuário
+        AntiForgery.Validate();
+
+        // Sair do contexto do usuário atual
+        WebSecurity.Logout();
+
+        // Redirecionar de volta para a home page ou URL de retorno
+        var returnUrl = Request.QueryString["ReturnUrl"];
+        Context.RedirectLocal(returnUrl);
+    } else {
+        Response.Redirect("~/");
+    }
+}
+
+
+
