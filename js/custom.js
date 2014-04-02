@@ -119,7 +119,7 @@ jQuery(document).ready(function($) {
             soloArrowLeftValign: "center",
             soloArrowRightHalign: "right",
             soloArrowRightValign: "center",
-            navigationVOffset: 60,
+            navigationVOffset: $('body').hasClass('boxed') ? 10 : 60,
             navOffsetHorizontal: 0,
             navOffsetVertical: 20,
             // no captions for mobile devices
@@ -260,110 +260,110 @@ jQuery(document).ready(function($) {
                     }
                 }
             });
-        });
-        
-        // jQuery UI slider
-        var prepareCurrency = function(value) {
-            return WebMarketVars.currencyBefore ? WebMarketVars.currencySymbol + value : value + WebMarketVars.currencySymbol;
-        };
-        var $slider = $(".jqueryui-slider-container > div");
-        $slider.slider({
-            range: true,
-            min: WebMarketVars.priceRange[0],
-            max: WebMarketVars.priceRange[1],
-            values: WebMarketVars.priceRange,
-            step: WebMarketVars.priceStep,
-            slide: function(ev, ui) {
-                $(this).parent().siblings(".min-val").val(prepareCurrency(ui.values[0]));
-                $(this).parent().siblings(".max-val").val(prepareCurrency(ui.values[1]));
-            },
-            change: function() {
-                updateIsotopeFiltering();
-            },
-            create: function() {
-                var $sliderParent = $(this).parents(".accordion-body");
-                $sliderParent.find(".min-val").val(prepareCurrency($(this).slider("values", 0)));
-                $sliderParent.find(".max-val").val(prepareCurrency($(this).slider("values", 1)));
-            }
-        });
-        //  ========== 
-        //  = Filters for sidebar = 
-        //  ========== 
-        var $selectableElms = $(".sidebar-filters .selectable");
-        $selectableElms.click(function(ev) {
-            ev.preventDefault();
-            $(this).toggleClass("selected");
-            updateIsotopeFiltering();
-        });
-        $(".sidebar-filters .accordion-toggle").click(function() {
-            setTimeout(updateIsotopeFiltering, 350);
-        });
-        $("#removeFilters").click(function(ev) {
-            ev.preventDefault();
-            $selectableElms.removeClass("selected");
-            updateIsotopeFiltering();
-        });
-        var updateIsotopeFiltering = function() {
-            var selectedElms = $(".sidebar-filters .in").find(".selectable.selected[data-target]").not(".detailed"), detailedElms = $(".sidebar-filters .in").find(".detailed.selected[data-target]"), filterString, filter, types = [];
-            if (selectedElms.length > 0 || detailedElms.length > 0) {
-                $("#removeFilters").fadeIn();
-            } else {
-                $("#removeFilters").fadeOut();
-            }
-            if (selectedElms.length < 1) {
-                filterString = ".isotope-container .span3";
-            } else {
-                var filterArr = [];
-                selectedElms.each(function() {
-                    var data = $(this).data("target");
-                    if ("undefined" !== typeof data) {
-                        filterArr.push($(this).data("target"));
-                    }
-                });
-                filterString = filterArr.join(",");
-            }
-            // basic filtering
-            filter = $(filterString);
-            // slider price filtering, after we have the right categories already
-            if ($slider.parents(".accordion-body").hasClass("in")) {
-                filter = filter.filter(function() {
-                    var $this = $(this);
-                    return $this.data("price") >= $slider.slider("values", 0) && $this.data("price") <= $slider.slider("values", 1);
-                });
-            }
-            // more precise filters for the size, color, brand ...
-            detailedElms.each(function() {
-                types.push($(this).data("type"));
+            
+            // jQuery UI slider
+            var prepareCurrency = function(value) {
+                return WebMarketVars.currencyBefore ? WebMarketVars.currencySymbol + value : value + WebMarketVars.currencySymbol;
+            };
+            var $slider = $(".jqueryui-slider-container > div");
+            $slider.slider({
+                range: true,
+                min: WebMarketVars.priceRange[0],
+                max: WebMarketVars.priceRange[1],
+                values: WebMarketVars.priceRange,
+                step: WebMarketVars.priceStep,
+                slide: function(ev, ui) {
+                    $(this).parent().siblings(".min-val").val(prepareCurrency(ui.values[0]));
+                    $(this).parent().siblings(".max-val").val(prepareCurrency(ui.values[1]));
+                },
+                change: function() {
+                    updateIsotopeFiltering();
+                },
+                create: function() {
+                    var $sliderParent = $(this).parents(".accordion-body");
+                    $sliderParent.find(".min-val").val(prepareCurrency($(this).slider("values", 0)));
+                    $sliderParent.find(".max-val").val(prepareCurrency($(this).slider("values", 1)));
+                }
             });
-            types = _.uniq(types);
-            if (detailedElms.length > 0) {
-                _.each(types, function(type) {
-                    var allowedValues = [];
-                    detailedElms.filter('[data-type="' + type + '"]').each(function() {
-                        allowedValues.push($(this).data("target"));
+            //  ========== 
+            //  = Filters for sidebar = 
+            //  ========== 
+            var $selectableElms = $(".sidebar-filters .selectable");
+            $selectableElms.click(function(ev) {
+                ev.preventDefault();
+                $(this).toggleClass("selected");
+                updateIsotopeFiltering();
+            });
+            $(".sidebar-filters .accordion-toggle").click(function() {
+                setTimeout(updateIsotopeFiltering, 350);
+            });
+            $("#removeFilters").click(function(ev) {
+                ev.preventDefault();
+                $selectableElms.removeClass("selected");
+                updateIsotopeFiltering();
+            });
+            var updateIsotopeFiltering = function() {
+                var selectedElms = $(".sidebar-filters .in").find(".selectable.selected[data-target]").not(".detailed"), detailedElms = $(".sidebar-filters .in").find(".detailed.selected[data-target]"), filterString, filter, types = [];
+                if (selectedElms.length > 0 || detailedElms.length > 0) {
+                    $("#removeFilters").fadeIn();
+                } else {
+                    $("#removeFilters").fadeOut();
+                }
+                if (selectedElms.length < 1) {
+                    filterString = ".isotope-container .span3";
+                } else {
+                    var filterArr = [];
+                    selectedElms.each(function() {
+                        var data = $(this).data("target");
+                        if ("undefined" !== typeof data) {
+                            filterArr.push($(this).data("target"));
+                        }
                     });
+                    filterString = filterArr.join(",");
+                }
+                // basic filtering
+                filter = $(filterString);
+                // slider price filtering, after we have the right categories already
+                if ($slider.parents(".accordion-body").hasClass("in")) {
                     filter = filter.filter(function() {
                         var $this = $(this);
-                        return _.some($this.data(type).split("|"), function(val) {
-                            return _.contains(allowedValues, val);
+                        return $this.data("price") >= $slider.slider("values", 0) && $this.data("price") <= $slider.slider("values", 1);
+                    });
+                }
+                // more precise filters for the size, color, brand ...
+                detailedElms.each(function() {
+                    types.push($(this).data("type"));
+                });
+                types = _.uniq(types);
+                if (detailedElms.length > 0) {
+                    _.each(types, function(type) {
+                        var allowedValues = [];
+                        detailedElms.filter('[data-type="' + type + '"]').each(function() {
+                            allowedValues.push($(this).data("target"));
+                        });
+                        filter = filter.filter(function() {
+                            var $this = $(this);
+                            return _.some($this.data(type).split("|"), function(val) {
+                                return _.contains(allowedValues, val);
+                            });
                         });
                     });
+                }
+                $container.isotope({
+                    filter: filter
                 });
-            }
-            $container.isotope({
-                filter: filter
+            };
+            updateIsotopeFiltering();
+            //  ========== 
+            //  = Sorting = 
+            //  ========== 
+            $("#isotopeSorting").change(function() {
+                var parameters = jQuery.parseJSON($(this).val());
+                parameters.sortAscending = "true" === parameters.sortAscending ? true : false;
+                $container.isotope(parameters);
             });
-        };
-        updateIsotopeFiltering();
-        //  ========== 
-        //  = Sorting = 
-        //  ========== 
-        $("#isotopeSorting").change(function() {
-            var parameters = jQuery.parseJSON($(this).val());
-            parameters.sortAscending = "true" === parameters.sortAscending ? true : false;
-            $container.isotope(parameters);
+            $("#isotopeSorting").trigger("change");
         });
-        $("#isotopeSorting").trigger("change");
     })();
 
 
@@ -582,6 +582,17 @@ jQuery(document).ready(function($) {
         }
     });
     
+
+    //  ========== 
+    //  = The language and currency switcher = 
+    //  ========== 
+    $('.js-selectable-dropdown').on('click', '.js-possibilities a', function (ev) {
+        if( "#" === $(this).attr('href') ) {
+            ev.preventDefault();
+            var parent = $(this).parents('.js-selectable-dropdown');
+            parent.find('.js-change-text').html($(this).html());
+        }
+    });
 
 
     //  ========== 
