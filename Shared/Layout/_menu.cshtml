@@ -29,21 +29,7 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                         <ul class="dropdown-menu">
                             <li><a href="icons.html">Icons</a></li>
                             <li class="dropdown">
-                                <a href="features.html" class="dropdown-toggle"><i class="icon-caret-right pull-right visible-desktop"></i> All Features</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="features.html#headings">Headings</a></li>
-                                    <li><a href="features.html#alertBoxes">Alert Boxes</a></li>
-                                    <li><a href="features.html#tabs">Tabs</a></li>
-                                    <li><a href="features.html#buttons">Buttons</a></li>
-                                    <li><a href="features.html#toggles">Toggles</a></li>
-                                    <li><a href="features.html#quotes">Quotes</a></li>
-                                    <li><a href="features.html#gallery">Gallery Grids</a></li>
-                                    <li><a href="features.html#code">Code</a></li>
-                                    <li><a href="features.html#columns">Columns</a></li>
-                                    <li><a href="features.html#maps">Maps</a></li>
-                                    <li><a href="features.html#progress">Progress Bars</a></li>
-                                    <li><a href="features.html#tables">Tables</a></li>
-                                </ul>
+                                <a href="features.html" class="dropdown-toggle"><i class="icon-caret-right pull-right visible-desktop"></i> All Features</a>                                
                             </li>
                         </ul>
                     </li>
@@ -54,8 +40,11 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                   <!--  ==========  -->
                   <!--  = Search form =  -->
                   <!--  ==========  -->
-                  <form class="navbar-form pull-right" action="#" method="get" />
+
+                  <form class="navbar-form pull-right" action="/pesquisa" method="post">
                       <button type="submit"><span class="icon-search"></span></button>
-                      <input type="text" class="span1" name="search" id="navSearchInput" />
+                      <input type="text" class="span1" name="criterio" id="navSearchInput" />
+
                   </form>
+
                 </div><!-- /.nav-collapse -->

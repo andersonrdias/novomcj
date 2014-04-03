@@ -1,16 +1,43 @@
-﻿@{
-    
+﻿
 
-var criterioBusca = "Critério de busca";
-
-
-var db = Database.Open("CeliaJoias");
+@{
+ 
+//Banco de dados
+ var db = Database.Open("CeliaJoias");
 
 //Categorias
-var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
+var slqSelectCategoria = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
 
 
+//Resultado de busca
+//var buscarPalavras = "Nenhum critério definido";
+
+if (IsPost)
+{    
+//buscarPalavras = Request["criterio"].Split(' ');
+
+
+
+} else {
     
+    Response.Redirect("~/");
+}
+
+
+var buscarPalavras = Request["criterio"].Split(' ');
+var criterioBusca = Request["criterio"];
+
+ IEnumerable<dynamic> resultado = Enumerable.Empty<string>();
+  var sqlSelect = "SELECT * FROM Produtos WHERE Ativo = 'true' AND " +
+                        "(titulo LIKE @0 OR descricao LIKE @0 OR CodProduto LIKE @0 OR Preco_Venda LIKE @0)" ;
+
+
+  foreach(var palavra in buscarPalavras)
+  {
+     resultado = resultado.Concat(db.Query(sqlSelect, "%" + palavra + "%").ToList());     
+  }
+ 
+  
 }
 
  
@@ -116,24 +143,10 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                             </div>
                             <div id="filterOne" class="accordion-body collapse in">
                                 <div class="accordion-inner">
-
-@foreach (var categoria in db.Query(slqSelect))
-{
-<a href="#" data-target=".filter--@categoria.Titulo" class="selectable"><i class="box"></i> @categoria.Titulo</a>
-}
-<a href="#" data-target=".filter--bags, .filter--hats" class="selectable"><i class="box"></i> Bags &amp; Hats</a>
-<a href="#" data-target=".filter--polo-shirts" class="selectable"><i class="box"></i> Polo Shirts</a>
-<a href="#" data-target=".filter--shirts" class="selectable"><i class="box"></i> Shirts</a>
-<a href="#" data-target=".filter--shoes, .filter--boots, .filter--trainers" class="selectable"><i class="box"></i> Shoes, Boots &amp; Trainers</a>
-<a href="#" data-target=".filter--shorts" class="selectable"><i class="box"></i> Shorts</a>
-<a href="#" data-target=".filter--suits, .filter--blazers" class="selectable"><i class="box"></i> Suits &amp; Blazers</a>
-<a href="#" data-target=".filter--sunglasses" class="selectable"><i class="box"></i> Sunglasses</a>
-<a href="#" data-target=".filter--swimwear" class="selectable"><i class="box"></i> Swimwear</a>
-<a href="#" data-target=".filter--trousers, .filter--chinos" class="selectable"><i class="box"></i> Trousers &amp; Chinos</a>
-<a href="#" data-target=".filter--t-shirts, .filter--vests" class="selectable"><i class="box"></i> T-Shirts &amp; Vests</a>
-<a href="#" data-target=".filter--bags" class="selectable"><i class="box"></i> Bags</a>
-<a href="#" data-target=".filter--underwear, .filter--socks" class="selectable"><i class="box"></i> Underwear &amp; Socks</a>
- 
+                                @foreach (var categoria in db.Query(slqSelectCategoria))
+                                {
+                                <a href="#" data-target=".filter--@categoria.Titulo" class="selectable"><i class="box"></i> @categoria.Titulo</a>
+                                }
                                 </div>
                             </div>
                         </div> <!-- /categories -->
@@ -232,8 +245,9 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                     <div class="underlined push-down-20">
                         <div class="row">
                             <div class="span5">
-                                <h3><span class="light">Critério de Pesquisa:</span> &quot;@criterioBusca&quot;</h3>
+                                <h3><span class="light">@resultado.Count() produto(s) encontrado(s) para o critério :</span> &quot;@criterioBusca&quot;</h3>                               
                             </div>
+
                             <div class="span4">
                                 <div class="form-inline sorting-by">
                                     <label for="isotopeSorting" class="black-clr">Ordenar por:</label>
@@ -247,35 +261,53 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                                     </select>
                                 </div>
                             </div>
+                
                         </div>
-                    </div> <!-- /title -->
+
+                    </div>
+                    
+ <!-- /title -->
                     
                     <!--  ==========  -->
                     <!--  = Products =  -->
                     <!--  ==========  -->
+                    @if(@resultado.Count()>0)
+                    {<text> 
                     <div class="row popup-products">
                         <div id="isotopeContainer" class="isotope-container">
+                    	 
+                             @foreach (var item in resultado)
+                            {<text>    
                     	    
-                    	    
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--shirts" data-price="529" data-popularity="4" data-size="m|l" data-color="blue|orange" data-brand="adidas">
+
+                    	    <div class="span3 filter--@FuncaoProdutos.Categoria_PesqCodigo(item.Categoria)" data-price="@item.Preco_Venda" data-popularity="4" data-size="m|l" data-color="blue|orange" data-brand="adidas">
                     	        <div class="product">
                     	             
                     	            <div class="product-img">
                     	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-11.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
+                    	                    <img STYLE="width:270px; height:230px" alt="" src="/images/produtos/@item.Imagem01" />
+
+                                                <div class="img-overlay">
+    	            	                            
+                                                     <a href="~/produto/@item.CodProduto" class="btn more btn-primary"><i class="icon-search"></i> &nbsp; Detalhes</a>
+                  
+                                                     <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
+                                                     <input type="hidden" name="produtoid" size="2" value="@item.CodProduto" />
+                                                     <input type="hidden" name="preco" size="2" value="@item.Preco_Venda" />
+                                                     <input type="hidden" name="quantidade" size="2" value="1" />
+                                                     <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
+                                                      <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
+                                                     </form>
+                                                    
+    	                                        </div>
+
+
                     	                </div>
+
                     	            </div>
                     	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$529</h4>
-                    	                <h5 class="no-margin isotope--title">Amet Tincidunt Neque Metus Ut</h5>
+                    	                <h4 class="title">@String.Format("{0:C}", item.Preco_Venda)</h4>
+                    	                <h5 class="no-margin isotope--title">@item.Titulo</h5>
                     	            </div>
                     	            <p class="center-align stars">
                     	                <span class="icon-star stars-clr"></span>
@@ -286,224 +318,15 @@ var slqSelect = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
                     	                 
                     	            </p>
                     	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--sunglasses" data-price="688" data-popularity="5" data-size="m|xl|xxl" data-color="pink" data-brand="nike">
-                    	        <div class="product">
-                    	             
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-5.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$688</h4>
-                    	                <h5 class="no-margin isotope--title">Adipiscing Sit</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--suits" data-price="1707" data-popularity="4" data-size="xs|l|xl|xxl" data-color="pink|purple" data-brand="shred">
-                    	        <div class="product">
-                    	             
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-3.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$1707</h4>
-                    	                <h5 class="no-margin isotope--title">Tincidunt Ac Duis Sit</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--shirts" data-price="1173" data-popularity="3" data-size="l|xl" data-color="orange" data-brand="nike">
-                    	        <div class="product">
-                    	             
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-21.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$1173</h4>
-                    	                <h5 class="no-margin isotope--title">Adipiscing Vel Ac Duis</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star"></span>
-                    	                <span class="icon-star"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--chinos" data-price="343" data-popularity="1" data-size="xs|s|l|xxl" data-color="pink" data-brand="adidas">
-                    	        <div class="product">
-                    	             
-                    	                <div class="stamp green">New</div>
-                	                 
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-4.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$343</h4>
-                    	                <h5 class="no-margin isotope--title">Tincidunt Vel</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star"></span>
-                    	                <span class="icon-star"></span>
-                    	                <span class="icon-star"></span>
-                    	                <span class="icon-star"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--chinos" data-price="1454" data-popularity="5" data-size="xs|s|l|xl" data-color="blue|orange" data-brand="s-oliver">
-                    	        <div class="product">
-                    	             
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-5.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$1454</h4>
-                    	                <h5 class="no-margin isotope--title">Sit Ac Amet</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--Colares" data-price="949" data-popularity="4" data-size="xs|xxl" data-color="blue|orange" data-brand="nike">
-                    	        <div class="product">
-                    	             
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-33.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">More</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$949</h4>
-                    	                <h5 class="no-margin isotope--title">Tincidunt Adipiscing Duis</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                	        <!--  ==========  -->
-                            <!--  = Single Product =  -->
-                            <!--  ==========  -->
-                    	    <div class="span3 filter--underwear" data-price="1017" data-popularity="5" data-size="s|m|xxl" data-color="blue" data-brand="puma">
-                    	        <div class="product">
-                    	             
-                    	            <div class="product-img">
-                    	                <div class="picture">
-                    	                    <img width="540" height="374" alt="" src="images/dummy/products/product-27.jpg" />
-                    	                    <div class="img-overlay">
-                    	                        <a class="btn more btn-primary" href="#">Detalhes</a>
-                    	                        <a class="btn buy btn-danger" href="#">Add to Cart</a>
-                    	                    </div>
-                    	                </div>
-                    	            </div>
-                    	            <div class="main-titles no-margin">
-                    	                <h4 class="title">$1017</h4>
-                    	                <h5 class="no-margin isotope--title">Consectetur Elit Nisi Feugiat Ut</h5>
-                    	            </div>
-                    	            <p class="center-align stars">
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                <span class="icon-star stars-clr"></span>
-                    	                 
-                    	            </p>
-                    	        </div>
-                    	    </div> <!-- /single product -->
-                    	     
-                    	    
+                    	    </div> 
+                    	     </text>}
+                	    
                     	</div>
                 	</div>
-                	<hr />
+                    <hr />                	
+                    </text>}
+                    
+
                 </section> <!-- /main content -->
             </div>
         </div>
