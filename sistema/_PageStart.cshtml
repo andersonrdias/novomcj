@@ -1,0 +1,11 @@
+﻿@{
+    
+if (!Roles.IsUserInRole(WebSecurity.CurrentUserName, "Admin"))
+	{
+string UrlAtual = Request.Url.ToString();
+Response.Redirect("~/Conta/");
+}
+
+    
+}
+
