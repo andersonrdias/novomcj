@@ -1,0 +1,20 @@
+﻿@{
+    
+bool manutencao = false;
+var pagina = Request.CurrentExecutionFilePath;
+
+//if (!Roles.IsUserInRole(WebSecurity.CurrentUserName,"Admin") )
+//{ Response.Redirect("~/"); }
+// Colocar um gatinho para identificar os usuarios com pagamentos pedentes ou suspensos
+
+
+if (manutencao)
+{
+if(pagina != "/manutencao")
+{
+   Response.Redirect("~/manutencao");
+}
+}
+    
+}
+
