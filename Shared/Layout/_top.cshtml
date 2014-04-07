@@ -25,6 +25,13 @@
                 <!--  = Social Icons =  -->
                 <!--  ==========  -->
                 <div class="span5">
+                    @if (!WebSecurity.IsAuthenticated){<text>
+                    <div class="topmost-line">
+                        <div class="lang-currency">                                                      
+                           <br>
+                        </div>
+                    </div>
+
                     <div class="top-right">
                         <div class="icons">
                             <a href="http://www.facebook.com/ProteusNet"><span class="zocial-facebook"></span></a>
@@ -37,26 +44,57 @@
                             <a href="#"><span class="zocial-windows"></span></a>
                             <a href="#"><span class="zocial-apple"></span></a>
                         </div>
-                         @if (!WebSecurity.IsAuthenticated) {<text> 
                         <div class="register">
                             <a href="#loginModal"  role="button" data-toggle="modal">Faça o seu Login</a> ou 
                             <a href="#registerModal" role="button" data-toggle="modal">Cadastre-se</a>
-                        </div>                           
-                         </text>} else {<text>
-                        <div class="register">
-                            Ola @WebSecurity.CurrentUserName <br> <br>
-                           
+                        </div>
+                    </div>                    
+                    
+                    </text>} else {<text>
+                    <div class="topmost-line">
+                        <div class="lang-currency">                                                      
                             <form id="logoutForm" action="~/conta/sair" method="post">
-                             <a class="btn  push-down-10" href="/conta/" role="button" data-toggle="modal">Minha Conta</a> 
+                           
                                 @AntiForgery.GetHtml()
-                                <a class="btn btn-danger push-down-10" href="javascript:document.getElementById('logoutForm').submit()">Logoff</a>
+
+                            <div class="dropdown js-selectable-dropdown">
+                                <a data-toggle="dropdown" class="selected" href="#"><span class="js-change-text"><i class="icon-user"></i> Minha Conta</span> <b class="caret"></b></a>
+                                <!-- for all available country flags look the styles in lib/components/_flags.scss -->
+                                <ul class="dropdown-menu js-possibilities" role="menu" aria-labelledby="dLabel">
+                                    <li><a href="#"><i class="icon-edit"></i> Meu Cadastro</a></li>
+                                    <li><a href="#"><i class="icon-truck"></i> Meus Pedidos</a></li>
+                                    <li><a href="#"><i class="icon-calendar"></i> Histórico</a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown js-selectable-dropdown">
+                                 <a class="btn-small btn-danger push-down-10" href="javascript:document.getElementById('logoutForm').submit()">Logoff</a>
+                                
+                            </div>
                             </form>
-                        </div>                        
-                         </text>}
-
-
+                        </div>
                     </div>
-                </div> <!-- /social icons -->
+
+                    <div class="top-right">
+                        <div class="icons">
+                            <a href="http://www.facebook.com/ProteusNet"><span class="zocial-facebook"></span></a>
+                            <a href="skype:primozcigler?call"><span class="zocial-skype"></span></a>
+                            <a href="https://twitter.com/proteusnetcom"><span class="zocial-twitter"></span></a>
+                            <a href="http://eepurl.com/xFPYD"><span class="zocial-rss"></span></a>
+                            <a href="#"><span class="zocial-wordpress"></span></a>
+                            <a href="#"><span class="zocial-android"></span></a>
+                            <a href="#"><span class="zocial-html5"></span></a>
+                            <a href="#"><span class="zocial-windows"></span></a>
+                            <a href="#"><span class="zocial-apple"></span></a>
+                        </div>
+                        <div class="register">
+                            <h6>@FuncaoUsuarios.NomeComepleto_Cod(WebSecurity.CurrentUserName)</h6>
+                        </div>
+                    </div>                  
+                    
+                     </text>}
+
+
+                </div><!-- /social icons -->
             </div>
         </div>
     </header>
