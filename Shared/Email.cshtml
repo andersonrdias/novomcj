@@ -1,0 +1,49 @@
+﻿@{
+
+var resultado = "";
+var urlredirecionamento = "/";
+
+var txemail = "";
+var NomeAutor= "";
+var txAssunto= "";
+var txmensagem= "";
+
+if (IsPost)
+{    
+        txemail = Request["txemail"];    
+        NomeAutor = Request["NomeAutor"];
+        txAssunto = Request["txAssunto"];
+        txmensagem = Request["txmensagem"];
+        urlredirecionamento =  Request["url"];
+
+           // Envia email de confirmação        
+            WebMail.Send(to: "contato@celiajoias.com", subject: "Contato Célia Jóias - Assunto: " + txAssunto + " Enviado por: " + NomeAutor ,
+            body: txmensagem);
+
+            resultado = "mensagem enviada";
+
+} else {
+    Response.Redirect(urlredirecionamento);
+}
+Response.Redirect(urlredirecionamento);
+
+
+
+  
+
+    
+}
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+      @resultado  
+    </body>
+</html>

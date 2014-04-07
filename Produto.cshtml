@@ -13,7 +13,8 @@ if (produto == null)
 }
 
 
-
+//Perguntas sobre o produto
+var TxProduto = "Cod. Ref.: " + String.Format("{0:00000}", produto.CodProduto) + " Produto: " + produto.Titulo;
 
     
 }
@@ -175,7 +176,7 @@ if (produto == null)
                         </div>
                     </div>
                     <div class="product-description">
-                        <p>@produto.Descricao </p>
+                        
                         <hr />
                         
                         <!--  ==========  -->
@@ -244,10 +245,7 @@ if (produto == null)
                             <a href="#tab-1" data-toggle="tab">DETALHES </a>
                         </li>
                         <li>
-                            <a href="#tab-2" data-toggle="tab">SIZING CHART</a>
-                        </li>
-                        <li>
-                            <a href="#tab-3" data-toggle="tab">COMMENTS</a>
+                            <a href="#tab-3" data-toggle="tab">PERGUNTAR SOBRE O PRODUTO</a>
                         </li>
                         <li>
                             <a href="#tab-4" data-toggle="tab">DÚVIDAS SOBRE MEDIDAS?</a>
@@ -255,25 +253,47 @@ if (produto == null)
                     </ul>
                     <div class="tab-content">
                         <div class="fade in tab-pane active" id="tab-1">
-                            <h3>Product Description</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus dui ante, vulputate at pellentesque eget, viverra ac dolor. Morbi interdum tortor non leo aliquam ac aliquet nulla porta. Morbi id dolor massa, ut ornare augue. Morbi tincidunt magna bibendum enim tristique tristique. Quisque a massa tellus, ac tempor magna. Sed eget ligula tellus, nec pellentesque dolor. Phasellus dictum, mauris non mollis ornare, turpis libero faucibus orci, at fringilla urna leo sodales libero. Aliquam nec lectus mauris. Morbi lectus quam, convallis vel euismod a, auctor non dui. Etiam a nisi risus.</p>
-                            <p>Phasellus velit quam, ultrices et hendrerit vitae, suscipit nec dui. Sed at ligula vitae ligula pellentesque dictum. Duis lobortis auctor ipsum vel placerat. Phasellus nisi odio, ornare eget faucibus et, accumsan nec mauris. per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus dui ante, vulputate at pellentesque eget, viverra ac dolor.Etiam a nisi risus.</p>
-                            <h1>Heading H1 30px</h1>
-                            <h2>Heading H2 26px</h2>
-                            <h3>Heading H3 20px</h3>
-                            <h4>Heading H4 18px</h4>
-                            <h5>Heading H5 15px</h5>
+                            <h3>Descrição do Produto</h3>
+                            <p>@produto.descricao</p>
+                            <h3>Especificações</h3>
                             <p>Phasellus velit quam, ultrices et hendrerit vitae, suscipit nec dui. Sed at ligula vitae ligula pellentesque dictum. Duis lobortis auctor ipsum vel placerat. Phasellus nisi odio, ornare eget faucibus et, accumsan nec mauris. per conubia nostra, per inceptos himenaeos.</p>
                         </div>
-                        <div class="fade tab-pane" id="tab-2">
-                            <p>
-                                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                            </p>
-                        </div>
+                     
                         <div class="fade tab-pane" id="tab-3">
-                            <p>
-                                Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.
+                           
+                    <section class="contact-form-container">
+                        
+                        <h3 class="push-down-25"><span class="light">Escrever  </span>Pergunta</h3>
+                        <p>Dúvidas sobre este produto?<br> 
+                        Envie-nos a sua dúvida preenchendo os campos abaixo, e logo retornaremos o seu contato.</p>
+
+                        <form id="enviarmensagem" name="enviarmensagem" method="post" action="/shared/email" class="form form-inline form-contact" enctype="multipart/form-data">
+                            <p class="push-down-20">
+                                <input type="text" aria-required="true" tabindex="1" size="30" value="" id="NomeAutor" name="NomeAutor" required="" />
+                                <label for="NomeAutor">Nome<span class="red-clr bold">*</span></label>
                             </p>
+                            <p class="push-down-20">
+                                <input type="email" aria-required="true" tabindex="2" size="30" value="" id="txemail" name="txemail" required="" />
+                                <label for="txemail">Email<span class="red-clr bold">*</span></label>
+                            </p>
+                            </p>
+                            <p class="push-down-20">
+                                <input type="text" tabindex="3" size="30" value="@produto.titulo" id="produto" name="produto" readonly="true" />
+                                <label for="produto">Produto</label>
+                            </p>
+    
+                            <p class="push-down-20">
+                                <textarea class="input-block-level" tabindex="4" rows="5" cols="70" id="txmensagem" name="txmensagem" placeholder="Escreva sua pergunta aqui ..." required=""></textarea>
+                            </p>
+                            <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />
+                            <input type="hidden" name="txtprodutotitulo" size="2" value="@produto.titulo" />
+                            <input type="hidden" name="txtprodutocodigo" size="2" value="@produto.codproduto" />                                     
+                            <p>
+                                <button class="btn btn-primary bold" type="submit" tabindex="5" id="submit">Enviar Pergunta</button>
+                            </p>
+                        </form>
+                    </section>
+              
                         </div>
                         <div class="fade tab-pane" id="tab-4">
 
