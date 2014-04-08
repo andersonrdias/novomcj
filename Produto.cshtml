@@ -2,6 +2,8 @@
 
 
 
+
+
 var produtoID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
 var db = Database.Open("CeliaJoias");
 var sqlSelect = "SELECT * FROM Produtos WHERE CodProduto = @0";
@@ -15,6 +17,32 @@ if (produto == null)
 
 //Perguntas sobre o produto
 var TxProduto = "Cod. Ref.: " + String.Format("{0:00000}", produto.CodProduto) + " Produto: " + produto.Titulo;
+
+
+
+//Adicionar ao histórico
+// Cria um carrinho vazio na sessão se ele não exitir
+if (Session["historico"] == null)
+{
+   Session["historico"] = new Historico();
+}
+// Pega o carrinho atual da Sessão
+Historico historico = (Historico)Session["historico"];
+
+
+
+
+
+
+       var _idProduto = historico.Itens.Count() + 1;
+       var _produtoID = produto.CodProduto;
+       var _descricao = produto.Titulo;
+       var _preco = produto.Preco_Venda;
+       
+
+      historico.AdicionarItem(_idProduto ,_produtoID , _descricao, _preco);
+     
+      
 
     
 }

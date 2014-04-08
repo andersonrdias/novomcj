@@ -10,11 +10,13 @@ public class Historico
     private List<HistoricoItem> _Itens = new List<HistoricoItem>();
     public List<HistoricoItem> Itens { get { return _Itens; } }
     public decimal ValorTotal { get { return _Itens.Sum(p => p.Preco); } }
-    public string LocalEntrega = "";
+    
 
-    public void AdicionarItem(int produtoID, string descricao, decimal preco)
+   // pulic HistoricoDesc {get{return _Itens.OrderByDescending(P => p.ProdutoId) }}
+
+    public void AdicionarItem(int produtoID, int codproduto,string descricao, decimal preco)
     {
-        _Itens.Add( new HistoricoItem { ProdutoID = produtoID, Descricao = descricao, Preco = preco } );
+        _Itens.Add( new HistoricoItem {ProdutoID = produtoID, CodProduto = codproduto, Descricao = descricao, Preco = preco } );
     }
     public void Limpar()
     {
@@ -24,8 +26,6 @@ public class Historico
     {
         _Itens.RemoveAt(index);
     }
-    public void DefinirUF_Entrega (string UF){
-        LocalEntrega = UF;
-    }
+    
 
 }
