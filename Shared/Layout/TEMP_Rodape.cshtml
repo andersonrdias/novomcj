@@ -18,18 +18,17 @@ var  historicoDesc = from h in historico.Itens
 double linhasHistoricoDesc = System.Math.Ceiling(historicoDesc.Count() / 4.0);
 //linhasHistoricoDesc = System.Math.Ceiling(linhasHistoricoDesc); //Math.Ceiling(linhasHistoricoDesc); // 1
 
-var contHistorico = 1;
+var produtoinicial = 1;
 var contTotal = 1;
     
 }
-
 
 
    
     <!--  ==========  -->
     <!--  = Footer =  -->
     <!--  ==========  -->
-<footer>
+    <footer>
         
         <!--  ==========  -->
         <!--  = Upper footer =  -->
@@ -37,10 +36,13 @@ var contTotal = 1;
         <div class="foot-light">
             <div class="container">
                 <div class="row">
-                    <div class="span8">
-
-                @if(historicoDesc.Count()>0){<text>
-                <div class="main-titles lined">
+                   <div class="row featured-items blocks-spacer">
+            <div class="span8">
+                
+                <!--  ==========  -->
+                <!--  = Title =  -->
+                <!--  ==========  -->
+            	<div class="main-titles lined">
             	    <h2 class="title"><span class="light">Produtos</span> Visitados</h2>
             	    <div class="arrows">
                         <a href="#" class="icon-chevron-left" id="featuredItemsLeft"></a>
@@ -49,52 +51,74 @@ var contTotal = 1;
             	</div>
 
 
+<div>
+                <!--  ==========  -->
+                <!--  = Carousel =  -->
+                <!--  ==========  -->
                 <div class="carouFredSel" data-autoplay="false" data-nav="featuredItems">
-                    
-                 @foreach (var item in historicoDesc){
-                     if(contHistorico == 1){RenderPage("~/Shared/Layout/partes/_footer_InicioLinha.cshtml");}   
-           	         <text>  	
-    	            	<!--  ==========  -->
-    					<!--  = Product =  -->
-    					<!--  ==========  -->
-    	            <div class="span2">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img STYLE="width:235px; height:200px" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(item.CodProduto)" alt="@item.Descricao"  />
-                                <div class="img-overlay">
-                                    <a href="/produto/@item.CodProduto" class="btn more btn-primary">Visualizar</a>
+   
+ 
+                @if(historicoDesc.Count() > 0){  
+                    foreach (var item in historicoDesc){
+                    if(produtoinicial == 1)
+                    {@RenderPage("~/Shared/Layout/partes/_footer_InicioLinha.cshtml")}    
+                                                    
+                    <text>
+                    <div class="span2">
+                        <div class="product">
+                            <div class="product-img">
+                                <div class="picture">
+                                    <img STYLE="width:235px; height:200px" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(item.CodProduto)" alt="@item.Descricao"  />
+                                    <div class="img-overlay">
+                                        <a href="/produto/@item.CodProduto" class="btn more btn-primary">Visualizar</a>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="main-titles no-margin">
+                                <h4 class="title">@String.Format("{0:C}", item.Preco)</h4>
+                                <h5 class="no-margin">@item.Descricao</h5>
+                            </div>                                   
                         </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">@String.Format("{0:C}", item.Preco)</h4>
-                            <h5 class="no-margin">@item.Descricao</h5>
-                        </div>
-
-            	    </div>
-            	</div> 
-                            <!-- /product -->
-                     </text>            	            
-                     if(contHistorico == 4 || contTotal == historicoDesc.Count() ){RenderPage("~/Shared/Layout/partes/_footer_FinalLinha.cshtml");}                                 	            	 
-                     
-                     contHistorico ++;
-                     contTotal++;
-                     if(contHistorico == 4){contHistorico =1;}
-                }
-
-            	    
-
-                </div>
-                     
-                 </text>} else {<text>             
-                 <p>Nenhum produto visualizado</p>                        
-                 </text>}
                     </div>
+                    </text> 
+                    produtoinicial++;
+                    contTotal ++;
+                    if(produtoinicial > 4 || contTotal == historicoDesc.Count())
+                    {@RenderPage("~/Shared/Layout/partes/_footer_FinalLinha.cshtml")
+                    produtoinicial = 1;
+                                                                                                                                    	  
+                    }                         
+                    }
+                } else {<text> 
+                <div class="span12"> 
+                <p>Nenhum produto visitado</p>
+                </div>
+
+</text>} 
+                                                         
+                  
                     
-                    <div class="span4">
+                    
+                    
+
+            
+
+                        
+ 	 
+
+            	 
+                </div> <!-- /carousel -->
+            </div>
+
+
+            </div>
+            
+            
+                 
+            </div> 
+                    <div><div class="span4">
                         <div class="main-titles lined">
-                            <h3 class="title"><span class="light">Inscrição no</span> Informativo</h3>
+                            <h3 class="title"><span class="light">Inscrição no </span> Informativo</h3>
                         </div>
                         <p>Cadastre-se e receba Novidades e Ofertas Exclusivas. </p>
                         <!-- Begin MailChimp Signup Form -->
@@ -112,10 +136,16 @@ var contTotal = 1;
                         </form>
                         </div>
                         <!--End mc_embed_signup-->
-                    </div>
-                </div>
+                    </div> </div>
+            
+                    
+                    
+                
             </div>
-        </div> <!-- /upper footer -->
+    
+                
+        </div>
+            </div> <!-- /upper footer -->
         
         <!--  ==========  -->
         <!--  = Middle footer =  -->
@@ -177,14 +207,12 @@ var contTotal = 1;
                          @DateTime.Now.Year &copy; Célia Jóias - Todos os direitos reservados
                     </div>
                     <div class="span6">
-                        <div class="pull-r
-                             ight">Desenvolvido por <a href="http://rdcsoluções.com.br/" target="_blank">RDC Soluções</div>
+                        <div class="pull-right">Desenvolvido por <a href="http://rdcsoluções.com.br/" target="_blank">RDC Soluções</div>
                     </div>
                 </div>
             </div>
         </div> <!-- /bottom footer -->
-    </footer>    
-<!-- /footer -->
+    </footer> <!-- /footer -->
     
     
     
