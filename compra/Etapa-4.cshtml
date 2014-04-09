@@ -1,5 +1,15 @@
 ﻿@{
     
+// Cria um carrinho vazio na sessão se ele não exitir
+if (Session["carrinho"] == null)
+{
+   Session["carrinho"] = new Carrinho();
+}
+// Pega o carrinho atual da Sessão
+Carrinho carrinho = (Carrinho)Session["carrinho"];
+
+
+    
 }
 
  
@@ -10,7 +20,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8" />
-    <title>Webmarket HTML Template - Checkout Step 4</title>
+    <title>Célia Jóias - Compra (4º Etapa)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="ProteusThemes" />
@@ -73,7 +83,9 @@
                     		    	</div>
                     		    	<div class="span6">
                     		    	    <div class="center-align">
-                    		    	        <h1><span class="light">Confirm</span> &amp; Pay</h1>
+                                            <h1><a href="/">Célia Jóias</a></h1>
+                                            <hr />
+                    		    	        <h2><span class="light">Confirmar </span>Compra</h2>
                     		    	    </div>
                     		    	</div>
                     		    	<div class="span2">
@@ -115,75 +127,43 @@
 							    <thead>
 							    	<tr>
 							    		<th colspan="2">Item</th>
-							    		<th><div class="align-center">Quantity</div></th>
-							    		<th><div class="align-right">Price</div></th>
+							    		<th><div class="align-center">Quantidade</div></th>
+							    		<th><div class="align-right">Preço</div></th>
 							    	</tr>
 							    </thead>
 							    <tbody>
-							         
+                                @foreach (var item in carrinho.Itens)
+                                {<text>					         
 							        <tr>
-							        	<td class="image"><img src="/images/dummy/cart-items/cart-item-1.jpg" alt="" width="124" height="124" /></td>
-							        	<td class="desc">Adidas Converse Lorem Ipsum Dolor sit</td>
+							        	<td class="image"><img STYLE="width:124px; height:124px" src="~/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)" alt="" width="124" height="124" /></td>
+							        	<td class="desc">@FuncaoProdutos.Produto_Titulo(item.ProdutoID) &nbsp; <a title="Remove Item" class="icon-remove-sign" href="#"></a></td>
 							        	<td class="qty">
-							        	    3					            	    </td>
+							        	    <input type="text" class="tiny-size" value="1" />
+					            	    </td>
 							        	<td class="price">
-							        	    $59
+							        	    @String.Format("{0:C}", FuncaoProdutos.Produto_Preco(item.ProdutoID))
 							        	</td>
 							        </tr>
-							         
-							        <tr>
-							        	<td class="image"><img src="/images/dummy/cart-items/cart-item-2.jpg" alt="" width="124" height="124" /></td>
-							        	<td class="desc">Adidas Converse Lorem Ipsum Dolor sit</td>
-							        	<td class="qty">
-							        	    2					            	    </td>
-							        	<td class="price">
-							        	    $59
-							        	</td>
-							        </tr>
-							         
-							        <tr>
-							        	<td class="image"><img src="/images/dummy/cart-items/cart-item-3.jpg" alt="" width="124" height="124" /></td>
-							        	<td class="desc">Adidas Converse Lorem Ipsum Dolor sit</td>
-							        	<td class="qty">
-							        	    3					            	    </td>
-							        	<td class="price">
-							        	    $59
-							        	</td>
-							        </tr>
-							         
-							        <tr>
-							        	<td class="image"><img src="/images/dummy/cart-items/cart-item-4.jpg" alt="" width="124" height="124" /></td>
-							        	<td class="desc">Adidas Converse Lorem Ipsum Dolor sit</td>
-							        	<td class="qty">
-							        	    3					            	    </td>
-							        	<td class="price">
-							        	    $59
-							        	</td>
-							        </tr>
-							         
-							        <tr>
-							        	<td class="image"><img src="/images/dummy/cart-items/cart-item-5.jpg" alt="" width="124" height="124" /></td>
-							        	<td class="desc">Adidas Converse Lorem Ipsum Dolor sit</td>
-							        	<td class="qty">
-							        	    3					            	    </td>
-							        	<td class="price">
-							        	    $59
-							        	</td>
-							        </tr>
-							        							        <tr>
-							        	<td colspan="2" rowspan="2">
+							    </text>}
+
+							      <tr>
+							        <td colspan="2" rowspan="2">
 							        	    &nbsp;
 							        	</td>
-							        	<td class="stronger">Shipping:</td>
-							        	<td class="stronger"><div class="align-right">$4.99</div></td>
+							        	<td class="stronger">Frete:</td>
+							        	<td class="stronger"><div class="align-right">0.00</div></td>
+
 							        </tr>
+
 							        <tr>
+
 							        	<td class="stronger">Subtotal:</td>
-							        	<td class="stronger"><div class="size-16 align-right">$357.81</div></td>
+							        	<td class="stronger"><div class="size-16 align-right">@String.Format("{0:C}", carrinho.ValorTotal)</div></td>
 							        </tr>
+
 							    </tbody>
 							</table>
-							
+							<hr />
 							<p class="right-align">
 							    <a href="/" class="btn btn-primary higher bold">Confirmar Compra</a>
 							</p>
