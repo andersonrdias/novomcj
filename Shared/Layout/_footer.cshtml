@@ -15,11 +15,21 @@ var  historicoDesc = from h in historico.Itens
                                 select h;
 
 
-double linhasHistoricoDesc = System.Math.Ceiling(historicoDesc.Count() / 4.0);
-//linhasHistoricoDesc = System.Math.Ceiling(linhasHistoricoDesc); //Math.Ceiling(linhasHistoricoDesc); // 1
 
-var contHistorico = 1;
-var contTotal = 1;
+var contHistorico = 0;
+
+double total = historicoDesc.Count()-1;
+var LinhasHistoricoDesc =  System.Math.Ceiling(total/4); 
+
+
+List<int> listaHistorico = new List<int>();
+foreach (var row in historicoDesc) {	
+listaHistorico.Add(row.CodProduto);
+}
+
+
+
+
     
 }
 
@@ -39,63 +49,91 @@ var contTotal = 1;
                 <div class="row">
                     <div class="span8">
 
-                @if(historicoDesc.Count()>0){<text>
-                <div class="main-titles lined">
+ <!-----------------slider-->
+                 @if(historicoDesc.Count()>0){<text>
+
+
+
+            	<div class="main-titles lined">
             	    <h2 class="title"><span class="light">Produtos</span> Visitados</h2>
             	    <div class="arrows">
                         <a href="#" class="icon-chevron-left" id="featuredItemsLeft"></a>
                         <a href="#" class="icon-chevron-right" id="featuredItemsRight"></a>
                     </div>
             	</div>
-
-
+         
+                <!--  ==========  -->
+                <!--  = Carousel =  -->
+                <!--  ==========  -->
                 <div class="carouFredSel" data-autoplay="false" data-nav="featuredItems">
-                    
-                 @foreach (var item in historicoDesc){
-                     if(contHistorico == 1){RenderPage("~/Shared/Layout/partes/_footer_InicioLinha.cshtml");}   
-           	         <text>  	
+             
+                @for(int l= 0; l< LinhasHistoricoDesc; l++){<text>
+                     
+                   
+                   
+                      <div class="slide">
+                        <div class="row">
+                    	 
+                     @for(int i= 0; i< 4 && contHistorico < historicoDesc.Count(); i++){	<text>  
+                    	
+                    	 
+                	            	
     	            	<!--  ==========  -->
     					<!--  = Product =  -->
     					<!--  ==========  -->
-    	            <div class="span2">
-            	    <div class="product">
-            	        <div class="product-img">
-                            <div class="picture">
-                                <img STYLE="width:235px; height:200px" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(item.CodProduto)" alt="@item.Descricao"  />
-                                <div class="img-overlay">
-                                    <a href="/produto/@item.CodProduto" class="btn more btn-primary">Visualizar</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-titles no-margin">
-                            <h4 class="title">@String.Format("{0:C}", item.Preco)</h4>
-                            <h5 class="no-margin">@item.Descricao</h5>
-                        </div>
-
+    	            	<div class="span2">
+    	            	    <div class="product">
+    	            	        <div class="product-img featured">
+    	            	            <div class="picture">
+    	            	        	    <img STYLE="width:140px; height:150px" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(listaHistorico[contHistorico])" alt=""  />
+    	            	        		<div class="img-overlay">
+    	            	        		 <a href="/produto/@listaHistorico[contHistorico]" class="btn more btn-success">@FuncaoProdutos.Produto_Titulo(listaHistorico[contHistorico]) <br> @String.Format("{0:C}",FuncaoProdutos.Produto_Preco(listaHistorico[contHistorico]))</a>  
+    	            	        		</div>
+    	            	            </div>
+    	            	        </div>
+    	            	        
+    	            	    </div>
+                	      </div> 
+                        <!-- /product -->
+    	            	 
+            	    </text>
+                    contHistorico++; 
+                    }
+               	 
+            	        </div>
             	    </div>
-            	</div> 
-                            <!-- /product -->
-                     </text>            	            
-                     if(contHistorico == 4 || contTotal == historicoDesc.Count() ){RenderPage("~/Shared/Layout/partes/_footer_FinalLinha.cshtml");}                                 	            	 
+
+
+                </text>
                      
-                     contHistorico ++;
-                     contTotal++;
-                     if(contHistorico == 4){contHistorico =1;}
                 }
 
-            	    
+            	  
 
-                </div>
-                     
+
+                </div> <!-- /carousel -->
+
+
+
+
+
+
+
+
                  </text>} else {<text>             
                  <p>Nenhum produto visualizado</p>                        
                  </text>}
+
+
+
+ <!-----------------slider-->
                     </div>
                     
                     <div class="span4">
                         <div class="main-titles lined">
                             <h3 class="title"><span class="light">Inscrição no</span> Informativo</h3>
                         </div>
+                        <br><br>
                         <p>Cadastre-se e receba Novidades e Ofertas Exclusivas. </p>
                         <!-- Begin MailChimp Signup Form -->
                         <div id="mc_embed_signup">
