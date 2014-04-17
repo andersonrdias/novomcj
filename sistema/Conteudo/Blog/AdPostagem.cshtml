@@ -1,0 +1,57 @@
+﻿
+
+@{
+
+
+  
+      
+// System.Web.Mvc
+ 
+//ValidateRequest="false";    var selectQueryStringProdutos = "select * from Produtos order by Titulo";
+
+
+
+
+var db = Database.Open("CeliaJoias");
+var postagens = db.Query( "select * from Postagem");
+
+
+var texto = "";
+
+if (IsPost) {
+
+texto = Request["texto"];
+
+var inserirQuery = "INSERT INTO postagem (conteudo ) " + "VALUES (@0)";
+  db.Execute(inserirQuery, texto);
+
+
+}   
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+     <form method="post" action="#" enctype="multipart/form-data">         
+        
+      <input type="text" id="texto" name="texto"  />
+            <button type="submit">gravar</button>
+         </form>
+        
+
+        <br>
+        <hr>
+        <h1>Exibição</h1>
+                @foreach (var item in postagens) {   
+                  
+@Html.Raw(item.conteudo)
+
+                                
+                    }
+    </body>
+</html>
