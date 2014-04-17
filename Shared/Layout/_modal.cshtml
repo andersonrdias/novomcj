@@ -9,7 +9,7 @@
             <h3 id="loginModalLabel"><span class="light">Bem Vindo ao </span> Célia Jóias!</h3>
         </div>
         <div class="modal-body">
-            <form method="post" action="~/conta/acesso" >
+            <form method="post" action="~/conta/acesso"  >
                 <div class="control-group">
                     <label class="control-label hidden shown-ie8" for="inputEmail">Username</label>
                     <div class="controls">
@@ -30,6 +30,7 @@
                         </label>
                     </div>
                 </div>
+                <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />     
                 <button type="submit" class="btn btn-primary input-block-level bold higher">
                     ENTRAR
                 </button>
@@ -48,7 +49,7 @@
             <h3 id="registerModalLabel"><span class="light">Quero me Cadastrar no site  </span> Célia Jóias</h3>
         </div>
         <div class="modal-body">
-            <form method="post" action="#" />
+            <form method="post" action="#" >
                 <div class="control-group">
                     <label class="control-label hidden shown-ie8" for="inputUsernameRegister">Username</label>
                     <div class="controls">

@@ -1,11 +1,15 @@
 ﻿@{
 
  var email = "";
-  var senha = "";
+ var senha = "";
+ var redirecionar = "~/";
+ 
   if(IsPost)
   {
     email = Request["email"];
     senha = Request["senha"];
+    redirecionar = Request["url"];
+
     var lembrarme = Request["lembrarme"].AsBool();
     // Validação
     if (email.IsEmpty()) {
@@ -27,7 +31,7 @@
            {
                
               // carrinho.DefinirUF_Entrega(FuncaoEntrega.PesquisarUF(email));
-               Response.Redirect("~/");
+               Response.Redirect(redirecionar);
 
             }
         }
