@@ -110,7 +110,7 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
                     		    	</div>
                     		    	<div class="span2">
                     		    	    <div class="right-align">
-                    		    	    	<img src="/images/buttons/security.jpg" alt="Security Sign" width="92" height="65" />
+                    		    	    	<img src="/images/buttons/segura.png" alt="Compra Segura"  />
                     		    	    </div>
                     		    	</div>
                     		    </div>
@@ -172,9 +172,9 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
                 	    <div class="tab-content push-down-30">
                             @if(!WebSecurity.IsAuthenticated){<text>
                 	        <div class="fade in tab-pane active" id="tab-1">
-                	            <h3>Product Description</h3>
-                	            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus dui ante, vulputate at pellentesque eget, viverra ac dolor. Morbi interdum tortor non leo aliquam ac aliquet nulla porta. Morbi id dolor massa, ut ornare augue. Morbi tincidunt magna bibendum enim tristique tristique. Quisque a massa tellus, ac tempor magna. Sed eget ligula tellus, nec pellentesque dolor. Phasellus dictum, mauris non mollis ornare, turpis libero faucibus orci, at fringilla urna leo sodales libero. Aliquam nec lectus mauris. Morbi lectus quam, convallis vel euismod a, auctor non dui. Etiam a nisi risus.</p>
-                	        
+                	            <h3>Bem Vindo</h3>
+                	            <p>Favor efetuar o login em nosso site</p>
+                	            <br>
                             <form method="post" action="~/conta/acesso" class="form-horizontal form-checkout">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">E-mail:<span class="red-clr bold">*</span></label>
@@ -191,26 +191,14 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
 
                                  <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />        
 
-
                                 <div class="control-group">
-                                 
+                                    <label class="control-label" for="firstName"></label>
                                     <div class="controls">
-<div class="span4">
-             
-     <button type="submit" class="btn btn-primary input-block-level bold higher">
-                    ENTRAR
-     </button>                 
-
-
-</div>
-
-         
-                                                                         
-                                                       
+                                        <button type="submit" class="btn btn-primary  bold higher" STYLE="width:51%"> ENTRAR </button>       
+                                        
+                                     
                                     </div>
-                                </div>
-
-                             
+                                </div>           
 
 
                                 
@@ -221,14 +209,47 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
                             
                             </div>
                 	        <div class="fade tab-pane" id="tab-2">
-                	            <p>
-                	                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                	            </p>
+                	            <h3>Sem cadastro? Não se preocupe, é rápido.</h3>
+                	            <p>Favor efetuar o login em nosso site</p>
+                	            <br>
                 	        </div>
                             <div class="fade tab-pane" id="tab-3">
-                	            <p>
-                	                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                	            </p>
+                                <h3>Esqueceu sua senha? Não tem problema</h3>
+                                <p>Informe o seu email de cadastro no campo abaixo para dar inicio ao processo de recuperação de senha.</p>
+                                <br>
+
+                                <form method="post" action="" class="form-horizontal form-checkout">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">E-mail:<span class="red-clr bold">*</span></label>
+                                    <div class="controls">
+                                        <input type="text" id="email" name="email" class="span4" required="" placeholder="Informe seu e-mail" />
+                                    </div>
+                                </div>
+
+
+                                 <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />        
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName"></label>
+                                    <div class="controls">
+                                        <button type="submit" class="btn btn-primary  bold higher" STYLE="width:51%"> RECUPERAR SENHA </button>       
+
+                                    </div>
+                                </div>
+
+                                
+
+                             
+
+
+                                
+                                                             
+                            </form>
+
+
+
+
+
+
                 	        </div>
                             </text>} else {<text>
                             <div class="fade in tab-pane active" id="tab-4">
