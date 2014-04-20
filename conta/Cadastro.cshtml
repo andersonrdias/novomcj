@@ -1,4 +1,6 @@
-﻿@{
+﻿
+
+@{
     
 
     // Inicializar variáveis gerais da página
@@ -20,6 +22,9 @@
     string Pais ="";
 
     string etapa = "";
+
+    string MsgErroEmail = "";
+
 
     if (IsPost) {
     etapa = Request.Form["etapa"];
@@ -90,7 +95,7 @@
                 // Crie e associe uma nova entrada no banco de dados de associação.
                 // Caso tenha êxito, continue processando a solicitação
                 try {
-                    bool requireEmailConfirmation = !WebMail.SmtpServer.IsEmpty();
+                    bool requireEmailConfirmation = false;// !WebMail.SmtpServer.IsEmpty();
                     var token = WebSecurity.CreateAccount(email, password, requireEmailConfirmation);
                     if (requireEmailConfirmation) {
                         var hostUrl = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
@@ -110,7 +115,8 @@
 
                     if (requireEmailConfirmation) {
                         // Agradeça ao usuário por se registrar e informe que um email será enviado
-                        Response.Redirect("~/conta/conclusao");
+                        Response.Redirect("/conta/Conclusao");
+
                     } else {
                         // Volte para a página inicial e saia
                         WebSecurity.Login(email, password);
@@ -123,6 +129,7 @@
             } else {
                 // O usuário já existe
                 ModelState.AddFormError("Email address is already in use.");
+                MsgErroEmail = "O email: " + email +" já esta em sendo usuado em nosso site.";
             }
         }
     }
@@ -211,7 +218,7 @@
                         </li>
                         <li><span class="icon-chevron-right"></span></li>
                         <li>
-                            <a href="">Acesso</a>
+                            <a href="">Cadastro</a>
                         </li>
                     </ul>
                 </div>
@@ -229,8 +236,8 @@
                 
                 <div class="span12">
                     <div class="title-area">
-                        <h1 class="inline"><span class="light">Site</span> Célia Jóias</h1>
-                        <h2 class="inline tagline">- Cadastro (@etapa)</h2>
+                        <h1 class="inline"><span class="light">Site</span> Célia Jóias </h1>
+                        <h2 class="inline tagline">- Cadastro </h2>
                     </div>
                 </div>
                 
@@ -256,27 +263,33 @@
                                     <label class="control-label" for="email">E-mail:</label>
                                     <div class="controls">
                                          <input type="email" id="email" name="email" class="span4" required="" value="@email"/>
-                                         <div style="top: 445px; left: 610.5px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Last 3</div></div>
+                                        @if(MsgErroEmail != ""){<text>
+                                         <div style="top: 438px; left: 610.5px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">@MsgErroEmail</div></div>
+                                        </text>}
+                                        
                                     </div>
                                 </div>
-
-
-
 
                                 <div class="control-group">
                                     <label class="control-label" for="cep">Senha:</label>
                                     <div class="controls">
-                                         <input type="password" id="Password" name="Password" class="span2" required="" value=""/>
-                                        @if(1>0){<text>
-                                        <div style="top: 493px; left: 410px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">@Html.ValidationMessage("password") </div></div>
-                                        </text>}
-                                        
+                                         <input type="password" id="Password" name="Password" class="span2" required="" value="" onblur="contarsenha()"  />
+                                       <div id="diverrorsenha" style="display: none;">
+                                        <div style="top: 493px; left: 410px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">A senha deve ter pelo menos 6 caracteres</div></div>
+                                       </div>
+
+
+
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="estado">Confirma Senha:</label>
                                     <div class="controls">
-                                         <input type="password" name="confirmPassword" id="confirmPassword" class="span2" required=""  value=""/>
+                                         <input type="password" name="confirmPassword" id="confirmPassword" class="span2" onblur="confirmarSenha()" required=""  value=""/>
+                                        <div id="diverroconfirmacaosenha" style="display: none;">
+                                        <div style="top: 550px; left: 410px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">A senha e a confirmação de senha não correspondem.</div></div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 
@@ -327,13 +340,26 @@
                                          <input type="text" readonly="false" id="estado" class="span2" required="" value=""/>
                                     </div>
                                 </div>
+                                <h5><i class="icon-fixed-width"></i>Informativo</h5><hr>
+                                <div class="control-group">
+                                  
+                                    <div class="controls">
+                                        <label>
+                                            <input id="formcadastro_ckbNewsLetter" name="formcadastro$ckbNewsLetter" type="checkbox" checked="true">
+	                                        <span>Quero receber o informativo com notícias, eventos e informações sobre os produtos.</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
 
                                 <hr>
                                 <p class="right-align">
-						        In the next step you will choose a payment method &nbsp; &nbsp;
+						        Declaro ter lido e concordo com os termos de privacidade do site. &nbsp; &nbsp;
 						        <button type="submit" class="btn btn-primary bold higher">
                                     Cadastrar
                                 </button>
+                                <hr>
 						    </p>
 
                             </div>
@@ -357,7 +383,7 @@
                             <h3><span class="light">Search</span></h3>
                         </div> -->
                         
-                        <form class="form" action="#" id="searchform" method="get" role="search" />
+                        <form class="form" action="#" id="searchform" method="get" role="search" >
                             <input type="text" id="appendedInputButton" class="input-block-level" name="s" placeholder="Pesquisar histórico ..." />
                             <button type="submit">
                                 <i class="icon-search"></i>
@@ -422,49 +448,75 @@
     <div id="fb-root"></div>
 
     <script type="text/javascript">
-    function exibe(id) {
-        if (id == '2') {
-            document.getElementById('DivEnderecoEntrega').style.display = "inline";
+        function exibe(id) {
+            if (id == '2') {
+                document.getElementById('DivEnderecoEntrega').style.display = "inline";
+            }
+            else {
+                document.getElementById('DivEnderecoEntrega').style.display = "none";
+            }
         }
-        else {
-            document.getElementById('DivEnderecoEntrega').style.display = "none";
+
+
+        function atualizacep(cep) {
+            cep = cep.replace(/\D/g, "")
+            url = "http://cep.correiocontrol.com.br/" + cep + ".js"
+            s = document.createElement('script')
+            s.setAttribute('charset', 'utf-8')
+            s.src = url
+            document.querySelector('head').appendChild(s)
         }
-    }
+
+        function correiocontrolcep(valor) {
+            if (valor.erro) {
+                document.getElementById('diverrocep').style.display = "inline";
+                return;
+            };
+            document.getElementById('logradouro').value = valor.logradouro
+            document.getElementById('bairro').value = valor.bairro
+            document.getElementById('cidade').value = valor.localidade
+            document.getElementById('estado').value = valor.uf
+
+            document.getElementById('diverrocep').style.display = "none";
+            // enviar UF por aqui
+            //  atualizarEstadoEntrega(valor.uf);
+        }
+
+        function atualizarEstadoEntrega(uf) {
+
+            //      document.getElementById('definirufentrega').value = uf;
+            //      document.formulario01.submit();
+
+            //      alert(uf);
 
 
-    function atualizacep(cep) {
-        cep = cep.replace(/\D/g, "")
-        url = "http://cep.correiocontrol.com.br/" + cep + ".js"
-        s = document.createElement('script')
-        s.setAttribute('charset', 'utf-8')
-        s.src = url
-        document.querySelector('head').appendChild(s)
-    }
-
-    function correiocontrolcep(valor) {
-        if (valor.erro) {
-            document.getElementById('diverrocep').style.display = "inline";            
-            return;
-        };
-        document.getElementById('logradouro').value = valor.logradouro
-        document.getElementById('bairro').value = valor.bairro
-        document.getElementById('cidade').value = valor.localidade
-        document.getElementById('estado').value = valor.uf
-
-         document.getElementById('diverrocep').style.display = "none";     
-        // enviar UF por aqui
-      //  atualizarEstadoEntrega(valor.uf);
-    }
-
-    function atualizarEstadoEntrega(uf) {
-     
-  //      document.getElementById('definirufentrega').value = uf;
-  //      document.formulario01.submit();
-
-  //      alert(uf);
+        }
 
 
-    }
+
+        function confirmarSenha() {
+
+            senha1 = document.formulario01.Password.value;
+            senha2 = document.formulario01.confirmPassword.value;
+
+            if (senha1 == senha2)
+                document.getElementById('diverroconfirmacaosenha').style.display = "none";
+            else
+                document.getElementById('diverroconfirmacaosenha').style.display = "inline";
+        }
+
+
+
+        function contarsenha() {
+
+            numerosCaract = document.formulario01.Password.value.length;
+            if(numerosCaract > 5)
+                 document.getElementById('diverrorsenha').style.display = "none";
+            else
+                document.getElementById('diverrorsenha').style.display = "inline";
+           
+        }
+
 
 
 
@@ -487,6 +539,7 @@
         document.write('<script src="/js/jquery.min.js"><\/script>');
     }
     </script>
+
     
     <!--  = _ =  -->
     <script src="/js/underscore/underscore-min.js" type="text/javascript"></script>
