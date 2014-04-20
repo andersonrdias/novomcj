@@ -1,44 +1,146 @@
 ﻿@{
+    
 
- var email = "";
-  var senha = "";
-  if(IsPost)
-  {
-    email = Request["email"];
-    senha = Request["senha"];
-    var lembrarme = Request["lembrarme"].AsBool();
-    // Validação
-    if (email.IsEmpty()) {
-        ModelState.AddError("email", "Nome do usuário não pode estar em branco.");
-    }
-    if (senha.IsEmpty()) {
-        ModelState.AddError("senha", "A senha deve ser informada.");
-    }
-    // tenta fazer o login
-    if(ModelState.IsValid)
-    {
-       if(WebSecurity.Login(email, senha, lembrarme))
-       {
-           if (Request.QueryString["sender"] != null)
-           {
-              Response.Redirect(Request.QueryString["sender"]);
-           }
-           else
-           {
-               
-              // carrinho.DefinirUF_Entrega(FuncaoEntrega.PesquisarUF(email));
-               Response.Redirect("~/");
+    // Inicializar variáveis gerais da página
+    var email = "";
+    var password = "";
+    var confirmPassword = "";
 
+    string Nome ="";
+    string TelFixo ="";
+    string TelCelular ="";
+    string CPFCNPJ ="";
+    string Logradouro ="";
+    string Numero ="";
+    string Complemento ="";
+    string Bairro ="";
+    string Cidade ="";
+    string CEP ="";
+    string UF ="";
+    string Pais ="";
+
+    string etapa = "";
+
+    if (IsPost) {
+    etapa = Request.Form["etapa"];
+
+    }
+
+
+    if(etapa == "1fase"){
+        
+    Nome = Request.Form["nome"];
+    email = Request.Form["email"];
+    CEP = Request.Form["cep"];
+
+
+
+
+    }else{
+    // Configurar validação
+    Validation.RequireField("email", "Você deve especificar um endereço de email.");
+    Validation.RequireField("password", "A senha não pode ficar em branco.");
+    Validation.Add("confirmPassword",
+        Validator.EqualsTo("password", "A senha e a confirmação de senha não correspondem."));
+    Validation.Add("password",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "A senha deve ter pelo menos 6 caracteres"));
+
+    // Se essa for uma solicitação POST, valide e processe os dados
+    if (IsPost) {
+
+
+
+        AntiForgery.Validate();
+        email = Request.Form["email"];
+        password = Request.Form["password"];
+        confirmPassword = Request.Form["confirmPassword"];
+
+        Nome = Request.Form["nome"];
+        CPFCNPJ = Request.Form["cpfcnpj"];
+        TelCelular = Request.Form["celular"];
+        TelFixo = Request.Form["telefone"];
+        Logradouro = Request.Form["logradouro"];
+        Numero = Request.Form["numero"];
+        Complemento = Request.Form["complemento"];
+        Bairro = Request.Form["Bairro"];
+        Cidade  = Request.Form["Cidade"];
+        CEP = Request.Form["CEP"];
+        UF = Request.Form["uf"];
+        Pais = Request.Form["pais"];
+
+        // Valide a resposta captcha do usuário
+        // if (!ReCaptcha.Validate("PRIVATE_KEY")) {
+        //     ModelState.AddError("recaptcha", "A resposta captcha está incorreta");
+        // }
+
+        // Se todas as informações forem válidas, crie uma nova conta
+        if (Validation.IsValid()) {
+            // Insira um novo usuário no banco de dados
+            var db = Database.Open("CeliaJoias");
+
+            // Verifique se o usuário já existe
+            var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            if (user == null) {
+                // Insira o email na tabela de perfil
+                db.Execute("INSERT INTO UserProfile (Email, Nome, Logradouro, Complemento, Bairro, Cidade, Estado, Pais, Cep) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8)", email, Nome, Logradouro, Complemento, Bairro, Cidade, UF, Pais, CEP );
+
+                // Crie e associe uma nova entrada no banco de dados de associação.
+                // Caso tenha êxito, continue processando a solicitação
+                try {
+                    bool requireEmailConfirmation = !WebMail.SmtpServer.IsEmpty();
+                    var token = WebSecurity.CreateAccount(email, password, requireEmailConfirmation);
+                    if (requireEmailConfirmation) {
+                        var hostUrl = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
+                        var confirmationUrl = hostUrl + VirtualPathUtility.ToAbsolute("~/conta/confirmacao?confirmationCode=" + HttpUtility.UrlEncode(token));
+
+                        var Corpo = "<div id=':161' class='ii gt m1428df759e46ffb1 adP adO' style='font-size: 13px; direction: ltr; margin: 5px 15px 0px 0px; padding-bottom: 5px; position: relative; z-index: 0; text-align: justify;'>	<div id=':160' style='overflow: hidden;'>		<table style='width: 520px; margin-left: auto; margin-right: auto; border: 1px solid #e4e2e2;'>			<tbody>				<tr>					<td style='font-family: arial, sans-serif; margin: 0px;'><span style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'><img src='http://www.celiajoias.com/image/logo.png' alt='' /></span></span>					</td>				</tr>				<tr>					<td style='font-family: arial, sans-serif; margin: 0px; background-color: #f6f3f3;'>						<table>							<tbody>								<tr>									<td>										<p>&nbsp;</p>										<p>Prezado(a) ";
+                        Corpo +=  Nome +",</p>	<div>	<p>Obrigado&nbsp;por&nbsp;cadastrar-se&nbsp;em nosso site!</p>											<p><span style='font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 13px;'>Seu código de confirmação é: <strong>" + token +"</strong>.</span>											</p>											<p>&nbsp;Você precisa seguir para o endereço abaixo, para completar&nbsp;o processo de registro (basta clicar no link abaixo ou copiá-lo&nbsp;&nbsp;e colá-lo em seu navegador):</p>										</div>										<div>&nbsp;</div>									</td>								</tr>							</tbody>						</table>					</td>				</tr>				<tr>					<td><span></span>						<table align='center'>							<tbody>								<tr>									<td>										<p style='text-align: left;'>&nbsp;</p>										<p style='text-align: left;'>";
+                        Corpo +=  "Visite <a href=\"" + confirmationUrl + "\">" + confirmationUrl + "</a> para ativar sua conta.";
+                        Corpo += "</p><p style='text-align: left;'>Caso o link não seja aberto corretamente, veja&nbsp;se&nbsp;ele está&nbsp;quebrado.&nbsp;Se&nbsp;houver algum espaço em branco no link, copie todo&nbsp;&nbsp;ele, remova o espaço em branco para restaurar o link e cole-o&nbsp;em seu avegador para abrir a página que fará a confirmação do&nbsp;e-mail.</p>									</td>								</tr>							</tbody>						</table><span><br /></span>					</td>				</tr>				<tr>					<td style='font-family: arial, sans-serif; margin: 0px; background-color: #f6f3f3;'>						<p>&nbsp;</p>Se&nbsp;você tiver algum problema ou precisar de assistência,&nbsp;&nbsp;escreva para&nbsp;&nbsp;<a href='mailto:contato@celiajoias.com'>contato@celiajoias.com</a><a href='mailto:contato@celiajoias.com.'>.</a>						<p>&nbsp;</p>					</td>				</tr>				<tr>					<td style='font-family: arial, sans-serif; margin: 0px; background-color: #604261;'>						<table style='width: 500px;' align='center'>							<tbody>								<tr>									<td style='font-family: arial, sans-serif; margin: 0px;'>										<p style='color: #222222; font-size: 13px; text-align: right;'><span style='color: #ffffff; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.3em;'>Atenciosamente,</span>										</p>										<p style='color: #222222; font-size: 13px; text-align: right;'><span style='color: #ffffff;'>Célia Jóias.com</span><br /><span style='color: #ffff00;'><a style='color: #1155cc;' href='http://www.celiajoias.com/' target='_blank'>www.CeliaJoias.com</a></span>										</p>									</td>								</tr>							</tbody>						</table>					</td>				</tr>			</tbody>		</table>	</div></div><p>&nbsp;</p><p>&nbsp;</p>";
+
+                        WebMail.Send(
+                            to: email,
+                            subject: "Confirme sua conta",
+                            body: Corpo
+                        );
+                    }
+
+                    if (requireEmailConfirmation) {
+                        // Agradeça ao usuário por se registrar e informe que um email será enviado
+                        Response.Redirect("~/conta/conclusao");
+                    } else {
+                        // Volte para a página inicial e saia
+                        WebSecurity.Login(email, password);
+
+                        Response.Redirect("~/");
+                    }
+                } catch (System.Web.Security.MembershipCreateUserException e) {
+                    ModelState.AddFormError(e.Message);
+                }
+            } else {
+                // O usuário já existe
+                ModelState.AddFormError("Email address is already in use.");
             }
         }
-        else
-        {
-           ModelState.AddFormError("Não foi possível realizar o login.");
-        }
-     }
-  }
-    
+    }
+
+        
+
+
+    }
+
+
+
+
+
+
+
+
 }
+
 
 
 
@@ -127,133 +229,121 @@
                 
                 <div class="span12">
                     <div class="title-area">
-                        <h1 class="inline"><span class="light">Webmarket</span> Blog</h1>
-                        <h2 class="inline tagline">- Where smart people write dumb things</h2>
+                        <h1 class="inline"><span class="light">Site</span> Célia Jóias</h1>
+                        <h2 class="inline tagline">- Cadastro (@etapa)</h2>
                     </div>
                 </div>
                 
                 <!--  ==========  -->
                 <!--  = Main content =  -->
                 <!--  ==========  -->
+                <form method="post" action="cadastro" name="formulario01" enctype="multipart/form-data" autocomplete="off">   
+                @AntiForgery.GetHtml()
                 <section class="span8 blog">
-                    
-                    <!--  ==========  -->
-                    <!--  = Sticky Post =  -->
-                    <!--  ==========  -->
-                    <article class="post format-standard sticky">
-                        <div class="post-inner">
-
-@Html.ValidationSummary(true)
-
-
-    <div>
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="loginModalLabel"><span class="light">Bem Vindo ao </span> Célia Jóias!</h3>
-        </div>
-        <div class="modal-body">
-            @Html.ValidationSummary(true)
-            <form method="post" action="@Request.QueryString" >
-                <div class="control-group">
-                    <label class="control-label hidden shown-ie8" for="inputEmail">Username</label>
-                    <div class="controls">
-                        <input type="text" class="input-block-level" id="email"  name="email" placeholder="email" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label hidden shown-ie8" for="inputPassword">Password</label>
-                    <div class="controls">
-                        <input type="password" class="input-block-level" id="senha"  name="senha" placeholder="senha" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <label class="checkbox">
-                            <input type="checkbox" />
-                            Remember me 
-                        </label>
-                    </div>
-                </div>
-                <button type="submit" value="Login" class="btn btn-primary input-block-level bold higher">
-                    ENTRAR
-                </button>
-            </form>
-            <p class="center-align push-down-0">
-                <a href="#" data-dismiss="modal">Forgot your password?</a>
-            </p>
-        </div>
-    </div>
-    
+                                   
+                 <div class="fade in tab-pane active" id="tab-4">
+                            <div class="form-horizontal">
+                                <h5><i class="icon-fixed-width"></i>Conta de Acesso</h5><hr>    
+                                <div class="control-group">
+                                    <label class="control-label" for="email">Nome:</label>
+                                    <div class="controls">
+                                         <input type="text" id="nome" name="nome" class="span4" required="" value="@Nome"/>
+                                    </div>
+                                </div>
 
 
-                        </div>
-                    </article>
-                    
+                                <div class="control-group">
+                                    <label class="control-label" for="email">E-mail:</label>
+                                    <div class="controls">
+                                         <input type="email" id="email" name="email" class="span4" required="" value="@email"/>
+                                         <div style="top: 445px; left: 610.5px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Last 3</div></div>
+                                    </div>
+                                </div>
 
-                    <!--  ==========  -->
-                    <!--  = Post with Image =  -->
-                    <!--  ==========  -->
-                    <article class="post format-image">
-                        <div class="post-inner">
-                            <a href="blog-single.html"><img src="/images/dummy/blog-posts/post-1.jpg" alt="featured image" width="1540" height="746" /></a>
-                            <div class="post-title">
-                            	<h2><a href="#"><span class="light">Post</span> With an Image</a></h2>
-                            	<div class="metadata">
-                            	    September 4, 2013 /
-                            	    <a href="http://localhost/themeforest/wp-theme/2008/09/layout-test/#comments">No comments</a> /
-                            	    Posted in: <a rel="category tag" title="View all posts in aciform" href="#">Webmarket</a>
-                            	</div>
+
+
+
+                                <div class="control-group">
+                                    <label class="control-label" for="cep">Senha:</label>
+                                    <div class="controls">
+                                         <input type="password" id="Password" name="Password" class="span2" required="" value=""/>
+                                        @if(1>0){<text>
+                                        <div style="top: 493px; left: 410px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">@Html.ValidationMessage("password") </div></div>
+                                        </text>}
+                                        
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="estado">Confirma Senha:</label>
+                                    <div class="controls">
+                                         <input type="password" name="confirmPassword" id="confirmPassword" class="span2" required=""  value=""/>
+                                    </div>
+                                </div>
+                                
+                                <h5><i class="icon-fixed-width"></i>Endereço</h5><hr>
+                                <div class="control-group">
+                                    <label class="control-label" for="logradouro">Logradouro:</label>
+                                    <div class="controls">
+                                         <input type="text" readonly="false" name="logradouro" id="logradouro" class="span4" required=""  value="@Logradouro"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="logradouro">Numero:</label>
+                                    <div class="controls">
+                                         <input type="text" name="numero" id="numero" class="span2" required=""  value="@Numero"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="complemento">Complemento:</label>
+                                    <div class="controls">
+                                         <input type="text" id="complemento" name="complemento" class="span4" required="" value="@Complemento"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">Bairro:</label>
+                                    <div class="controls">
+                                         <input type="text" id="bairro" name="bairro" class="span4" required="" value="@Bairro"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="cidade">Cidade:</label>
+                                    <div class="controls">
+                                         <input type="text" readonly="false" id="cidade" name="cidade" class="span4" required="" value="@Cidade"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="cep">CEP:</label>
+                                    <div class="controls">
+                                         <input type="text" id="cep" name="cep" onblur="atualizacep(this.value)" class="span2" required="" value="@CEP"/>
+                                        <div id="diverrocep" style="display: none;">
+                                       <div style="top: 950px; left: 410.5px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Favor informar um CEP válido</div></div> 
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="estado">Estado:</label>
+                                    <div class="controls">
+                                         <input type="text" readonly="false" id="estado" class="span2" required="" value=""/>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <p class="right-align">
+						        In the next step you will choose a payment method &nbsp; &nbsp;
+						        <button type="submit" class="btn btn-primary bold higher">
+                                    Cadastrar
+                                </button>
+						    </p>
+
                             </div>
-                            
-                            <p class="push-down-25">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat mauris eget magna egestas porta. Curabitur sagittis sagittis neque rutrum congue. Donec lobortis dui sagittis, ultrices nunc ornare, ultricies elit. Curabitur tristique felis pulvinar nibh porta, sit amet interdum ligula placerat. Maecenas auctor, sem nec eleifend blandit...
-                            </p>
-                            
-                            <a href="blog-single.html" class="btn btn-primary bold higher">CONTINUE READING</a>
-                        </div>
-                    </article>
-                    
-                    <!--  ==========  -->
-                    <!--  = Simple Post =  -->
-                    <!--  ==========  -->
-                    <article class="post format-standard">
-                        <div class="post-inner">
-                            <div class="post-title">
-                            	<h2><a href="#"><span class="light">Simple</span> Post - Without Anything Amusing</a></h2>
-                            	<div class="metadata">
-                            	    September 4, 2013 /
-                            	    <a href="http://localhost/themeforest/wp-theme/2008/09/layout-test/#comments">No comments</a> /
-                            	    Posted in: <a rel="category tag" title="View all posts in aciform" href="#">Webmarket</a>
-                            	</div>
-                            </div>
-                            
-                            <p class="push-down-25">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat mauris eget magna egestas porta. Curabitur sagittis sagittis neque rutrum congue. Donec lobortis dui sagittis, ultrices nunc ornare, ultricies elit. Curabitur tristique felis pulvinar nibh porta, sit amet interdum ligula placerat. Maecenas auctor, sem nec eleifend blandit...
-                            </p>
-                            
-                            <a href="blog-single.html" class="btn btn-primary bold higher">CONTINUE READING</a>
-                        </div>
-                    </article>
-                    
-                    <hr />
-                    
-                    <!--  ==========  -->
-                    <!--  = Pagination =  -->
-                    <!--  ==========  -->
-                    <div class="pagination">
-                        <ul>
-                            <li><a href="#" class="btn btn-primary"><span class="icon-chevron-left"></span></a></li>
-                            <li><a href="#">1</a></li>
-                            <li class="active"><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#" class="btn btn-primary"><span class="icon-chevron-right"></span></a></li>
-                        </ul>
-                    </div> <!-- /pagination -->
+                	        </div>  
+                   
+                
+
                     
                 </section> <!-- /main content -->
-
+                </form>
                 <!--  ==========  -->
                 <!--  = Sidebar =  -->
                 <!--  ==========  -->
@@ -313,19 +403,7 @@
                     </div>
                     
                     
-                    <!--  ==========  -->
-                    <!--  = Twitter Widget =  -->
-                    <!--  ==========  -->
-                    <div class="sidebar-item widget_twitter">
-                        <div class="underlined">
-                            <h3><span class="light">Twitter</span> Feed</h3>
-                        </div>
-                        
-                        <a class="twitter-timeline" href="https://twitter.com/primozcigler" data-widget-id="361435057526800385">Tweets by primozcigler</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
-                    </div>
-                    
                     
                 </aside> <!-- /sidebar --> 
                 
@@ -342,6 +420,57 @@
     <!--  = FB =  -->
     
     <div id="fb-root"></div>
+
+    <script type="text/javascript">
+    function exibe(id) {
+        if (id == '2') {
+            document.getElementById('DivEnderecoEntrega').style.display = "inline";
+        }
+        else {
+            document.getElementById('DivEnderecoEntrega').style.display = "none";
+        }
+    }
+
+
+    function atualizacep(cep) {
+        cep = cep.replace(/\D/g, "")
+        url = "http://cep.correiocontrol.com.br/" + cep + ".js"
+        s = document.createElement('script')
+        s.setAttribute('charset', 'utf-8')
+        s.src = url
+        document.querySelector('head').appendChild(s)
+    }
+
+    function correiocontrolcep(valor) {
+        if (valor.erro) {
+            document.getElementById('diverrocep').style.display = "inline";            
+            return;
+        };
+        document.getElementById('logradouro').value = valor.logradouro
+        document.getElementById('bairro').value = valor.bairro
+        document.getElementById('cidade').value = valor.localidade
+        document.getElementById('estado').value = valor.uf
+
+         document.getElementById('diverrocep').style.display = "none";     
+        // enviar UF por aqui
+      //  atualizarEstadoEntrega(valor.uf);
+    }
+
+    function atualizarEstadoEntrega(uf) {
+     
+  //      document.getElementById('definirufentrega').value = uf;
+  //      document.formulario01.submit();
+
+  //      alert(uf);
+
+
+    }
+
+
+
+
+</script>
+
     <script>(function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -391,6 +520,12 @@
     
     <!--  = Custom JS =  -->
     <script src="/js/custom.js" type="text/javascript"></script>
+
+     <script type="text/javascript">
+         $(window).load(function() {
+            atualizacep('@CEP');            
+            })
+     </script>
 
   </body>
 </html>

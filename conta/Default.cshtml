@@ -6,7 +6,33 @@ if (!WebSecurity.IsAuthenticated)
    Response.Redirect("~/conta/acesso");
 }
 
+//Identificação
+var Nome = "";
+var Email = "";
+//Endereço 
+var CadLogradouro = "";    
+var CadComplemento = "";
+var CadBairro = "";
+var CadCidade = "";
+var CadEstado = "";
+var CadCep = "";
+var CadPais = "";
 
+var usuarioAtual = WebSecurity.CurrentUserId;
+var db = Database.Open("CeliaJoias");
+
+foreach (var row in db.Query("select * from UserProfile where UserId = " + usuarioAtual)) 
+    {	
+    Nome = row.Nome;
+    Email = row.Email;
+    CadLogradouro = row.Logradouro;
+    CadComplemento = row.Complemento;        
+    CadBairro = row.Bairro;
+    CadCidade = row.Cidade;
+    CadEstado = row.Estado;
+    CadCep = row.Cep;
+    CadPais = row.Pais;
+}
 
 
 
@@ -148,102 +174,64 @@ if (!WebSecurity.IsAuthenticated)
                         <h3><span class="light">Informações sobre a </span>Conta</h3>
                     </div> <!-- /title -->
                     
-                	<!--  ==========  -->
-                    <!--  = Table of whishlist =  -->
-                    <!--  ==========  -->
-                    <table class="table table-items push-down-50">
-                        <thead>
-                            <tr>
-                                <th colspan="2">Item</th>
-                                <th><div class="align-center">Quantity</div></th>
-                                <th><div class="align-right">Price</div></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                             
-                            <tr>
-                                <td class="image"><img src="/images/dummy/cart-items/cart-item-1.jpg" alt="" width="124" height="124" /></td>
-                                <td class="desc">Adidas Converse Lorem Ipsum Dolor sit &nbsp; <a title="Remove Item" class="icon-remove-sign" data-delete-next="true" href="#"></a></td>
-                                <td class="qty">
-                                    <input type="text" class="tiny-size" value="2" />
-                                </td>
-                                <td class="price">
-                                    $59
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="no-border" colspan="4">
-                                    <form action="#" method="post" class="form">
-                                        <div class="three-quarters">
-                                            <input type="text" class="input-block-level" placeholder="You can enter you comment here">
-                                        </div>  
-                                        <div class="one-quarter">
-                                            <button class="btn btn-primary btn-block higher bold">SAVE</button>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                             
-                            <tr>
-                                <td class="image"><img src="/images/dummy/cart-items/cart-item-2.jpg" alt="" width="124" height="124" /></td>
-                                <td class="desc">Adidas Converse Lorem Ipsum Dolor sit &nbsp; <a title="Remove Item" class="icon-remove-sign" data-delete-next="true" href="#"></a></td>
-                                <td class="qty">
-                                    <input type="text" class="tiny-size" value="4" />
-                                </td>
-                                <td class="price">
-                                    $59
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="no-border" colspan="4">
-                                    <form action="#" method="post" class="form">
-                                        <div class="three-quarters">
-                                            <input type="text" class="input-block-level" placeholder="You can enter you comment here">
-                                        </div>  
-                                        <div class="one-quarter">
-                                            <button class="btn btn-primary btn-block higher bold">SAVE</button>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                                                    </tbody>
-                    </table>
+<div class="fade in tab-pane active" id="tab-4">
+                            <div class="form-horizontal">
+                                <h5><i class="icon-fixed-width"></i>Conta de Acesso</h5><hr>    
+                                <div class="control-group">
+                                    <label class="control-label" for="email">Nome:</label>
+                                    <div class="controls">
+                                         <input type="text" id="email" class="span4" required="" readonly="false" value="@FuncaoUsuarios.NomeComepleto_Cod(WebSecurity.CurrentUserName)"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">E-mail:</label>
+                                    <div class="controls">
+                                         <input type="email" id="email" class="span4" required="" readonly="false" value="@WebSecurity.CurrentUserName"/>
+                                    </div>
+                                </div>
+                                
+                                <h5><i class="icon-fixed-width"></i>Endereço</h5><hr>
+                                <div class="control-group">
+                                    <label class="control-label" for="logradouro">Logradouro:</label>
+                                    <div class="controls">
+                                         <input type="text" id="logradouro" class="span4" required="" readonly="false" value="@CadLogradouro"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="complemento">Complemento:</label>
+                                    <div class="controls">
+                                         <input type="text" id="complemento" class="span4" required="" readonly="false" value="@CadComplemento"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">Bairro:</label>
+                                    <div class="controls">
+                                         <input type="text" id="bairro" class="span4" required="" readonly="false" value="@CadBairro"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="cidade">Cidade:</label>
+                                    <div class="controls">
+                                         <input type="text" id="cidade" class="span4" required="" readonly="false" value="@CadCidade"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="cep">CEP:</label>
+                                    <div class="controls">
+                                         <input type="text" id="cep" class="span2" required="" readonly="false" value="@CadCep"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="estado">Estado:</label>
+                                    <div class="controls">
+                                         <input type="text" id="estado" class="span2" required="" readonly="false" value="@CadEstado"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                	        </div>
 
 
-                    <div class="underlined push-down-20">
-                        <h3><span class="light">My</span> Orders</h3>
-                    </div>
-                    <h6>Hello, Luka Komac!</h6>
-                    <p class="push-down-40">
-                        From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
-                    </p>
-                    
-                    <form action="#" method="post" class="tab-content">
-                        <div class="control-group">
-                            <label class="control-label" for="firstName">First Name<span class="red-clr bold">*</span></label>
-                            <div class="controls">
-                                <input type="text" id="firstName" class="span4" required>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="lastName">Last Name<span class="red-clr bold">*</span></label>
-                            <div class="controls">
-                                <input type="text" id="lastName" class="span4" required>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="email">Email<span class="red-clr bold">*</span></label>
-                            <div class="controls">
-                                <input type="email" id="email" class="span4" required>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="controls">
-                                <button class="btn btn-primary higher bold">SAVE</button>
-                            </div>
-                        </div>
-                        
-                    </form>
 
                 </section> <!-- /main content -->
             </div>

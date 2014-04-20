@@ -49,31 +49,27 @@
             <h3 id="registerModalLabel"><span class="light">Quero me Cadastrar no site  </span> Célia Jóias</h3>
         </div>
         <div class="modal-body">
-            <form method="post" action="#" >
+            <form method="post" action="/conta/cadastro" >
                 <div class="control-group">
-                    <label class="control-label hidden shown-ie8" for="inputUsernameRegister">Username</label>
+                    <label class="control-label hidden shown-ie8" for="inputUsernameRegister">Nome Completo</label>
                     <div class="controls">
-                        <input type="text" class="input-block-level" id="inputUsernameRegister" placeholder="Username" />
+                        <input type="text" class="input-block-level" id="nome" name="nome" placeholder="Nome Completo" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label hidden shown-ie8" for="inputEmailRegister">Email</label>
                     <div class="controls">
-                        <input type="email" class="input-block-level" id="inputEmailRegister" placeholder="Email" />
+                        <input type="email" class="input-block-level" name="email" id="email" placeholder="Email" />
                     </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label hidden shown-ie8" for="inputPasswordRegister">Password</label>
-                    <div class="controls">
-                        <input type="password" class="input-block-level" id="inputPasswordRegister" placeholder="Password" />
-                    </div>
-                </div>
+                </div>                
                 <div class="control-group">
                     <label class="control-label hidden shown-ie8" for="cep">CEP</label>
                     <div class="controls">
-                        <input type="text" class="input-block-level" id="cep" placeholder="cep" />
+                        <input type="text" class="input-block-level" id="cep" name="cep" placeholder="Digite o seu CEP" />
                     </div>
                 </div>
+                <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />   
+                <input type="hidden" name="etapa" id="etapa" value="1fase" />   
                 <button type="submit" class="btn btn-danger input-block-level bold higher">
                     CADASTRAR
                 </button>

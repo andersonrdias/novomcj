@@ -1,5 +1,15 @@
 ﻿@{
 
+
+//Redirecionamento
+if (WebSecurity.IsAuthenticated)
+{
+   Response.Redirect("~/conta");
+}
+
+
+
+
  var email = "";
  var senha = "";
  var redirecionar = "~/";
@@ -315,7 +325,7 @@
                 <!--  ==========  -->
                 <!--  = Sidebar =  -->
                 <!--  ==========  -->
-                <aside class="span4 right-sidebar">
+                <aside class="span3 right-sidebar">
                     
                     <!--  ==========  -->
                     <!--  = Search Widget =  -->
