@@ -1,0 +1,44 @@
+﻿@{
+    
+var email = "";
+ var redirecionar = "~/";
+
+ var db = Database.Open("CeliaJoias");
+
+  if(IsPost)
+  {
+    email = Request["email"];
+    redirecionar = Request["url"];
+
+  
+    //int cont_informativo = db.Query("DELETE FROM informativo_lista WHERE email = @0");
+
+
+
+
+    var deleteQueryString = "DELETE FROM informativo_lista WHERE email = @0";
+    db.Execute(deleteQueryString, email);
+
+    
+    
+
+  }
+
+  //redirecionar para a pagina de confirmação de cadastro ou mensagem de erro.
+  Response.Redirect(@Href(redirecionar)); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+}
+

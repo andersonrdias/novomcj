@@ -1,0 +1,42 @@
+﻿@{
+    
+
+ var email = "";
+ var redirecionar = "~/";
+
+ var db = Database.Open("CeliaJoias");
+
+  if(IsPost)
+  {
+    email = Request["email"];
+    redirecionar = Request["url"];
+
+  
+    int cont_informativo = db.QueryValue("SELECT COUNT (Email) FROM Informativo_Lista Where Email = '" + email +"';");
+
+    //Se válido    
+    if(cont_informativo < 1){
+    // Email não existente na lista
+    var inserirQuery = "INSERT INTO Informativo_Lista (Email) " + "VALUES (@0)";
+    db.Execute(inserirQuery,email);
+
+        
+    } else{
+    //Email ja existe
+        
+
+    }
+    
+    
+
+  }
+
+  //redirecionar para a pagina de confirmação de cadastro ou mensagem de erro.
+  Response.Redirect(@Href(redirecionar)); 
+
+
+
+
+    
+}
+

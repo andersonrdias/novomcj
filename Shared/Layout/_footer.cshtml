@@ -134,12 +134,14 @@ listaHistorico.Add(row.CodProduto);
                             <h3 class="title"><span class="light">Inscrição no</span> Informativo</h3>
                         </div>
                         <br><br>
+
                         <p>Cadastre-se e receba Novidades e Ofertas Exclusivas. </p>
                         <!-- Begin MailChimp Signup Form -->
                         <div id="mc_embed_signup">
-                        <form action="http://proteusthemes.us4.list-manage1.com/subscribe/post?u=ea0786485977f5ec8c9283d5c&amp;id=5dad3f35e9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form form-inline" target="_blank" novalidate="" />
+                        <form action="/conta/cadastroinformativo" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form form-inline"  novalidate="" >
                             <div class="mc-field-group">
                                 <input type="email" value="" placeholder="Digite aqui o seu e-mail." name="EMAIL" class="required email" id="mce-EMAIL" />
+                                <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
                                 <input type="submit" value="Cadastrar" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary" />
                             </div>
                             <div id="mce-responses" class="clear">

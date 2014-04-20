@@ -7,7 +7,14 @@ if (!WebSecurity.IsAuthenticated)
 }
 
 
+var db = Database.Open("CeliaJoias");
 
+
+var conta_existente = false;
+var email = WebSecurity.CurrentUserName;
+
+//Contar quantos existem
+int cont_informativo = db.QueryValue("SELECT COUNT (Email) FROM Informativo_Lista Where Email = '" + email +"';");
 
 
 
@@ -24,7 +31,7 @@ if (!WebSecurity.IsAuthenticated)
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
-    <title>Célia Jóias - Conta</title>
+    <title>Célia Jóias - Informativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="ProteusThemes">
@@ -121,11 +128,11 @@ if (!WebSecurity.IsAuthenticated)
                         	<div class="span3">
 		                    	<div class="widget">
                                     <ul class="nav nav-pills nav-stacked">
-                                        <li class="active"><a href="/conta">Resumo do Conta <i class="icon-caret-right pull-right"></i></a></li>                                        
+                                        <li><a href="/conta">Resumo do Conta <i class="icon-caret-right pull-right"></i></a></li>                                        
                                         <li><a href="/conta/pedidos">Meus Pedidos <i class="icon-caret-right pull-right"></i></a></li>
                                         <li><a href="/conta/listaprodutos">Minha lista de desejos <i class="icon-caret-right pull-right"></i></a></li>
                                         <li><a href="/conta/afiliados">Programa de Afiliados <i class="icon-caret-right pull-right"></i></a></li>
-                                        <li><a href="/conta/informativo">Assinatura de Informativo <i class="icon-caret-right pull-right"></i></a></li>
+                                        <li class="active"><a href="#">Assinatura de Informativo <i class="icon-caret-right pull-right"></i></a></li>
                                     </ul>
                                 </div>
 
@@ -145,105 +152,56 @@ if (!WebSecurity.IsAuthenticated)
                     <!--  = Title =  -->
                     <!--  ==========  -->
                     <div class="underlined push-down-20">
-                        <h3><span class="light">Informações sobre a </span>Conta</h3>
+                        <h3><span class="light">Assinatura do</span> Informativo</h3>
                     </div> <!-- /title -->
-                    
-                	<!--  ==========  -->
-                    <!--  = Table of whishlist =  -->
-                    <!--  ==========  -->
-                    <table class="table table-items push-down-50">
-                        <thead>
-                            <tr>
-                                <th colspan="2">Item</th>
-                                <th><div class="align-center">Quantity</div></th>
-                                <th><div class="align-right">Price</div></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                             
-                            <tr>
-                                <td class="image"><img src="/images/dummy/cart-items/cart-item-1.jpg" alt="" width="124" height="124" /></td>
-                                <td class="desc">Adidas Converse Lorem Ipsum Dolor sit &nbsp; <a title="Remove Item" class="icon-remove-sign" data-delete-next="true" href="#"></a></td>
-                                <td class="qty">
-                                    <input type="text" class="tiny-size" value="2" />
-                                </td>
-                                <td class="price">
-                                    $59
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="no-border" colspan="4">
-                                    <form action="#" method="post" class="form">
-                                        <div class="three-quarters">
-                                            <input type="text" class="input-block-level" placeholder="You can enter you comment here">
-                                        </div>  
-                                        <div class="one-quarter">
-                                            <button class="btn btn-primary btn-block higher bold">SAVE</button>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                             
-                            <tr>
-                                <td class="image"><img src="/images/dummy/cart-items/cart-item-2.jpg" alt="" width="124" height="124" /></td>
-                                <td class="desc">Adidas Converse Lorem Ipsum Dolor sit &nbsp; <a title="Remove Item" class="icon-remove-sign" data-delete-next="true" href="#"></a></td>
-                                <td class="qty">
-                                    <input type="text" class="tiny-size" value="4" />
-                                </td>
-                                <td class="price">
-                                    $59
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="no-border" colspan="4">
-                                    <form action="#" method="post" class="form">
-                                        <div class="three-quarters">
-                                            <input type="text" class="input-block-level" placeholder="You can enter you comment here">
-                                        </div>  
-                                        <div class="one-quarter">
-                                            <button class="btn btn-primary btn-block higher bold">SAVE</button>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                                                    </tbody>
-                    </table>
 
+                    @if(cont_informativo > 0){<text>
+                    <div class="alert alert-success in fade">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                             <b>Assintura Ativa </b>para o email:@email
+                        </div>                   
+                    <p>
+                    Obrigado por assinar o nosso informativo.<br>
+                    Através do nosso informativo você será sempre atualizado com as noticias do nosso site e receberá ofertas especiais.
 
-                    <div class="underlined push-down-20">
-                        <h3><span class="light">My</span> Orders</h3>
-                    </div>
-                    <h6>Hello, Luka Komac!</h6>
-                    <p class="push-down-40">
-                        From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
                     </p>
-                    
-                    <form action="#" method="post" class="tab-content">
-                        <div class="control-group">
-                            <label class="control-label" for="firstName">First Name<span class="red-clr bold">*</span></label>
-                            <div class="controls">
-                                <input type="text" id="firstName" class="span4" required>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="lastName">Last Name<span class="red-clr bold">*</span></label>
-                            <div class="controls">
-                                <input type="text" id="lastName" class="span4" required>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="email">Email<span class="red-clr bold">*</span></label>
-                            <div class="controls">
-                                <input type="email" id="email" class="span4" required>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="controls">
-                                <button class="btn btn-primary higher bold">SAVE</button>
-                            </div>
-                        </div>
-                        
+                    <br><br><hr>
+                    <form action="/conta/retirarinformativo" method="post" >
+                    <p class="right-align">
+							    Deseja retirar o seu email da lista do informativo? &nbsp; &nbsp;                                
+                                <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
+                                <input type="hidden" name="email" size="2" value="@email" />                                                    
+                                <input type="submit" value="Retira-se do Informativo" name="subscribe" id="mc-embedded-subscribe" class="btn btn-danger btn-small push-down-10" />
+					</p>                    
                     </form>
+                    </text>} else {<text>
+                    <div class="alert alert-danger in fade">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                             <b>Assintura desativada </b>para o email:@email
+                        </div>                   
+                    <p>
+                    Deseja receber promoções especiais exclusivas para os nossos assinantes? <br>
+                    O nosso site se compromete a não divulgar o seu email.  Respeitando a privacidade dos nossos clientes.
+
+                    </p>
+                    <br><br><hr>
+                    <form action="/conta/cadastroinformativo" method="post" >
+                    <p class="right-align">
+							    Deseja incluir o seu email da lista do informativo? &nbsp; &nbsp;
+                                <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
+                                <input type="hidden" name="email" size="2" value="@email" />                                                    
+                                <input type="submit" value="Assinar Informativo" name="subscribe" id="mc-embedded-subscribe" class="btn btn-success push-down-10" />
+
+					</p>                    
+                    </form>
+                    
+                    </text>}
+
+
+                    <br><br><br>
+
+
+
 
                 </section> <!-- /main content -->
             </div>
