@@ -10,7 +10,15 @@ public class Carrinho
     private List<CarrinhoItem> _Itens = new List<CarrinhoItem>();
     public List<CarrinhoItem> Itens { get { return _Itens; } }
     public decimal ValorTotal { get { return _Itens.Sum(p => p.Preco); } }
-    public string LocalEntrega = "";
+
+    //Endereço de entrega
+    public string Logradouro = "";
+    public string Numero = "";
+    public string Complemento = "";
+    public string Bairro = "";
+    public string Cidade = "";
+    public string Cep = "";
+    public string Estado = "";
 
     public void AdicionarItem(int produtoID, string descricao, decimal preco)
     {
@@ -24,8 +32,18 @@ public class Carrinho
     {
         _Itens.RemoveAt(index);
     }
-    public void DefinirUF_Entrega (string UF){
-        LocalEntrega = UF;
+
+    public void DefinirEnderecoEntrega (string _logradouro, string _numero ,string _complemento, string _bairro, string _cidade, string _cep, string _estado){
+        
+        Logradouro = _logradouro;
+        Numero = _numero;
+        Complemento = _complemento;
+        Bairro = _bairro;
+        Cep = _cep;
+        Cidade = _cidade;
+        Estado = _estado;
+
+
     }
 
 }

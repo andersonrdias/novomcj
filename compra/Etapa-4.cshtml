@@ -135,7 +135,7 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
                                 @foreach (var item in carrinho.Itens)
                                 {<text>					         
 							        <tr>
-							        	<td class="image"><img STYLE="width:124px; height:124px" src="~/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)" alt="" width="124" height="124" /></td>
+							        	<td class="image"><img STYLE="width:62px; height:62px" src="~/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)" alt="" width="124" height="124" /></td>
 							        	<td class="desc">@FuncaoProdutos.Produto_Titulo(item.ProdutoID) &nbsp; <a title="Remove Item" class="icon-remove-sign" href="#"></a></td>
 							        	<td class="qty">
 							        	    <input type="text" class="tiny-size" value="1" />
@@ -163,7 +163,29 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
 
 							    </tbody>
 							</table>
-							<hr />
+							
+                            
+
+                            <div class="alert alert-info in fade">
+                            
+                            <h4>Endereço de Entrega</h4>
+                            <p>@carrinho.Logradouro. @carrinho.Numero<br>
+                            @if(carrinho.Complemento != ""){
+                            <text>
+                            carrinho.Complemento <br>                                                            
+                            </text>
+                            }
+                            @carrinho.Bairro<br>
+                            @carrinho.Cidade<br>
+                            @carrinho.Cep - @carrinho.Estado</p>
+
+
+                            </div>
+
+
+
+
+                            <hr />
 							<p class="right-align">
 							    <a href="/" class="btn btn-primary higher bold">Confirmar Compra</a>
 							</p>

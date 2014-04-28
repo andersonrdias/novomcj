@@ -1,39 +1,115 @@
 ﻿@{
     
 
+var usuarioAtual = WebSecurity.CurrentUserId;
+var db = Database.Open("CeliaJoias");
+
+    
+// Cria um carrinho vazio na sessão se ele não exitir
+if (Session["carrinho"] == null)
+{
+   Session["carrinho"] = new Carrinho();
+}
+// Pega o carrinho atual da Sessão
+Carrinho carrinho = (Carrinho)Session["carrinho"];
+
 
 //Identificação
 var Nome = "";
 var Email = "";
 //Endereço 
-var CadLogradouro = "";    
+var Logradouro = "";
+var numero = "";
+var Complemento = "";
+var Bairro = "";
+var Cidade = "";
+var Cep = "";
+var Estado = "";
+// Endereço Padrão
+var CadLogradouro = "";
+var Cadnumero = "";
 var CadComplemento = "";
 var CadBairro = "";
 var CadCidade = "";
-var CadEstado = "";
 var CadCep = "";
-var CadPais = "";
+var CadEstado = "";
 
-var usuarioAtual = WebSecurity.CurrentUserId;
-var db = Database.Open("CeliaJoias");
+
 
 foreach (var row in db.Query("select * from UserProfile where UserId = " + usuarioAtual)) 
     {	
     Nome = row.Nome;
     Email = row.Email;
+
     CadLogradouro = row.Logradouro;
+    Cadnumero = row.Numero;
     CadComplemento = row.Complemento;        
     CadBairro = row.Bairro;
     CadCidade = row.Cidade;
     CadEstado = row.Estado;
     CadCep = row.Cep;
-    CadPais = row.Pais;
+    
+}
+
+
+
+if(carrinho.Cep != null){
+
+    Logradouro = carrinho.Logradouro;
+    numero = carrinho.Numero;
+    Complemento = carrinho.Complemento;        
+    Bairro = carrinho.Bairro;
+    Cidade = carrinho.Cidade;
+    Estado = carrinho.Estado;
+    Cep = carrinho.Cep;
+    
+
+} else {
+    
+    Logradouro = CadLogradouro;
+    numero = Cadnumero;
+    Complemento = CadComplemento;        
+    Bairro = CadBairro;
+    Cidade = CadCidade;
+    Estado = CadEstado;
+    Cep = CadCep;
+
+
+
 }
   
 //Frete
 var frete_cobrar = true;  
-var frete_valor = 10.4;  
+var frete_valor = 10.4;
+var frete_estadp = "RJ";  
+
+
+//Selecão de tipo de endereço
+var tipoEndereco = "";
+
+
   
+ if (IsPost){
+  
+        Logradouro = Request["logradouro"];
+        numero = Request["numero"];
+        Complemento = Request["complemento"];
+        Cidade = Request["cidade"];
+        Bairro = Request["bairro"];
+        Estado = Request["estado"];
+        Cep = Request["cep"];
+        
+
+
+    carrinho.DefinirEnderecoEntrega(Logradouro, numero, Complemento, Bairro, Cidade, Cep, Estado);
+    Response.Redirect("/compra/Etapa-4");
+
+
+ }
+
+
+
+
     
 }
 
@@ -144,145 +220,98 @@ var frete_valor = 10.4;
                     		    	</div>
                     		    </div>
                     		</div> <!-- /steps -->
-                    		
-						    <!--  ==========  -->
-							<!--  = Payment =  -->
-							<!--  ==========  -->
+                    	
 							
+                            <form method="post" action="Etapa-3" name="formEndereco" enctype="multipart/form-data">
+
+	
+						
 							
                             <div class="form-horizontal">
                 	            <h3><i class="icon-fixed-width"></i>Endereço de Entrega</h3>
+                                <div class="control-group">                                                                  
+                                			    
+			
+						          
+                                        <div class="alert in fade right-align">                                            
+                                            <b>Atenção!</b> Defina com bastante atenção o endereço de entrega, o local não poderá ser alterado posteriormente. &nbsp; &nbsp;&nbsp; 
+                                            <input type="button" onclick="copiarEnderecoPadrao()" class="btn btn-warning higher bold"  value="Utilizar Endereço Padrão">
+                                        </div>						        
+                           
                                 
-                        
-                    
-                                
-                                
-                                        
-                                                	           
-                                <div class="control-group">
-                                    
-                                    <div class="controls">
-
-                                <label for="SelEnderecoCadastro">
-                                <input type="radio" checked="checked" id="SelEnderecoCadastro" value="1" name="SelEnderecoCadastro"  onclick="javascript: exibe('1');">
-                                O Endereço de entrega <b>é o mesmo </b>endereço de cadastro
-                                </label>
-    
-                                <label for="SelEnderecoCadastro2">
-                                <input type="radio" id="SelEnderecoCadastro2" value="2" name="SelEnderecoCadastro"  onclick="javascript: exibe('2');">
-                                O endereço de entrega <b> é diferente</b> do endereço de cadastro, e irei digitar este endereço.
-                                </label>
-                                        <div class="alert in fade">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
-                                            <b>Atenção!</b> Defina com bastante atenção o endereço de entrega, o local não poderá ser alterado posteriormente.
-                                        </div>
-                                    
-                                </div>
-
-
-
-                                <div id="enderecopadrao">
+                                <div id="endereco">
                             
-                                <h5><i class="icon-fixed-width"></i>Endereço residência</h5>
+                                
                                 <hr>
                                 <div class="control-group">
                                     <label class="control-label" for="logradouro">Logradouro:</label>
                                     <div class="controls">
-                                         <input type="text" id="logradouro" class="span4" required="" readonly="false" value="@CadLogradouro"/>
+                                         <input type="text" id="logradouro" name="logradouro" class="span4" required=""  value="@Logradouro"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="numero">Numero:</label>
+                                    <div class="controls">
+                                         <input type="text" id="numero" name="numero" class="span2" required=""  value="@numero"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="complemento">Complemento:</label>
                                     <div class="controls">
-                                         <input type="text" id="complemento" class="span4" required="" readonly="false" value="@CadComplemento"/>
+                                         <input type="text" id="complemento" name="complemento" class="span4"  value="@Complemento"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="email">Bairro:</label>
+                                    <label class="control-label" for="bairro">Bairro:</label>
                                     <div class="controls">
-                                         <input type="text" id="bairro" class="span4" required="" readonly="false" value="@CadBairro"/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="cidade">Cidade:</label>
-                                    <div class="controls">
-                                         <input type="text" id="cidade" class="span4" required="" readonly="false" value="@CadCidade"/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="cep">CEP:</label>
-                                    <div class="controls">
-                                         <input type="text" id="cep" class="span2" required="" readonly="false" value="@CadCep"/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="estado">Estado:</label>
-                                    <div class="controls">
-                                         <input type="text" id="estado" class="span2" required="" readonly="false" value="@CadEstado"/>
-                                    </div>
-                                </div>
-                                </div>
-
-                                <div id="endereconovo" style="display: none;">
-                            
-                                <h5><i class="icon-fixed-width"></i>Novo Endereço</h5>
-                                <hr>
-                                <div class="control-group">
-                                    <label class="control-label" for="logradouro">Logradouro:</label>
-                                    <div class="controls">
-                                         <input type="text" id="logradouro" class="span4" required=""  value=""/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="complemento">Complemento:</label>
-                                    <div class="controls">
-                                         <input type="text" id="complemento" class="span4" required=""  value=""/>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="email">Bairro:</label>
-                                    <div class="controls">
-                                         <input type="text" id="bairro" class="span4" required=""  value=""/>
+                                         <input type="text" id="bairro" name="bairro" class="span4" required=""  value="@Bairro"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="cidade">Cidade:</label>
                                     <div class="controls">
-                                         <input type="text" id="cidade" class="span4" required=""  value=""/>
+                                         <input type="text" id="cidade" name="cidade" class="span4" required=""  value="@Cidade"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="cep">CEP:</label>
                                     <div class="controls">
-                                         <input type="text" id="cep" class="span2" required=""  value=""/>
+                                         <input type="text" id="cep" onblur="atualizacep(this.value)" name="cep" class="span2" required=""  value="@Cep"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="estado">Estado:</label>
                                     <div class="controls">
-                                         <input type="text" id="estado" class="span2" required=""  value=""/>
+                                         <input type="text" id="estado" name="estado" onblur="confirmarEstado()" class="span2" required=""  value="@Estado"/>
                                     </div>
                                 </div>
                                 </div>
 
                             </div>
-                            @if(frete_cobrar){<text>
-                            <div class="alert alert-danger in fade">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <b>Aviso!</b><br>Será cobrado o frete no valor de @String.Format("{0:C}",frete_valor) devido a combra não alcançar o valor mínimo para frete gratuíto.                            
-                            </div>  
-                            </text>}
+                                
+                                <div  id="divcobrarfrete">
+                                <div class="alert alert-danger in fade">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <b>Aviso!</b><br>Será cobrado o frete no valor de @String.Format("{0:C}",frete_valor) devido a combra não alcançar o valor mínimo para frete gratuíto.                            
+                                </div>
+                                </div>  
+        
 							
         
-                            <hr />
+                                <hr />
 						    
-						    <p class="right-align">
-						        Na próxima e última etapa, será possivel rever e confirmar a compra &nbsp; &nbsp;
-						        <a href="/compra/etapa-4 " class="btn btn-primary higher bold">CONTINUE</a>
-						    </p>
+						        <p class="right-align">
+						            Na próxima e última etapa, será possivel rever e confirmar a compra &nbsp; &nbsp;
+
+                                     <input type="submit" class="btn btn-primary higher bold" id="button-confirm" value="Continue">
+						            
+						        </p>
 							    
 							    
                     	</div>
+
+                            </form>
+
                     </div>
                 </div>
                 
@@ -322,52 +351,82 @@ var frete_valor = 10.4;
     }
     </script>
     <script type="text/javascript">
-    function exibe(id) {
-        if (id == '1') {
-            document.getElementById('endereconovo').style.display = "none";
-            document.getElementById('enderecopadrao').style.display = "inline";
+        function exibe(id) {
+            if (id == '1') {
+                document.getElementById('endereconovo').style.display = "none";
+                document.getElementById('enderecopadrao').style.display = "inline";
+            }
+            else {
+                document.getElementById('endereconovo').style.display = "inline";
+                document.getElementById('enderecopadrao').style.display = "none";
+            }
         }
-        else {
-            document.getElementById('endereconovo').style.display = "inline";
-            document.getElementById('enderecopadrao').style.display = "none";
+
+
+        function atualizacep(cep) {
+            cep = cep.replace(/\D/g, "")
+            url = "http://cep.correiocontrol.com.br/" + cep + ".js"
+            s = document.createElement('script')
+            s.setAttribute('charset', 'utf-8')
+            s.src = url
+            document.querySelector('head').appendChild(s)
         }
-    }
+
+        function correiocontrolcep(valor) {
+            if (valor.erro) {
+                alert('Cep não encontrado');
+                return;
+            };
+            document.getElementById('logradouro').value = valor.logradouro
+            document.getElementById('bairro').value = valor.bairro
+            document.getElementById('cidade').value = valor.localidade
+            document.getElementById('estado').value = valor.uf
+        
+        confirmarEstado();
+
+            // enviar UF por aqui
+            //  atualizarEstadoEntrega(valor.uf);
+        }
+
+        function atualizarEstadoEntrega(uf) {
+
+            //      document.getElementById('definirufentrega').value = uf;
+            //      document.formulario01.submit();
+
+            //      alert(uf);
 
 
-    function atualizacep(cep) {
-        cep = cep.replace(/\D/g, "")
-        url = "http://cep.correiocontrol.com.br/" + cep + ".js"
-        s = document.createElement('script')
-        s.setAttribute('charset', 'utf-8')
-        s.src = url
-        document.querySelector('head').appendChild(s)
-    }
-
-    function correiocontrolcep(valor) {
-        if (valor.erro) {
-            alert('Cep não encontrado');
-            return;
-        };
-        document.getElementById('endereco').value = valor.logradouro
-        document.getElementById('bairro').value = valor.bairro
-        document.getElementById('cidade').value = valor.localidade
-        document.getElementById('estado').value = valor.uf
-
-        // enviar UF por aqui
-      //  atualizarEstadoEntrega(valor.uf);
-    }
-
-    function atualizarEstadoEntrega(uf) {
-     
-  //      document.getElementById('definirufentrega').value = uf;
-  //      document.formulario01.submit();
-
-  //      alert(uf);
+        }
 
 
-    }
+
+        function confirmarEstado() {
+
+            if (document.getElementById('estado').value == 'RJ') {
+
+                document.getElementById('divcobrarfrete').style.display = "none";
+            } else {
+
+                document.getElementById('divcobrarfrete').style.display = "inline";
+            }
+
+        }
 
 
+        function copiarEnderecoPadrao() {
+
+            document.getElementById('logradouro').value = '@CadLogradouro';
+            document.getElementById('numero').value = '@Cadnumero';
+            document.getElementById('bairro').value = '@CadBairro';
+            document.getElementById('cidade').value = '@CadCidade';
+            document.getElementById('cep').value = '@CadCep';
+            document.getElementById('estado').value = '@CadEstado';
+
+            alert('Endereço padrão copiado');
+
+	        confirmarEstado();
+
+        }
 
 
 </script>
