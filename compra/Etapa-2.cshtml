@@ -6,6 +6,7 @@ var Email = "";
 //Endereço 
 var CadLogradouro = "";    
 var CadComplemento = "";
+var CadNumero = "";
 var CadBairro = "";
 var CadCidade = "";
 var CadEstado = "";
@@ -20,6 +21,7 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
     Nome = row.Nome;
     Email = row.Email;
     CadLogradouro = row.Logradouro;
+    CadNumero = row.Numero;
     CadComplemento = row.Complemento;        
     CadBairro = row.Bairro;
     CadCidade = row.Cidade;
@@ -273,6 +275,12 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
                                     <label class="control-label" for="logradouro">Logradouro:</label>
                                     <div class="controls">
                                          <input type="text" id="logradouro" class="span4" required="" readonly="false" value="@CadLogradouro"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="numero">Numero:</label>
+                                    <div class="controls">
+                                         <input type="text" id="numero" class="span2" required="" readonly="false" value="@CadNumero"/>
                                     </div>
                                 </div>
                                 <div class="control-group">

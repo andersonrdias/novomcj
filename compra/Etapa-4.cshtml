@@ -1,5 +1,11 @@
 ﻿@{
     
+var usuarioAtual = WebSecurity.CurrentUserId;
+var db = Database.Open("CeliaJoias");
+
+//Opção de envio
+bool copiaEmail = true; 
+    
 // Cria um carrinho vazio na sessão se ele não exitir
 if (Session["carrinho"] == null)
 {
@@ -7,6 +13,85 @@ if (Session["carrinho"] == null)
 }
 // Pega o carrinho atual da Sessão
 Carrinho carrinho = (Carrinho)Session["carrinho"];
+
+string pedidoCep = "";
+
+var DataPedido = DateTime.Now;
+
+
+if(IsPost){
+    
+    pedidoCep = Request["cep"];
+
+   //  if(pedidoCep == carrinho.Cep){
+
+          //---------------------------------------Pedido Ok
+          // salva pedido
+            var UsuarioID = WebSecurity.GetUserId(WebSecurity.CurrentUserName);
+          //  var db = Database.Open("TecnoSite");
+        
+          var pedidoSQL = "INSERT INTO Pedidos (CodUsuario, pedidoEnviado, pedidoTotal, " +
+          "pedidoDataHora, logradouro, bairro,cidade, uf, pais, cep, complemento,numero) VALUES ( @0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11)";
+        
+          db.Execute(pedidoSQL,UsuarioID,false,carrinho.ValorTotal,DataPedido,carrinho.Logradouro,carrinho.Bairro,carrinho.Cidade,carrinho.Estado,"Brasil",carrinho.Cep, carrinho.Complemento, carrinho.Numero);
+        
+          var pedidoId = db.GetLastInsertId();
+        
+          foreach(var item in carrinho.Itens)
+          {
+                pedidoSQL = "INSERT INTO PedidoItens (CodPedido, CodProduto, preco, descricao) VALUES (@0, @1, @2, @3)";
+                db.Execute(pedidoSQL, pedidoId, item.ProdutoID,  item.Preco, item.Descricao);
+          }
+        
+        
+          //Corpo da Mensagem
+
+             if(carrinho.Complemento != ""){carrinho.Complemento = "<br />Complemento:" + carrinho.Complemento;}
+
+            var Corpo = "<table style='width: 520px; margin-left: auto; margin-right: auto; border: 1px solid #e4e2e2;'> <tbody>  <tr>   <td><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'><img src='http://www.celiajoias.com/image/logo.png' /></span></span>   </td>  </tr>  <tr>   <td style='background-color: #f6f3f3;'>    <table style='width: 500px; margin-left: auto; margin-right: auto;'>     <tbody>      <tr>       <td>        <p>&nbsp;</p>        <p style='text-align: justify;'>Prezado(a) " ;
+            Corpo += FuncaoUsuarios.NomeComepleto_PeloCod(UsuarioID) +",</p> <p style='text-align: justify;'>Obrigado por comprar no CeliaJoias.com<br />Recebemos seu pedido feito em <strong>";
+            Corpo += DataPedido +"</strong>.</p><h2 style='text-align: justify;'> Nº do pedido:<br />";
+            Corpo += String.Format("{0:000000}", pedidoId) +"</h2>        <p style='text-align: justify;'>O prazo de entrega será em até 03 dia(s) útil(eis) após a confirmação do pagamento.</p>        <p style='text-align: justify;'>Para sua segurança, se houver qualquer divergência de informações cadastrais, endereço de entrega e de pagamento, entraremos em contato para confirmar os dados antes de enviar os produtos.</p>        <p style='text-align: justify;'>Enviaremos um novo e-mail a cada evolução no andamento do seu pedido. Caso prefira, você pode acompanhar também pelo site.</p><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'></span></span>       </td>      </tr>      <tr>       <td>        <p>&nbsp;</p>       </td>      </tr>     </tbody>    </table>   </td>  </tr>  <tr>   <td><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'></span></span> </span>    <table align='center' style='width: 100%;'>     <tbody>      <tr>       <td>        <p>&nbsp;</p>       </td>      </tr>      <tr>       <td>        <p><strong>Resumo do Pedido:</strong>        </p>        <table align='center' style='width: 100%;'>         <tbody>          <tr>           <td>Produto</td>           <td>Qtde</td>           <td>Preço</td>           <td>Total</td>          </tr>";
+            foreach(var item in carrinho.Itens)
+            {
+              Corpo += " <tr> <td>" + FuncaoProdutos.Produto_Titulo(item.ProdutoID) +"</td>           <td>1</td>           <td>" +  String.Format("{0:C}", item.Preco) +"</td>           <td>" +  String.Format("{0:C}", item.Preco) + "</td>          </tr>";
+            }
+             Corpo += "<tr>           <td colspan='3'>            <hr />           </td>           <td>            <hr />           </td>          </tr>          <tr>           <td colspan='3'>Sub-Total:</td>           <td>";
+             Corpo +=  String.Format("{0:C}", carrinho.ValorTotal) +"</td>          </tr>          <tr>           <td colspan='3'>Descontos:</td>           <td>R$ 0,00</td>          </tr>          <tr>           <td colspan='3'>Despesa c/ Entrega:</td>           <td>R$ 0,00</td>          </tr>          <tr>           <td colspan='3'>Total:</td>           <td>" + String.Format("{0:C}", carrinho.ValorTotal) + "</td>          </tr>         </tbody>        </table>        <p>&nbsp;</p>       </td>      </tr>      <tr>       <td><strong>Endereço de Entrega:</strong><br /> Logradouro: ";
+             Corpo += carrinho.Logradouro +", " +carrinho.Numero + " - "+ carrinho.Complemento + "<br /> Bairro: " + carrinho.Bairro + "<br /> Cidade: "  + carrinho.Cidade + "<br />CEP:" + carrinho.Cep + " Estado:" + carrinho.Estado +  "</td>      </tr>     </tbody>    </table><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'><br /></span></span>   </td>  </tr>  <tr>   <td style='background-color: #f6f3f3;'><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'></span></span> </span>    <table align='center' style='width: 500px;'>     <tbody>      <tr>       <td>        <p><strong>IMPORTANTE:</strong>        </p>        <p><strong>Aprovação da compra</strong>        </p>        <ul>         <li>Caso a aprovação do pagamento pela instituição financeira ocorra após às 20h, a data de entrega será acrescida mais 1 dia útil.</li>        </ul>        <p><strong>Alteração de pedido</strong>        </p>        <ul>         <li>A partir deste momento não é possível a inclusão ou exclusão de itens no pedido.</li>        </ul>        <p><strong>Sobre a entrega</strong>        </p>        <ul>         <li>Se houver diferença de prazos para cada item, a entrega será feita parcialmente, conforme disponibilidade e os prazos específicos.</li>         <li>Caso a entrega tenha sido agendada, aguarde o recebimento do produto na data e turno informados.</li>        </ul>        <p>Se houver dúvidas em relação ao seu pedido, acesse aqui e fale conosco.</p>        <p>Agradecemos por escolher a CéliaJóias.com. Esperamos ter você sempre como nosso cliente.</p>       </td>      </tr>     </tbody>    </table><span color='#333333' face='Tahoma, Helvetica, Arial, sans-serif' style='color: #333333; font-family: Tahoma, Helvetica, Arial, sans-serif;'><span style='font-size: 12px; line-height: 15.796875px;'></span></span>   </td>  </tr>  <tr>   <td style='background-color: #604261;'>    <table align='center' style='width: 500px;'>     <tbody>      <tr>       <td>        <p style='text-align: right;'><span style='color: #ffffff;'><strong>&nbsp;</strong></span>        </p>        <p style='text-align: right;'><span style='color: #ffffff;'>Atenciosamente,</span>        </p>        <p style='text-align: right;'><span style='color: #ffffff;'>Célia Jóias.com</span><br /><a href='http://www.CeliaJoias.com' target='_blank'><span style='color: #ffff00;'><span style='color: #ffff00;'>www.CeliaJoias.com</span></span></a>        </p>        <p style='text-align: right;'><span style='color: #ffffff;'><strong>&nbsp;</strong></span>        </p>       </td>      </tr>     </tbody>     </table>   </td>  </tr> </tbody></table>";
+        
+
+
+
+            // Envia email de confirmação        
+            WebMail.Send(to: WebSecurity.CurrentUserName,subject: "Célia Jóias - Confirmação de Pedido",
+            body: Corpo);
+
+            // Envia email avisando os administradores do site
+            var corpoAdmin = "<table style='font-family: Tahoma, Helvetica, Arial, sans-serif;'>  <tbody>   <tr>    <td>     <h1>Aviso do Sistema!</h1>    </td>    <td></td>   </tr>   <tr>    <td>Pedido n.º:</td>    <td>" + String.Format("{0:000000}", pedidoId) +"</td>   </tr>   <tr>    <td>Data do Pedido:</td>    <td>" + DataPedido +"</td>   </tr>   <tr>    <td>Cliente:</td>    <td>" +  FuncaoUsuarios.NomeComepleto_PeloCod(UsuarioID) +"&nbsp;</td>   </tr>  </tbody> </table> <p><span style='color: #ff0000;'><strong>Nota:</strong>&nbsp;Segue abaixo cópia do email de confirmação do pedido enviado ao cliente.</span> </p> <hr />";
+            if(copiaEmail)
+            {
+                corpoAdmin += Corpo;
+            }
+            WebMail.Send(to: "contato@celiajoias.com",subject: "Célia Jóias - Aviso de Pedido",
+            body: corpoAdmin);
+
+            // limpa o carrinho
+            carrinho.Limpar();
+            Response.Redirect("/compra/etapa-5");
+
+            //---------------------------------------Fim Pedido Ok         
+
+
+
+
+
+
+   //  }
+
+
+
+}
 
 
     
@@ -120,9 +205,7 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
                     		    </div>
                     		</div> <!-- /steps -->
                     		
-                    		<!--  ==========  -->
-							<!--  = Selected Items =  -->
-							<!--  ==========  -->
+                            <form method="post" action="etapa-4" name="formulario01" enctype="multipart/form-data">
 							<table class="table table-items">
 							    <thead>
 							    	<tr>
@@ -135,7 +218,7 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
                                 @foreach (var item in carrinho.Itens)
                                 {<text>					         
 							        <tr>
-							        	<td class="image"><img STYLE="width:62px; height:62px" src="~/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)" alt="" width="124" height="124" /></td>
+							        	<td class="image"><img STYLE="width:62px; height:62px" src="~/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)"  /></td>
 							        	<td class="desc">@FuncaoProdutos.Produto_Titulo(item.ProdutoID) &nbsp; <a title="Remove Item" class="icon-remove-sign" href="#"></a></td>
 							        	<td class="qty">
 							        	    <input type="text" class="tiny-size" value="1" />
@@ -169,10 +252,10 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
                             <div class="alert alert-info in fade">
                             
                             <h4>Endereço de Entrega</h4>
-                            <p>@carrinho.Logradouro. @carrinho.Numero<br>
-                            @if(carrinho.Complemento != ""){
+                            <p>@carrinho.Logradouro, @carrinho.Numero<br>
+                            @if(carrinho.Complemento != ""    ){
                             <text>
-                            carrinho.Complemento <br>                                                            
+                            @carrinho.Complemento <br>                                                            
                             </text>
                             }
                             @carrinho.Bairro<br>
@@ -187,8 +270,12 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
 
                             <hr />
 							<p class="right-align">
-							    <a href="/" class="btn btn-primary higher bold">Confirmar Compra</a>
+                                 <input type="hidden" name="cep" size="2" value="@carrinho.Cep)" />
+                                 <input type="submit"  class="btn btn-primary higher bold" id="button-confirm" value="Confirmar Compra">
 							</p>
+
+                            </form>
+
                     	</div>
                     </div>
                 </div>

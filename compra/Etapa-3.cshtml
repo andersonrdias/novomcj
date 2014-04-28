@@ -53,7 +53,7 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
 
 
 
-if(carrinho.Cep != null){
+if(carrinho.Cep != ""){
 
     Logradouro = carrinho.Logradouro;
     numero = carrinho.Numero;
@@ -277,6 +277,9 @@ var tipoEndereco = "";
                                     <label class="control-label" for="cep">CEP:</label>
                                     <div class="controls">
                                          <input type="text" id="cep" onblur="atualizacep(this.value)" name="cep" class="span2" required=""  value="@Cep"/>
+                                        <div id="diverrocep" style="display: none;">
+                                            <div style="top: 745px; left: 510.5px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Favor informar um CEP válido</div></div> 
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -289,23 +292,42 @@ var tipoEndereco = "";
 
                             </div>
                                 
-                                <div  id="divcobrarfrete">
+                                <div  id="divcobrarfrete" style="display: none;">
                                 <div class="alert alert-danger in fade">
                                 <button type="button" class="close" data-dismiss="alert">×</button>
                                 <b>Aviso!</b><br>Será cobrado o frete no valor de @String.Format("{0:C}",frete_valor) devido a combra não alcançar o valor mínimo para frete gratuíto.                            
                                 </div>
                                 </div>  
         
-							
+
+
+
+                                
         
                                 <hr />
-						    
+
+
+                                <div id="divprosseguirOk" style="display: none;">
 						        <p class="right-align">
 						            Na próxima e última etapa, será possivel rever e confirmar a compra &nbsp; &nbsp;
 
                                      <input type="submit" class="btn btn-primary higher bold" id="button-confirm" value="Continue">
 						            
 						        </p>
+                                </div>
+
+                                <div id="divprosseguirPendente" >
+                                <p class="right-align">
+						            Verifique se todos os campos acima estão preenchidos corretamente para prosseguir. &nbsp; &nbsp;
+
+                                     <input type="submit" class="btn higher bold" id="button-confirm" disabled value="Continue">
+						            
+						        </p>
+                                
+                                </div>
+
+
+						    
 							    
 							    
                     	</div>
@@ -374,7 +396,10 @@ var tipoEndereco = "";
 
         function correiocontrolcep(valor) {
             if (valor.erro) {
-                alert('Cep não encontrado');
+                document.getElementById('diverrocep').style.display = "inline";;
+
+                document.getElementById('divprosseguirPendente').style.display = "inline";
+                document.getElementById('divprosseguirOk').style.display = "none";
                 return;
             };
             document.getElementById('logradouro').value = valor.logradouro
@@ -382,21 +407,14 @@ var tipoEndereco = "";
             document.getElementById('cidade').value = valor.localidade
             document.getElementById('estado').value = valor.uf
         
-        confirmarEstado();
+            confirmarEstado();
+            document.getElementById('diverrocep').style.display = "none";
 
-            // enviar UF por aqui
-            //  atualizarEstadoEntrega(valor.uf);
-        }
-
-        function atualizarEstadoEntrega(uf) {
-
-            //      document.getElementById('definirufentrega').value = uf;
-            //      document.formulario01.submit();
-
-            //      alert(uf);
-
+            document.getElementById('divprosseguirPendente').style.display = "none";
+            document.getElementById('divprosseguirOk').style.display = "inline";
 
         }
+
 
 
 
@@ -423,6 +441,8 @@ var tipoEndereco = "";
             document.getElementById('estado').value = '@CadEstado';
 
             alert('Endereço padrão copiado');
+
+
 
 	        confirmarEstado();
 
@@ -462,6 +482,13 @@ var tipoEndereco = "";
     
     <!--  = Custom JS =  -->
     <script src="/js/custom.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+         $(window).load(function() {
+
+           alert('xxxxx');        
+            })
+     </script>
 
   </body>
 </html>
