@@ -91,19 +91,16 @@ var tipoEndereco = "";
   
  if (IsPost){
   
-        Logradouro = Request["logradouro"];
-        numero = Request["numero"];
-        Complemento = Request["complemento"];
-        Cidade = Request["cidade"];
-        Bairro = Request["bairro"];
-        Estado = Request["estado"];
-        Cep = Request["cep"];
+    Logradouro = Request["logradouro"];
+    numero = Request["numero"];
+    Complemento = Request["complemento"];
+    Cidade = Request["cidade"];
+    Bairro = Request["bairro"];
+    Estado = Request["estado"];
+    Cep = Request["cep"];
         
-
-
     carrinho.DefinirEnderecoEntrega(Logradouro, numero, Complemento, Bairro, Cidade, Cep, Estado);
     Response.Redirect("/compra/Etapa-4");
-
 
  }
 
@@ -277,9 +274,6 @@ var tipoEndereco = "";
                                     <label class="control-label" for="cep">CEP:</label>
                                     <div class="controls">
                                          <input type="text" id="cep" onblur="atualizacep(this.value)" name="cep" class="span2" required=""  value="@Cep"/>
-                                        <div id="diverrocep" style="display: none;">
-                                            <div style="top: 745px; left: 510.5px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Favor informar um CEP válido</div></div> 
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -292,42 +286,23 @@ var tipoEndereco = "";
 
                             </div>
                                 
-                                <div  id="divcobrarfrete" style="display: none;">
+                                <div  id="divcobrarfrete">
                                 <div class="alert alert-danger in fade">
                                 <button type="button" class="close" data-dismiss="alert">×</button>
                                 <b>Aviso!</b><br>Será cobrado o frete no valor de @String.Format("{0:C}",frete_valor) devido a combra não alcançar o valor mínimo para frete gratuíto.                            
                                 </div>
                                 </div>  
         
-
-
-
-                                
+							
         
                                 <hr />
-
-
-                                <div id="divprosseguirOk" style="display: none;">
+						    
 						        <p class="right-align">
 						            Na próxima e última etapa, será possivel rever e confirmar a compra &nbsp; &nbsp;
 
                                      <input type="submit" class="btn btn-primary higher bold" id="button-confirm" value="Continue">
 						            
 						        </p>
-                                </div>
-
-                                <div id="divprosseguirPendente" >
-                                <p class="right-align">
-						            Verifique se todos os campos acima estão preenchidos corretamente para prosseguir. &nbsp; &nbsp;
-
-                                     <input type="submit" class="btn higher bold" id="button-confirm" disabled value="Continue">
-						            
-						        </p>
-                                
-                                </div>
-
-
-						    
 							    
 							    
                     	</div>
@@ -396,10 +371,7 @@ var tipoEndereco = "";
 
         function correiocontrolcep(valor) {
             if (valor.erro) {
-                document.getElementById('diverrocep').style.display = "inline";;
-
-                document.getElementById('divprosseguirPendente').style.display = "inline";
-                document.getElementById('divprosseguirOk').style.display = "none";
+                alert('Cep não encontrado');
                 return;
             };
             document.getElementById('logradouro').value = valor.logradouro
@@ -407,15 +379,12 @@ var tipoEndereco = "";
             document.getElementById('cidade').value = valor.localidade
             document.getElementById('estado').value = valor.uf
         
-            confirmarEstado();
-            document.getElementById('diverrocep').style.display = "none";
+        confirmarEstado();
 
-            document.getElementById('divprosseguirPendente').style.display = "none";
-            document.getElementById('divprosseguirOk').style.display = "inline";
-
+ 
         }
 
-
+ 
 
 
         function confirmarEstado() {
@@ -430,6 +399,8 @@ var tipoEndereco = "";
 
         }
 
+</script>
+<script type="text/javascript">
 
         function copiarEnderecoPadrao() {
 
@@ -441,8 +412,6 @@ var tipoEndereco = "";
             document.getElementById('estado').value = '@CadEstado';
 
             alert('Endereço padrão copiado');
-
-
 
 	        confirmarEstado();
 
@@ -482,13 +451,6 @@ var tipoEndereco = "";
     
     <!--  = Custom JS =  -->
     <script src="/js/custom.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-         $(window).load(function() {
-
-           alert('xxxxx');        
-            })
-     </script>
 
   </body>
 </html>

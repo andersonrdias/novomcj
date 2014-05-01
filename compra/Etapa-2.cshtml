@@ -17,9 +17,11 @@ var usuarioAtual = WebSecurity.CurrentUserId;
 var db = Database.Open("CeliaJoias");
 
 foreach (var row in db.Query("select * from UserProfile where UserId = " + usuarioAtual)) 
-    {	
+{	
     Nome = row.Nome;
     Email = row.Email;
+
+
     CadLogradouro = row.Logradouro;
     CadNumero = row.Numero;
     CadComplemento = row.Complemento;        
@@ -322,23 +324,23 @@ foreach (var row in db.Query("select * from UserProfile where UserId = " + usuar
 
 
 
-                            <hr />
+                            <hr>
 
-                              @if(WebSecurity.IsAuthenticated){<text>
-                                <p class="right-align">
+                            @if(10>2){<text>
+                            <p class="right-align">
 						            Na próxima etapa será necessário definir o endereco de entrega &nbsp; &nbsp;
 						            <a href="/compra/etapa-3 " class="btn btn-primary higher bold">CONTINUE</a>
 						        </p>                            
-                             </text>}else{<text>
+                            </text>}else{<text>
                             <div class="alert alert-danger in fade">
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <b>Cliente não identificado!</b> Favor efetuar login de um conta existente ou criar uma nova.
-                        </div>
-                                <p class="right-align">
+                            </div>
+                            <p class="right-align">
 						            Para continuar será necessário logar no site &nbsp; &nbsp;
                                     <button class="btn higher bold" disabled>CONTINUE</button>
-						        </p>
-                             </text>}
+						    </p>
+                            </text>}
 						    
 
 							    

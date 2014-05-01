@@ -1,12 +1,43 @@
 ﻿@{
     
-// Cria um carrinho vazio na sessão se ele não exitir
-if (Session["carrinho"] == null)
+if (!WebSecurity.IsAuthenticated)
 {
-   Session["carrinho"] = new Carrinho();
+   Response.Redirect("~/");
+}   
+   
+    
+var usuarioAtual = WebSecurity.CurrentUserId;
+var db = Database.Open("CeliaJoias");
+
+
+//var SelectPedido = "select MAX (CodPedido) from Pedidos where CodUsuario = 3";
+
+var row1 = db.QuerySingle("select MAX (CodPedido) from Pedidos where CodUsuario = "+usuarioAtual);
+int CodUltimoPedido = row1.Column1;  
+
+var SelectPedido = "select * from Pedidos where CodPedido = " + CodUltimoPedido;
+
+var Nome = "";
+var Email = "";
+
+foreach (var row in db.Query("select * from UserProfile where UserId = " + usuarioAtual)) {	
+Nome = row.Nome;
+Email = row.Email;
 }
-// Pega o carrinho atual da Sessão
-Carrinho carrinho = (Carrinho)Session["carrinho"];
+
+int ContProdutos = 1;
+string ItenProd = "";
+string ItenDescricao = "";
+string ItenValor = "";
+string ItenQuantidade = "";
+string ItenPeso = "";
+
+
+
+
+
+
+
 
 
     
@@ -56,6 +87,8 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
 
    
   <body class="checkout-page">
+
+
    
 <script type="text/javascript">
     var numero = 15;
@@ -63,8 +96,8 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
     setInterval("chamar();", 1000);
     setTimeout("executar();", 15000);
 
-    function executar() {
-        alert("Teste de mensagem!");
+    function executar() {        
+        document.forms.formpagseguro.submit();
     }    
 
 </script>    
@@ -136,13 +169,81 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
                             <h1>Compra Confirmada</h1>
                           
 
-                            <div class="row-fluid push-down-20">
+ 
+
+                                <!-----------------Pagamento-->
+                                 
+                                
+                                <form name="formpagseguro"  method="post" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">  
+      
+                                @foreach (var row2 in db.Query(SelectPedido)) {	   
+    
+    
+                                     <!-- Campos obrigatórios -->  
+                                    <input type="hidden" name="receiverEmail" value="celiajoias@celiajoias.com">  
+                                    <input type="hidden" name="currency" value="BRL">  
+    
+                                    foreach (var rowItens in db.Query( "select * from PedidoItens where CodPedido =" + CodUltimoPedido)) {	   
+                                        ItenProd = "itemId"+ContProdutos;
+                                        ItenDescricao = "itemDescription"+ContProdutos;
+                                        ItenValor = "itemAmount"+ContProdutos;
+                                        ItenQuantidade = "itemQuantity"+ContProdutos;
+                                        ItenPeso = "itemWeight"+ContProdutos;
+
+  
+                                    <!-- Itens do pagamento (ao menos um item é obrigatório) -->  
+                                    <input type="hidden" name="@ItenProd" value="@ContProdutos"> 
+                                                                                                  
+                                    <input type="hidden" name="@ItenDescricao" value="@FuncaoProdutos.Produto_Titulo(rowItens.CodProduto)">  
+                                    <input type="hidden" name="@ItenValor" value="@FuncaoPagamento.ConverterValor(String.Format("{0:N}", rowItens.Preco))">  
+                                    <input type="hidden" name="@ItenQuantidade" value="1">  
+                                    <input type="hidden" name="@ItenPeso" value="1000">  
+
+
+
+
+                                    ContProdutos ++;
+                                     }
+  
+      
+                                    <!-- Código de referência do pagamento no seu sistema (opcional) -->  
+                                    <input type="hidden" name="reference" value="REF1234">  
+      
+                                    <!-- Informações de frete (opcionais) -->  
+
+                                    
+                                    <input type="hidden" name="itemShippingCost1" value="10.00">  
+
+                                    <input type="hidden" name="shippingType" value="1">  
+                                    <input type="hidden" name="shippingAddressPostalCode" value="@row2.CEP">  
+                                    <input type="hidden" name="shippingAddressStreet" value="@row2.Logradouro">  
+                                    <input type="hidden" name="shippingAddressNumber" value="@row2.Numero">  
+                                    <input type="hidden" name="shippingAddressComplement" value="@row2.Complemento">  
+                                    <input type="hidden" name="shippingAddressDistrict" value="@row2.Bairro">  
+                                    <input type="hidden" name="shippingAddressCity" value="@row2.Cidade">  
+                                    <input type="hidden" name="shippingAddressState" value="@row2.UF">  
+                                    <input type="hidden" name="shippingAddressCountry" value="@row2.Pais">  
+      
+                                    <!-- Dados do comprador (opcionais) -->  
+                                    <input type="hidden" name="senderName" value="@Nome">  
+                                    <input type="hidden" name="senderAreaCode" value="">  
+                                    <input type="hidden" name="senderPhone" value="">  
+                                    <input type="hidden" name="senderEmail" value="@Email">  
+      
+                                    <!-- submit do form (obrigatório) -->  
+                                    <input type="image" name="submit"   
+                                    src="image/pagseguro.jpg"   
+                                    alt="Pague com PagSeguro">  
+
+                                }      
+
+
+                           <div class="row-fluid push-down-20">
                                <p>Muito obrigado pelo seu pedido. Um email de confirmação foi enviado para o seu email.<br>
                                Seu pedido será despachado de imediato após a confirmação de pagamento e deverá estar chegando dentro de 03 (três) dias úteis após o envio.</p>
 
                               <hr>
-                        <div>
-
+                            <div>
                             <div class="span2">
                             <i class="icon-fixed-width icon-5x"></i>
             
@@ -156,7 +257,9 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
                         </div>
                         </div>
 
+                                </form>  
 
+                    	       <!----------Pagamento-->
 
                    
                             <hr>

@@ -14,6 +14,16 @@ if (Session["carrinho"] == null)
 Carrinho carrinho = (Carrinho)Session["carrinho"];
 
 
+private void Page_Load( object sender, System.EventArgs e )
+{
+  MessageBox.Show( "Hello World!" );
+  MessageBox.Show( "This is my second message." );
+  MessageBox.Show( "Alerts couldnt be simpler." );
+}
+
+
+
+
 
 if (IsPost)
 {
@@ -35,11 +45,11 @@ if (IsPost)
     }
     
 
+  // MessageBox.Show("O produto esta no cesto
+  
 Response.Redirect(urlredirecionamento);
 
 }
-
-
 
 
 
@@ -54,3 +64,4 @@ Response.Redirect(urlredirecionamento);
 }
 
 
+   
