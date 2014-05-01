@@ -14,12 +14,7 @@ if (Session["carrinho"] == null)
 Carrinho carrinho = (Carrinho)Session["carrinho"];
 
 
-private void Page_Load( object sender, System.EventArgs e )
-{
-  MessageBox.Show( "Hello World!" );
-  MessageBox.Show( "This is my second message." );
-  MessageBox.Show( "Alerts couldnt be simpler." );
-}
+
 
 
 
@@ -41,11 +36,11 @@ if (IsPost)
         // Formulario postado pelo botão Remover Item do Carrinho
         var removerIndice = Request["removerIndice"].AsInt();
         carrinho.RemoverItem(removerIndice);
+
          urlredirecionamento =  Request["url"];  
     }
     
 
-  // MessageBox.Show("O produto esta no cesto
   
 Response.Redirect(urlredirecionamento);
 

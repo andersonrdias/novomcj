@@ -16,6 +16,34 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
 var FreteGratis_Estado = "RJ";
 int FreteGratis_ValorMinimo = 500 ;
 
+//Contador de Itens no carrinho
+int i = 0;
+int QtdeExtra = carrinho.Itens.Count() - 3;
+string QtdeTexto = "Existem " + QtdeExtra + " produtos não visulizados nesta janela";
+if(QtdeExtra == 1){
+    QtdeTexto = "Existe 01 produto não visulizado nesta janela";   
+}
+
+
+
+//Colocar o carrinho de compras em ordem decrescente
+var  carrinhoDesc = from h in carrinho.Itens 
+                                orderby h.ProdutoID descending
+                                select h;
+
+
+
+var contHistorico = 0;
+
+double total = carrinhoDesc.Count()-1;
+var LinhascarrinhoDesc =  System.Math.Ceiling(total/4); 
+
+
+List<int> listaCarrinho = new List<int>();
+foreach (var row in carrinhoDesc) {	
+listaCarrinho.Add(row.ProdutoID);
+}
+
 
 }
 
@@ -32,27 +60,41 @@ int FreteGratis_ValorMinimo = 500 ;
                         </a>
                     </div>
                     <div class="open-panel">
-                     @foreach (var item in carrinho.Itens){
+                     @foreach (var item in listaCarrinho){
                         <text>
                         <div class="item-in-cart clearfix">
                             <div class="image">
-                                <img src="/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)" STYLE="width:62px; height:62px" alt="cart item" />
+                                <img src="/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item)" STYLE="width:62px; height:62px" alt="cart item" />
                             </div>
                             <div class="desc">
-                                <strong><a href="~/produto/@item.ProdutoID">@FuncaoProdutos.Produto_Titulo(item.ProdutoID)</a></strong>
-                                <span class="light-clr qty">
-                                    Qty: 1
-                                    &nbsp;
-                                    <a href="#" class="icon-remove-sign" title="Remove Item"></a>
-                                </span>
+                            <strong><a href="~/produto/@item">@FuncaoProdutos.Produto_Titulo(item)</a></strong>       
+                            <form action="/compra/compra" method="post">
+                            <input type="hidden" value="@i" id="removerIndice" name="removerIndice" />  
+                            <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />
+                            <span class="light-clr qty">
+                                <input type="submit" class="btn btn-mini push-down-10" value="Remover" />
+                             </span>
+                             </form>
                             </div>
                             <div class="price">
-                                <strong>@String.Format("{0:C}", FuncaoProdutos.Produto_Preco(item.ProdutoID))</strong>
+                                <strong>@String.Format("{0:C}", FuncaoProdutos.Produto_Preco(item))</strong>
                             </div>
                         </div>
                         </text>
+                        i++;
+                        if(i>2  && @carrinho.Itens.Count()>4 ){
+                            break;
+                        }
                      }
-                         
+                        
+                       @if(@carrinho.Itens.Count()>4){<text>
+                        <br>
+                        <div class="alert in fade span4">
+                          @QtdeTexto, <br> <a href="/compra/etapa-1"  > clique aqui</a> para visualizar todos os produtos.
+                        </div>
+
+                        </text>}
+
                         <div class="summary">
 
 

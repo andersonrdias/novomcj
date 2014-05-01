@@ -8,6 +8,10 @@ if (Session["carrinho"] == null)
 // Pega o carrinho atual da Sessão
 Carrinho carrinho = (Carrinho)Session["carrinho"];
 
+
+//Contador de Itens no carrinho
+int i = 0;
+
     
 }
 
@@ -133,10 +137,15 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
 							    </thead>
 							    <tbody>
                                 @foreach (var item in carrinho.Itens)
-                                {<text>					         
-							        <tr>
+                                {<text>		
+                                <form action="/compra/compra" method="post">
+                                <input type="hidden" value="@i" id="removerIndice" name="removerIndice" />  
+                                <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />
+                 				<tr>
 							        	<td class="image"><img STYLE="width:62px; height:62px" src="~/images/produtos/mini_@FuncaoProdutos.Produto_Imagem(item.ProdutoID)" alt="" /></td>
-							        	<td class="desc">@FuncaoProdutos.Produto_Titulo(item.ProdutoID) &nbsp; <a title="Remove Item" class="icon-remove-sign" href="#"></a></td>
+							        	<td class="desc">@FuncaoProdutos.Produto_Titulo(item.ProdutoID) &nbsp; <br>
+                                            <input type="submit" class="btn btn-mini push-down-10" value="Remover" />
+                                        </td>
 							        	<td class="qty">
 							        	    <input type="text" class="tiny-size" value="1" />
 					            	    </td>
@@ -144,7 +153,10 @@ Carrinho carrinho = (Carrinho)Session["carrinho"];
 							        	    @String.Format("{0:C}", FuncaoProdutos.Produto_Preco(item.ProdutoID))
 							        	</td>
 							        </tr>
-							    </text>}
+                                </form>
+
+							    </text>
+                                i++;}
 
 							        							        <tr>
 							        	<td colspan="2" rowspan="2">
