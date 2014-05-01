@@ -146,7 +146,7 @@ int ContMarcador = 0;
 	              	                 
 	                    <li><span class="icon-chevron-right"></span></li>
 	                    <li>
-	                        <a href="#">@produto.Titulo</a>
+	                        <a href="#">@produto.Titulo</a>                            
 	                    </li>
 	                </ul>
         		</div>
@@ -301,8 +301,6 @@ int ContMarcador = 0;
                         <div class="fade in tab-pane active" id="tab-1">
                             <h3>Descrição do Produto</h3>
                             <p>@produto.descricao</p>
-                            <h3>Especificações</h3>
-                            <p>Phasellus velit quam, ultrices et hendrerit vitae, suscipit nec dui. Sed at ligula vitae ligula pellentesque dictum. Duis lobortis auctor ipsum vel placerat. Phasellus nisi odio, ornare eget faucibus et, accumsan nec mauris. per conubia nostra, per inceptos himenaeos.</p>
                         </div>
                      
                         <div class="fade tab-pane" id="tab-3">
@@ -629,7 +627,7 @@ int ContMarcador = 0;
                             </div>
                         </div>
                         <div class="main-titles no-margin">
-                            <h4 class="title"><span class="striked">@String.Format("{0:C}", item.Preco_Venda)</span> <span class="red-clr">$29</span></h4>
+                            <h4 class="title">@String.Format("{0:C}", item.Preco_Venda)</h4>
                             <h5 class="no-margin">@item.Titulo</h5>
                         </div>
                         <p class="desc">@item.descricao</p>                        

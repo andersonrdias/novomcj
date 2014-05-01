@@ -90,7 +90,10 @@ listaCarrinho.Add(row.ProdutoID);
                        @if(@carrinho.Itens.Count()>4){<text>
                         <br>
                         <div class="alert in fade span4">
-                          @QtdeTexto, <br> <a href="/compra/etapa-1"  > clique aqui</a> para visualizar todos os produtos.
+                             <small>
+                                @QtdeTexto, <br> <a href="/compra/etapa-1"  > Clique aqui</a> para visualizar todos os produtos.   
+                             </small>
+                          
                         </div>
 
                         </text>}

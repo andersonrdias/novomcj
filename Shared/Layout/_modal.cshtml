@@ -1,4 +1,44 @@
 ﻿@{
+   
+// Cria um carrinho vazio na sessão se ele não exitir
+if (Session["carrinho"] == null)
+{
+   Session["carrinho"] = new Carrinho();
+}
+// Pega o carrinho atual da Sessão
+Carrinho carrinho = (Carrinho)Session["carrinho"];   
+   
+   
+    
+bool Mensagem = false;
+
+if(carrinho.msgCarrinhoCompra == true){
+Mensagem = true;
+carrinho.DefinirMensagemCompra(false);
+}
+
+
+
+
+if(Mensagem){
+    
+<script type="text/javascript">
+    window.onload = function () {
+
+        var Mensagem =true;
+
+        if (Mensagem == true)
+            document.getElementById('link').click();
+
+    }
+</script>
+
+
+
+
+}
+
+
     
 }
 
@@ -80,4 +120,34 @@
             
         </div>
     </div>
+
+    
+ <div id="ConfirmacaoModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+
+     <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>            
+        </div>   
+     <div >
+
+
+          <div class="alert alert-success in fade">
+            Produto adicionado com sucesso no carrinho de compra!
+          </div>       
+          <small>         
+           Visualize o <b>Carrinho de compra <a href="" class="btn btn-danger"><i class="icon-shopping-cart"></i></a></b> aqui a direita.
+          <i class="icon-fixed-width"></i>          <br>
+          
+          </small>
+          
+
+   
+
+
+
+
+        </div>
+
+    </div>
+
+<a href="#ConfirmacaoModal" role="button" data-toggle="modal" id="link" >Faça o seu Login</a>
 

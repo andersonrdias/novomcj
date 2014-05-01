@@ -20,6 +20,9 @@ public class Carrinho
     public string Cep = "";
     public string Estado = "";
 
+    //Aviso do Sistema
+    public bool msgCarrinhoCompra = false;
+
     public void AdicionarItem(int produtoID, string descricao, decimal preco)
     {
         _Itens.Add( new CarrinhoItem { ProdutoID = produtoID, Descricao = descricao, Preco = preco } );
@@ -42,6 +45,14 @@ public class Carrinho
         Cep = _cep;
         Cidade = _cidade;
         Estado = _estado;
+
+
+    }
+
+        public void DefinirMensagemCompra (bool _aviso){
+        
+        msgCarrinhoCompra = _aviso;
+      
 
 
     }

@@ -30,6 +30,7 @@ if (IsPost)
        var _preco = Request["preco"];
        carrinho.AdicionarItem(_produtoID.AsInt(), _descricao, _preco.AsDecimal());
        urlredirecionamento =  Request["url"];   
+       carrinho.DefinirMensagemCompra(true);
     }
     else if (Request["removerIndice"] != null)
     {
