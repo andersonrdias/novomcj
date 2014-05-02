@@ -20,6 +20,9 @@ public class Carrinho
     public string Cep = "";
     public string Estado = "";
 
+    //Valor Frete
+    public decimal valorFrete = 0;
+
     //Aviso do Sistema
     public bool msgCarrinhoCompra = false;
 
