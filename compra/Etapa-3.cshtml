@@ -1,4 +1,11 @@
-﻿@{
+﻿@using System;
+@using System.Xml;
+
+@using System.Xml.Linq;
+
+
+
+@{
     
 
 var usuarioAtual = WebSecurity.CurrentUserId;
@@ -66,48 +73,125 @@ if(carrinho.Cep != ""){
 
 } else {
     
-    Logradouro = CadLogradouro;
-    numero = Cadnumero;
-    Complemento = CadComplemento;        
-    Bairro = CadBairro;
-    Cidade = CadCidade;
-    Estado = CadEstado;
-    Cep = CadCep;
+//    Logradouro = CadLogradouro;
+//    numero = Cadnumero;
+//    Complemento = CadComplemento;        
+//    Bairro = CadBairro;
+//    Cidade = CadCidade;
+//    Estado = CadEstado;
+//    Cep = CadCep;
 
 
 
 }
   
-//Frete
-var frete_cobrar = true;  
-var frete_valor = 10.4;
-var frete_estadp = "RJ";  
+
 
 
 //Selecão de tipo de endereço
-var tipoEndereco = "";
+string tipoEndereco = "";
 
 
   
  if (IsPost){
-  
+
+
+    tipoEndereco = Request["zerarEndereco"];
+
+    if(tipoEndereco != "apagarendereco"){
+        
     Logradouro = Request["logradouro"];
     numero = Request["numero"];
     Complemento = Request["complemento"];
     Cidade = Request["cidade"];
     Bairro = Request["bairro"];
     Estado = Request["estado"];
-    Cep = Request["cep"];
+    Cep = Request["cep"];   
+
+     
         
     carrinho.DefinirEnderecoEntrega(Logradouro, numero, Complemento, Bairro, Cidade, Cep, Estado);
-    Response.Redirect("/compra/Etapa-4");
+ //   Response.Redirect("/compra/Etapa-4");    
+
+    } 
+  
+
 
  }
 
 
+bool enderecoPreenchido = false;
+
+if(carrinho.Logradouro != ""){
+    enderecoPreenchido = true;
+}
+
+if(tipoEndereco == "apagarendereco"){
+     enderecoPreenchido = false;    
+}
 
 
+//------------------Cálculo do Frete
+string CepOrigem = "01002020";
+string CepDestino = Cep; 
+string TipoFrete =  "40010";   //'Código de cada tipo de frete 41106  PAC sem contrato, 40010  SEDEX sem contrato
+string Peso = "0.3";             // 'Peso em Kg
+string Comprimento = "16";
+string Altura = "2";
+string Largura = "11";
+string Diamentro = "0";
+string MaoPropria = "n";       // 's para sim n para não
+string ValorDeclarado = "0";
+string AvisoRecebimento = "n" ;//'s para sim n para não
+
+
+string valorX = "";
+string PrazoX = "";
+string MsgX = "";
+
+string  urlx;
+
+urlx = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?/CalcPrecoPrazo?nCdEmpresa=+sDsSenha=+nCdServico="+TipoFrete+"+sCepOrigem="+CepOrigem+"+sCepDestino="+CepDestino+"+nVlPeso="+Peso+"+nCdFormato=1+nVlComprimento="+Comprimento+"+nVlAltura="+Altura+"+nVlLargura="+Largura+"+nVlDiametro="+Diamentro+"+sCdMaoPropria="+MaoPropria+"+nVlValorDeclarado="+ValorDeclarado+"+sCdAvisoRecebimento="+AvisoRecebimento+"";
+
+
+var url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=09146920&sDsSenha=123456&sCepOrigem=" +CepOrigem+"&sCepDestino="+CepDestino+"&nVlPeso="+Peso+"&nCdFormato=1&nVlComprimento="+Comprimento+"&nVlAltura="+Altura+"&nVlLargura="+Largura+"&sCdMaoPropria="+MaoPropria+"&nVlValorDeclarado="+ValorDeclarado+"&sCdAvisoRecebimento="+AvisoRecebimento+"&nCdServico=40010&nVlDiametro=0&StrRetorno=xml&nIndicaCalculo=3";
     
+var feed = XDocument.Load(url);
+
+
+
+XmlDocument xmlDocument = new XmlDocument();
+xmlDocument.Load(url);XmlNodeList emit = xmlDocument.GetElementsByTagName("cServico");
+
+foreach (XmlElement emissor in emit)
+                {
+                    XmlNodeList Valor = emissor.GetElementsByTagName("Valor");
+                    XmlNodeList PrazoEntregaL = emissor.GetElementsByTagName("PrazoEntrega");
+                    XmlNodeList MsgE = emissor.GetElementsByTagName("MsgErro");
+
+                   valorX = Valor[0].InnerText;
+                   PrazoX = PrazoEntregaL[0].InnerText;
+                   MsgX = MsgE[0].InnerText;
+
+                }
+
+
+//Frete
+var frete_cobrar = true;  
+var frete_estado = "RJ";  
+var frete_VlrMinimo = 500;
+
+if(carrinho.Estado == frete_estado || carrinho.ValorTotal >= frete_VlrMinimo ){
+    
+    frete_cobrar = false;
+    valorX = "0";
+
+}
+
+
+carrinho.DefinirFrete(valorX, PrazoX, MsgX);
+
+
 }
 
  
@@ -220,31 +304,46 @@ var tipoEndereco = "";
                     		</div> <!-- /steps -->
                     	
 							
-                            <form method="post" action="Etapa-3" name="formEndereco" enctype="multipart/form-data">
+                          
 
 	
 						
 							
                             <div class="form-horizontal">
+
+        
+							@if(!enderecoPreenchido){<text>
+
+                              <form method="post" action="Etapa-3" name="formEndereco" enctype="multipart/form-data">
+
                 	            <h3><i class="icon-fixed-width"></i>Endereço de Entrega</h3>
                                 <div class="control-group">                                                                  
                                 			    
 			
 						          
-                                        <div class="alert in fade right-align">                                            
+                                        <div class="alert in fade">                                            
                                             <b>Atenção!</b> Defina com bastante atenção o endereço de entrega, o local não poderá ser alterado posteriormente. &nbsp; &nbsp;&nbsp; 
-                                            <input type="button" onclick="copiarEnderecoPadrao()" class="btn btn-warning higher bold"  value="Utilizar Endereço Padrão">
+                                           
                                         </div>						        
-                           
+                         
                                 
                                 <div id="endereco">
-                            
+                            <div class="control-group">
+                                    <label class="control-label" for="cep">CEP:</label>
+                                    <div class="controls">
+                                         <input type="text" id="cep" onblur="atualizacep(this.value)" name="cep" class="span2" required=""  value="@Cep"/>
+                                          <p><small>Informe o CEP para preencher automáticamente o endereço. </small></p>
+                                        <div id="diverrocep" style="display: none;" >
+                                       <div style="top: 428px; left: 510px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Favor informar um CEP válido</div></div> 
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 <hr>
                                 <div class="control-group">
                                     <label class="control-label" for="logradouro">Logradouro:</label>
                                     <div class="controls">
-                                         <input type="text" id="logradouro" name="logradouro" class="span4" required=""  value="@Logradouro"/>
+                                         <input type="text" id="logradouro" name="logradouro" class="span4" required="" readonly="false"  value="@Logradouro"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -262,56 +361,92 @@ var tipoEndereco = "";
                                 <div class="control-group">
                                     <label class="control-label" for="bairro">Bairro:</label>
                                     <div class="controls">
-                                         <input type="text" id="bairro" name="bairro" class="span4" required=""  value="@Bairro"/>
+                                         <input type="text" id="bairro" name="bairro" class="span4" required="" readonly="false" value="@Bairro"/>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="cidade">Cidade:</label>
                                     <div class="controls">
-                                         <input type="text" id="cidade" name="cidade" class="span4" required=""  value="@Cidade"/>
+                                         <input type="text" id="cidade" name="cidade" class="span4" required="" readonly="false" value="@Cidade"/>
                                     </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="cep">CEP:</label>
-                                    <div class="controls">
-                                         <input type="text" id="cep" onblur="atualizacep(this.value)" name="cep" class="span2" required=""  value="@Cep"/>
-                                        <div id="diverrocep" style="display: none;" >
-                                       <div style="top: 746px; left: 510px; display: block;" class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Favor informar um CEP válido</div></div> 
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                                
                                 <div class="control-group">
                                     <label class="control-label" for="estado">Estado:</label>
                                     <div class="controls">
-                                         <input type="text" id="estado" name="estado" onblur="confirmarEstado()" class="span2" required=""  value="@Estado"/>
+                                         <input type="text" id="estado" name="estado" onblur="confirmarEstado()" class="span2" readonly="false" required=""  value="@Estado"/>
                                     </div>
                                 </div>
                                 </div>
 
                             </div>
+                                <hr />
+						        <p class="right-align">
+						            Verifique atentamente o endereço informado &nbsp; &nbsp;
+
+                                     <input type="submit" class="btn btn-primary higher bold" id="button-confirm" value="Definir Endereço">
+						            
+						        </p>                                                   
+                               </form>  
                                 
-                                <div  id="divcobrarfrete" style="display: none;">
-                                <div class="alert alert-danger in fade">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <b>Aviso!</b><br>Será cobrado o frete no valor de @String.Format("{0:C}",frete_valor) devido a combra não alcançar o valor mínimo para frete gratuíto.                            
-                                </div>
-                                </div>  
-        
-							
+                             </text>}else{<text>
+
+                            <form method="post" action="Etapa-3" name="formEndereco" enctype="multipart/form-data">
+                                
+                            <div class="alert in fade right-align">                                            
+                                <b>Atenção!</b> Revise com bastante atenção o endereço informado, o local não poderá ser alterado posteriormente. &nbsp; &nbsp;&nbsp; 
+                                   <input type="submit" class="btn btn-primary higher bold" id="button-confirm" value="Editar do Endereço">  
+                                       
+                            </div>
+                                
+                            <div class="alert alert-info in fade">
+                            
+                            <h4>Endereço de Entrega</h4>
+                            <p>@carrinho.Logradouro, @carrinho.Numero<br>
+                            @if(carrinho.Complemento != ""    ){
+                            <text>
+                            @carrinho.Complemento <br>                                                            
+                            </text>
+                            }
+                            @carrinho.Bairro<br>
+                            @carrinho.Cidade<br>
+                            @carrinho.Cep - @carrinho.Estado</p>
+
+
+                            </div>
+                                
+
+                            <div class="alert alert-info in fade">
+                            
+                            <h4>Informações sobre a entrega</h4>
+                            <p>@if(frete_cobrar){<text>Valor do Sedex: @String.Format("{0:C}", valorX)  </text>}else{<text>Frete Gratuíto</text>}<br>
+                            Prazo de Entrega: @PrazoX dia(s)* após a postagem<br>
+                            @MsgX</p>
+                            <br>    
+                            <small><b>Nota:</b> <br>
+                                Serão considerado os dias úteis de segunda à sábado <br>
+                                As estregas são gratuitas para o estado do @frete_estado ou para compras acima de @String.Format("{0:C}", frete_VlrMinimo)                            
+                            </small>
+
+                            </div>
+                                
+ 							<p class="right-align">
+							  Na próxima e última etapa, será possivel rever e confirmar a compra &nbsp; &nbsp;
+							    <a href="/compra/etapa-4" class="btn btn-primary higher bold">CONTINUE</a>
+							</p>                             
+                            <input type="hidden" name="zerarEndereco" size="2" value="apagarendereco" />
+                              </form>   
+                             </text>}
+                                
+
         
                                 <hr />
 						    
-						        <p class="right-align">
-						            Na próxima e última etapa, será possivel rever e confirmar a compra &nbsp; &nbsp;
 
-                                     <input type="submit" class="btn btn-primary higher bold" id="button-confirm" value="Continue">
-						            
-						        </p>
 							    
 							    
                     	</div>
 
-                            </form>
+                           
 
                     </div>
                 </div>
@@ -379,6 +514,8 @@ var tipoEndereco = "";
                 return;
             };
             document.getElementById('logradouro').value = valor.logradouro
+            document.getElementById('numero').value = ""
+            document.getElementById('complemento').value = ""
             document.getElementById('bairro').value = valor.bairro
             document.getElementById('cidade').value = valor.localidade
             document.getElementById('estado').value = valor.uf
@@ -394,6 +531,19 @@ var tipoEndereco = "";
 
 
         function confirmarEstado() {
+
+            if (document.getElementById('estado').value == 'RJ') {
+
+                document.getElementById('divcobrarfrete').style.display = "none";
+            } else {
+
+                document.getElementById('divcobrarfrete').style.display = "inline";
+            }
+
+        }
+
+
+        function ExibirEndereco() {
 
             if (document.getElementById('estado').value == 'RJ') {
 

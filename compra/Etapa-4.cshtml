@@ -31,9 +31,9 @@ if(IsPost){
           //  var db = Database.Open("TecnoSite");
         
           var pedidoSQL = "INSERT INTO Pedidos (CodUsuario, pedidoEnviado, pedidoTotal, " +
-          "pedidoDataHora, logradouro, bairro,cidade, uf, pais, cep, complemento,numero) VALUES ( @0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11)";
+          "pedidoDataHora, logradouro, bairro,cidade, uf, pais, cep, complemento,numero, FreteValor, FretePrazo, FreteMsg) VALUES ( @0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14)";
         
-          db.Execute(pedidoSQL,UsuarioID,false,carrinho.ValorTotal,DataPedido,carrinho.Logradouro,carrinho.Bairro,carrinho.Cidade,carrinho.Estado,"Brasil",carrinho.Cep, carrinho.Complemento, carrinho.Numero);
+          db.Execute(pedidoSQL,UsuarioID,false,carrinho.ValorTotal,DataPedido,carrinho.Logradouro,carrinho.Bairro,carrinho.Cidade,carrinho.Estado,"Brasil",carrinho.Cep, carrinho.Complemento, carrinho.Numero, carrinho.freteValor,carrinho.fretePrazo,carrinho.freteMensagem);
         
           var pedidoId = db.GetLastInsertId();
         
@@ -235,14 +235,14 @@ if(IsPost){
 							        	    &nbsp;
 							        	</td>
 							        	<td class="stronger">Frete:</td>
-							        	<td class="stronger"><div class="align-right">0.00</div></td>
+							        	<td class="stronger"><div class="align-right">@String.Format("{0:C}",carrinho.freteValor)</div></td>
 
 							        </tr>
 
 							        <tr>
 
-							        	<td class="stronger">Subtotal:</td>
-							        	<td class="stronger"><div class="size-16 align-right">@String.Format("{0:C}", carrinho.ValorTotal)</div></td>
+							        	<td class="stronger">Total:</td>
+							        	<td class="stronger"><div class="size-16 align-right">@String.Format("{0:C}", carrinho.ValorTotal + carrinho.freteValor)</div></td>
 							        </tr>
 
 							    </tbody>

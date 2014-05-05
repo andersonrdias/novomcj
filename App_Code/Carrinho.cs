@@ -20,8 +20,11 @@ public class Carrinho
     public string Cep = "";
     public string Estado = "";
 
-    //Valor Frete
-    public decimal valorFrete = 0;
+    // Frete
+    public decimal freteValor = 0;
+    public string fretePrazo = "";
+    public string freteMensagem = "";
+
 
     //Aviso do Sistema
     public bool msgCarrinhoCompra = false;
@@ -49,6 +52,14 @@ public class Carrinho
         Cidade = _cidade;
         Estado = _estado;
 
+
+    }
+
+    public void DefinirFrete (string _valor, string _prazo, string _msg){
+   
+       freteValor = decimal.Parse(_valor);
+        fretePrazo = _prazo;
+        freteMensagem = _msg;
 
     }
 
