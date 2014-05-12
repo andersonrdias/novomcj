@@ -210,10 +210,25 @@ int ContMarcador = 0;
                         <h1 class="name"><span class="light"></span> @produto.Titulo</h1>
                         Cód. Ref: </span> @String.Format("{0:00000}", produto.CodProduto)
                         <div class="meta">
-                            <span class="tag">@String.Format("{0:C}", produto.Preco_Venda)</span>
+
+                            <span class="tag">
+
+
+                                        @if(FuncaoProdutos.Promocao_Pesquisa(produto.CodProduto)){<text>
+                                        <span class="striked">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(produto.CodProduto)[0])</span> <span class="red-clr">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(produto.CodProduto)[1])</span>                           
+                                         </text>}else{<text>
+
+                                       @String.Format("{0:C}",FuncaoProdutos.Produto_Preco(produto.CodProduto)[1])                        
+                            
+                                         </text>}    
+
+
+</span>
+
+
 
                             <span class="stock">
-
+                                <br><br>
                                 <span class="btn btn-success">Disponível</span> 
                                 <span class="btn btn-danger">Esgotado</span>
                                 <span class="btn btn-warning">Sob encomenda</span>
@@ -232,7 +247,7 @@ int ContMarcador = 0;
                         <form action="/compra/compra" class="form form-inline clearfix" method="post">
 
                                      <input type="hidden" name="produtoid" size="2" value="@produto.CodProduto" />
-                                     <input type="hidden" name="preco" size="2" value="@produto.Preco_Venda" />
+                                     <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(produto.CodProduto)[1]" />
                                      <input type="hidden" name="quantidade" size="2" value="1" />
                                      <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />
 
@@ -618,7 +633,7 @@ int ContMarcador = 0;
                                     <a href="~/produto/@item.CodProduto" class="btn more btn-primary"><i class="icon-search"></i> &nbsp; Detalhes</a>                  
                                     <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
                                     <input type="hidden" name="produtoid" size="2" value="@item.CodProduto" />
-                                    <input type="hidden" name="preco" size="2" value="@item.Preco_Venda" />
+                                    <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(item.CodProduto)[1]" />
                                     <input type="hidden" name="quantidade" size="2" value="1" />
                                     <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
                                     <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
@@ -627,7 +642,11 @@ int ContMarcador = 0;
                             </div>
                         </div>
                         <div class="main-titles no-margin">
-                            <h4 class="title">@String.Format("{0:C}", item.Preco_Venda)</h4>
+                            @if(FuncaoProdutos.Promocao_Pesquisa(item.CodProduto)){<text>
+                            <h4 class="title"><span class="striked">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(item.CodProduto)[0])</span> <span class="red-clr">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(item.CodProduto)[1])</span></h4>                            
+                                </text>}else{<text>
+                            <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(item.CodProduto)[1])</h4>                            
+                                </text>}    
                             <h5 class="no-margin">@item.Titulo</h5>
                         </div>
                         <p class="desc">@item.descricao</p>                        

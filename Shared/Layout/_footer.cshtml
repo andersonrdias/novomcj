@@ -87,7 +87,7 @@ listaHistorico.Add(row.CodProduto);
     	            	            <div class="picture">
     	            	        	    <img STYLE="width:140px; height:150px" src="~/images/produtos/@FuncaoProdutos.Produto_Imagem(listaHistorico[contHistorico])" alt=""  />
     	            	        		<div class="img-overlay">
-    	            	        		 <a href="/produto/@listaHistorico[contHistorico]" class="btn more btn-success">@FuncaoProdutos.Produto_Titulo(listaHistorico[contHistorico]) <br> @String.Format("{0:C}",FuncaoProdutos.Produto_Preco(listaHistorico[contHistorico]))</a>  
+    	            	        		 <a href="/produto/@listaHistorico[contHistorico]" class="btn more btn-success">@FuncaoProdutos.Produto_Titulo(listaHistorico[contHistorico]) <br> @String.Format("{0:C}",FuncaoProdutos.Produto_Preco(listaHistorico[contHistorico])[1])</a>  
     	            	        		</div>
     	            	            </div>
     	            	        </div>

@@ -32,11 +32,56 @@ public static string Produto_Titulo (int produtoID)
   return db.QuerySingle(sqlQuery, produtoID).titulo;
 }
 
-public static decimal Produto_Preco (int produtoID)
+public static double[] Produto_Preco (int produtoID)
 {
-  var db = Database.Open("CeliaJoias");
-  var sqlQuery = "SELECT Preco_Venda FROM Produtos WHERE CodProduto = @0";
-  return db.QuerySingle(sqlQuery, produtoID).Preco_Venda;
+
+
+bool boolpromocao = false;
+
+ double valor = 0; 
+ double percentual; 
+ double valor_final = 0;
+
+ var db = Database.Open("CeliaJoias");
+ var sqlQuery = "";
+
+ double[] preco = {0,0};
+
+
+ if(FuncaoProdutos.Promocao_Pesquisa(produtoID)){
+ //Verifica se existe promoção
+     
+ sqlQuery = "SELECT * FROM Produtos A INNER JOIN Promocoes B ON A.CodProduto = B.Promocao_Produto where CodProduto = @0";
+ var produto = db.QuerySingle(sqlQuery, produtoID);
+
+//   if(produto.TipoDesconto == 1){
+     
+    valor = (double) produto.Preco_venda;
+    percentual = produto.Promocao_Percentual;       
+    valor_final = valor - (percentual * valor);
+
+
+  // }
+
+
+ }else{
+//Se não tiver promoção
+     
+sqlQuery = "SELECT Preco_Venda FROM Produtos WHERE CodProduto = @0";
+valor_final = (double)db.QuerySingle(sqlQuery, produtoID).Preco_Venda;
+
+ }
+
+
+ preco[0] = valor;
+ preco[1] = valor_final;
+ 
+return preco;
+
+
+
+
+
 }
 
 
@@ -62,6 +107,26 @@ public static string Produto_Descricao (int produtoID)
   var sqlQuery = "SELECT Descricao FROM Produtos WHERE CodProduto = @0";
  return  db.QuerySingle(sqlQuery, produtoID).Descricao;
 }
+
+
+
+public static bool Promocao_Pesquisa (int _produtoID)
+{
+    bool resultado = false;
+
+    var db = Database.Open("CeliaJoias");
+    var sqlQuery = "SELECT COUNT(Promocao_Produto) AS Quantidade FROM Promocoes WHERE Promocao_Produto = @0 AND Promocao_DataInicio <= GETDATE() AND Promocao_DataFinal >= GETDATE()";
+    int consulta = db.QuerySingle(sqlQuery, _produtoID).Quantidade; 
+
+    if(consulta > 0){
+        resultado = true;
+    }
+    return  resultado;
+
+
+
+}
+
 
 
 

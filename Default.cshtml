@@ -4,7 +4,7 @@
 
 
 //Frete Gratis
-var vlr_Min_Fretegratis = 100;
+var vlr_Min_Fretegratis = 500;
 
 //Promoções
 var tx_promocoes = "Descontos de até 30%, confira";
@@ -255,7 +255,7 @@ if(listaProc.Count < 4){
                                     <a href="~/produto/@ProdutosDestaque[produtoinicial]" class="btn more btn-primary"><i class="icon-search"></i> &nbsp; Detalhes</a>                  
                                     <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
                                     <input type="hidden" name="produtoid" size="2" value="@ProdutosDestaque[produtoinicial]" />
-                                    <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial])" />
+                                    <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial])[1]" />
                                     <input type="hidden" name="quantidade" size="2" value="1" />
                                     <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
                                     <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
@@ -263,8 +263,12 @@ if(listaProc.Count < 4){
     	                        </div>
                             </div>
                         </div>
-    	                <div class="main-titles">
-    	                    <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial]))</h4>
+    	                <div class="main-titles"> 
+                            @if(FuncaoProdutos.Promocao_Pesquisa(ProdutosDestaque[produtoinicial])){<text>
+                            <h4 class="title"><span class="striked">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial])[0])</span> <span class="red-clr">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial])[1])</span></h4>                            
+                             </text>}else{<text>
+                            <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosDestaque[produtoinicial])[1])</h4>                            
+                             </text>}    	                   
     	                    <h5 class="no-margin">@FuncaoProdutos.Produto_Titulo(ProdutosDestaque[produtoinicial])</h5>
     	                </div>
                         <p class="desc">@FuncaoProdutos.Produto_Descricao(ProdutosDestaque[produtoinicial])</p>
@@ -326,7 +330,7 @@ if(listaProc.Count < 4){
                                     <a href="~/produto/@ProdutosNovos[i]" class="btn more btn-primary">Detalhes</a>
                                     <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
                                     <input type="hidden" name="produtoid" size="2" value="@ProdutosNovos[i]" />
-                                    <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(@ProdutosNovos[i])" />
+                                    <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(@ProdutosNovos[i])[1]" />
                                     <input type="hidden" name="quantidade" size="2" value="1" />
                                     <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
                                     <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
@@ -335,7 +339,12 @@ if(listaProc.Count < 4){
                             </div>
                         </div>
                         <div class="main-titles no-margin">
-                            <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosNovos[i]))</h4>
+
+                            @if(FuncaoProdutos.Promocao_Pesquisa(ProdutosNovos[i])){<text>
+                            <h4 class="title"><span class="striked">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosNovos[i])[0])</span> <span class="red-clr">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosNovos[i])[1])</span></h4>                            
+                             </text>}else{<text>
+                            <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosNovos[i])[1])</h4>                            
+                             </text>}
                             <h5 class="no-margin">@FuncaoProdutos.Produto_Titulo(ProdutosNovos[i])</h5>
                         </div>
                         <p class="desc">@FuncaoProdutos.Produto_Descricao(ProdutosNovos[i])</p>
@@ -404,7 +413,7 @@ if(listaProc.Count < 4){
                   
                                                      <form action="/compra/compra" class="form form-inline clearfix" method="post">                                                                                                                                                                    
                                                      <input type="hidden" name="produtoid" size="2" value="@ProdutosProc[produtoinicial]" />
-                                                     <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(ProdutosProc[produtoinicial])" />
+                                                     <input type="hidden" name="preco" size="2" value="@FuncaoProdutos.Produto_Preco(ProdutosProc[produtoinicial])[1]" />
                                                      <input type="hidden" name="quantidade" size="2" value="1" />
                                                      <input type="hidden" name="url" size="2" value="@HttpContext.Current.Request.Url.AbsolutePath" />                                                    
                                                       <button class="btn buy btn-danger"><i class="icon-shopping-cart"></i> &nbsp; Comprar</button>                                                    
@@ -414,8 +423,12 @@ if(listaProc.Count < 4){
     	                                    </div>
     	                                </div>
     	                                <div class="main-titles">
-    	                                    <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosProc[produtoinicial]))</h4>
-    	                                    <h5 class="no-margin">@FuncaoProdutos.Produto_Titulo(ProdutosProc[produtoinicial])</h5>
+                                        @if(FuncaoProdutos.Promocao_Pesquisa(ProdutosProc[produtoinicial])){<text>
+                                        <h4 class="title"><span class="striked">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosProc[produtoinicial])[0])</span> <span class="red-clr">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosProc[produtoinicial])[1])</span></h4>                            
+                                         </text>}else{<text>
+                                        <h4 class="title">@String.Format("{0:C}",FuncaoProdutos.Produto_Preco(ProdutosProc[produtoinicial])[1])</h4>                            
+                                         </text>}    	 
+                                        <h5 class="no-margin">@FuncaoProdutos.Produto_Titulo(ProdutosProc[produtoinicial])</h5>
     	                                </div>
     	                                <p class="desc">@FuncaoProdutos.Produto_Descricao(ProdutosProc[produtoinicial])</p>
     	                                <p class="center-align stars">

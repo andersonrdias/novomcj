@@ -55,7 +55,12 @@
                             <form id="logoutForm" action="~/conta/sair" method="post">
                            
                                 @AntiForgery.GetHtml()
-
+                            @if (Roles.IsUserInRole(WebSecurity.CurrentUserName, "Admin"))
+	                        {<text>
+                            <div class="dropdown js-selectable-dropdown">
+                                 <a class="btn-small btn-danger push-down-10" href="/sistema/">Administração do Site</a>                               
+                            </div>
+                            </text>}
                             <div class="dropdown js-selectable-dropdown">
                                 <a data-toggle="dropdown" class="selected" href="#"><span class="js-change-text"><i class="icon-user"></i> Minha Conta</span> <b class="caret"></b></a>
                                 <!-- for all available country flags look the styles in lib/components/_flags.scss -->

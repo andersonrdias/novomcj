@@ -1,5 +1,8 @@
 ﻿@{
     
+
+
+    
 }
 
  <header>
@@ -16,22 +19,14 @@
                                 </li>
 								<li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle nav_condensed" data-toggle="dropdown"><i class="flag-gb"></i> <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-										<li><a href="javascript:void(0)"><i class="flag-de"></i> Deutsch</a></li>
-										<li><a href="javascript:void(0)"><i class="flag-fr"></i> Français</a></li>
-										<li><a href="javascript:void(0)"><i class="flag-es"></i> Español</a></li>
-										<li><a href="javascript:void(0)"><i class="flag-ru"></i> Pусский</a></li>
-                                    </ul>
-                                </li>
-                                <li class="divider-vertical hidden-phone hidden-tablet"></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Johny Smith <b class="caret"></b></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@FuncaoUsuarios.NomeComepleto_Cod(WebSecurity.CurrentUserName) <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
 										<li><a href="user_profile.html">Minha Conta</a></li>
 										<li><a href="javascrip:void(0)">Another action</a></li>
 										<li class="divider"></li>
-										<li><a href="login.html">Sair do Sistema (Log Out)</a></li>
+										<li><a href="/" target="_blank">Visualizar o Site</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Sair do Sistema (Log Out)</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -44,24 +39,67 @@
                                         <li class="dropdown">
                                             <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-list-alt icon-white"></i> Vendas & Pedidos <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="form_elements.html">Form elements</a></li>
-                                                <li><a href="form_extended.html">Extended form elements</a></li>
-                                                <li><a href="form_validation.html">Form Validation</a></li>
+                                                <li><a href="#">Visualizar Vendas</a></li>
+                                                <li><a href="#"> Relatórios &amp; Estatistica</a></li>           
+                                                 <li class="divider"></li>
+                                                <li><a href="#">Consultar pagamentos (api pagseguro)</a></li>
+                                                <li><a href="#">Financeiro</a></li>
                                             </ul>
                                         </li>
                                         <li class="dropdown">
                                             <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-th icon-white"></i> Produtos <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="alerts_btns.html">Alerts & Buttons</a></li>
-                                                <li><a href="icons.html">Icons</a></li>
-                                                <li><a href="notifications.html">Notifications</a></li>
-                                                <li><a href="tables.html">Tables</a></li>
-												<li><a href="tables_more.html">Tables (more examples)</a></li>
-                                                <li><a href="tabs_accordion.html">Tabs & Accordion</a></li>
-                                                <li><a href="tooltips.html">Tooltips, Popovers</a></li>
-                                                <li><a href="typography.html">Typography</a></li>
-												<li><a href="widgets.html">Widget boxes</a></li>
-												<li class="dropdown">
+                                                <li><a href="/sistema/produtos/cadastrar">Adicionar Produtos</a></li>
+                                                <li><a href="/sistema/produtos/">Visualizar todos os Produtos</a></li>
+                                                <li><a href="#"> Relatórios &amp; Estatistica</a></li>           
+                                                 <li class="divider"></li>
+                                                <li><a href="#">Gerenciar Categorias de Produtos</a></li>
+                                                 <li class="divider"></li>
+                                                <li><a href="#">Adicionar Promoção</a></li>
+												<li><a href="#">Visualizar todas as promoções</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-wrench icon-white"></i> Clientes & Usuários <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Visualizar Clientes</a></li>
+                                                <li><a href="#">Grupo de Clientes</a></li>
+                                                <li><a href="#">Programa de inidicação (afiliados)</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Administração de Contas</a></li>                      
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown">
+                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-file icon-white"></i> Conteúdo <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="/sistema/mensagens/">Mensagens</a></li>
+                                                <li><a href="#">Eventos &amp; Tarefas</a></li>
+                                                <li class="divider"></li>
+                                                <li class="dropdown">
+													<a href="#">Blog <b class="caret-right"></b></a>
+													<ul class="dropdown-menu">
+														<li><a href="#">Nova Postagem</a></li>
+														<li><a href="#">Visualizar todas as postagens</a></li>
+														<li><a href="#">Configuração do blog</a></li>														
+													</ul>
+												</li>
+                                                <li class="dropdown">
+													<a href="#">Textos institucionais <b class="caret-right"></b></a>
+													<ul class="dropdown-menu">
+														<li><a href="#">Quem Somos</a></li>
+														<li><a href="#">Sobre os Produtos</a></li>
+														<li><a href="#">Compra Segura</a></li>
+														<li><a href="#">Política de Troca</a></li>
+														<li><a href="#">Política de Privacidade</a></li>                                                                                                                														
+													</ul>
+												</li>
+                                                <li class="divider"></li>                                                              
+												<li><a href="mailbox.html">Mailbox</a></li>
+                                                <li><a href="search_page.html">Search page</a></li>
+                                                <li><a href="user_profile.html">User profile</a></li>
+												<li><a href="user_static.html">User profile (static)</a></li>
+                                                <li class="dropdown">
 													<a href="#">Sub menu <b class="caret-right"></b></a>
 													<ul class="dropdown-menu">
 														<li><a href="#">Sub menu 1.1</a></li>
@@ -80,35 +118,20 @@
                                             </ul>
                                         </li>
                                         <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-wrench icon-white"></i> Clientes & Usuários <b class="caret"></b></a>
+                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-file icon-white"></i> Configuração <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="charts.html">Charts</a></li>
-                                                <li><a href="calendar.html">Calendar</a></li>
+                                                <li><a href="#">Informações sobre a loja</a></li>
+                                                <li><a href="#">Formas de Pagamento</a></li>
+												<li><a href="#">Formas de Entrega</a></li>
+												<li><a href="#">Rede Social</a></li>
                                                 <li class="divider"></li>
-                                                <li><a href="datatable.html">Datatable</a></li>
-                                                <li><a href="file_manager.html">File Manager</a></li>
-                                                <li><a href="floating_header.html">Floating List Header</a></li>
-                                                <li><a href="google_maps.html">Google Maps</a></li>
-                                                <li><a href="gallery.html">Gallery Grid</a></li>
-                                                <li><a href="wizard.html">Wizard</a></li>
+                                                <li><a href="#">Template do Site</a></li>
+                                                <li class="divider"></li>
+												<li><a href="#">Ajuda</a></li>
                                             </ul>
                                         </li>
-                                        <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-file icon-white"></i> Pages <b class="caret"></b></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="chat.html">Chat</a></li>
-                                                <li><a href="error_404.html">Error 404</a></li>
-												<li><a href="mailbox.html">Mailbox</a></li>
-                                                <li><a href="search_page.html">Search page</a></li>
-                                                <li><a href="user_profile.html">User profile</a></li>
-												<li><a href="user_static.html">User profile (static)</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                        </li>
-                                        <li>
-                                            <a href="documentation.html"><i class="icon-book icon-white"></i> Help</a>
-                                        </li>
+
+         
                                     </ul>
                                 </div>
                             </nav>
@@ -118,7 +141,7 @@
                 <div class="modal hide fade" id="myMail">
                     <div class="modal-header">
                         <button class="close" data-dismiss="modal">×</button>
-                        <h3>New messages</h3>
+                        <h3>Novas Mensagens</h3>
                     </div>
                     <div class="modal-body">
                         <div class="alert alert-info">In this table jquery plugin turns a table row into a clickable link.</div>
@@ -160,7 +183,7 @@
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <a href="javascript:void(0)" class="btn">Go to mailbox</a>
+                        <a href="javascript:void(0)" class="btn">Visualizar Todas</a>
                     </div>
                 </div>
                 <div class="modal hide fade" id="myTasks">
