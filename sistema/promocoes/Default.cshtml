@@ -159,7 +159,8 @@ var produtos = db.Query(selectQueryStringProdutos);
                                     <tr>
                                         <th>Imagem</th>
                                         <th>Nome do Produto</th>
-                                        <th>Categoria</th>
+                                        <th>Data Inicial</th>
+                                        <th>Data Final</th>
                                         <th>Situação</th>
                                         <th>Preço</th>
                                     </tr>
@@ -173,10 +174,12 @@ var produtos = db.Query(selectQueryStringProdutos);
 												<img alt="" src="/images/produtos/mini_@item.Imagem01" style="height:50px;width:50px">
 											</a>
 										</td>
-                                        <td><a href="/sistema/promocoes/visualizar/@item.PromocaoCod">@item.Titulo</a></td>
-                                        <td>@FuncaoProdutos.Produto_Categoria(item.CodProduto)</td>
+                                        <td><a href="/sistema/promocoes/visualizar/@item.PromocaoCod">@item.Titulo</a><br>Categoria: @FuncaoProdutos.Produto_Categoria(item.CodProduto)</td>
+                                        <td>@item.Promocao_DataInicio</td>
+                                        <td>@item.Promocao_DataFinal</td>
                                         <td class="center">@if(item.Ativo){<text><font color="green">Produto Ativo</font> </text>}else{<text><font color="red">Desativado</font></text>} @if(item.Destaque){<text> <br> <font color="blue">Produto em Destaque</font> </text>}</td>
-                                        <td class="center">@String.Format("{0:C}", item.Preco_Venda)</td>
+                                        <td class="center">De: @String.Format("{0:C}", item.Preco_Venda) <br>
+                                        Por: @String.Format("{0:C}", FuncaoProdutos.Produto_Preco(item.CodProduto)[1]) </td>
                                     </tr>
                                  }
                                                                     </tbody>

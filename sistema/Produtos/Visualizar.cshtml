@@ -147,7 +147,7 @@ var qtdeTag =  ListaTag.Length;
                                     <a href="~/sistema/"><i class="icon-home"></i></a>
                                 </li>
                                 <li>
-                                    <a href="~/sistema/produtos/">Produtos</a>
+                                    <a href="#">Produtos</a>
                                 </li>
                                 <li>
                                     <a href="">Visualizar</a>
@@ -170,9 +170,13 @@ var qtdeTag =  ListaTag.Length;
 
 
                                             <li><a href="#tab_dr3" data-toggle="tab">Editar o Produto</a></li>
+                                            @if(produto.Ativo){<text>
 											<li><a href="#tab_dr4" data-toggle="tab">Desativar o Produto</a></li>
-											<li><a href="#tab_dr5" data-toggle="tab">Deletar o produto</a></li>
-											<li class="divider"></li>
+                                            </text>}else{<text>
+                                            <li><a href="#tab_dr4" data-toggle="tab">Ativar o Produto</a></li>
+                                            </text>}		
+                                            <li><a href="#tab_dr5" data-toggle="tab">Deletar o produto</a></li>
+                                            <li class="divider"></li>
 											<li><a href="~/sistema/produtos/">Relação de Produtos</a></li>
 										</ul>
 									</li>
@@ -182,8 +186,24 @@ var qtdeTag =  ListaTag.Length;
 											<div class="row-fluid">
 								                    <div class="span12">
 									                    <div class="vcard">
-										                    <img class="thumbnail" src="/images/produtos/mini_@produto.Imagem01" alt="" />
-										                    <ul>
+                                                       @if(produto.Imagem01 != ""){
+                                                       <text>
+                                                       <img class="thumbnail" src="/images/produtos/mini_@produto.Imagem01" alt="" />
+                                                       </text>    
+                                                       }else if(produto.Imagem02 != ""){                                           
+                                                       <text>
+                                                       <img class="thumbnail" src="/images/produtos/mini_@produto.Imagem02" alt="" />
+                                                       </text> 
+                                                       }else if(produto.Imagem03 != ""){                                           
+                                                       <text>
+                                                       <img class="thumbnail" src="/images/produtos/mini_@produto.Imagem03" alt="" />
+                                                       </text> 
+                                                       } else {
+                                                       <text>
+                                                        <img class="thumbnail" src="http://www.placehold.it/80x80/EFEFEF/AAAAAA" alt="">                                        
+                                                       </text>
+                                                       }
+                                                            <ul>
 											                    <li class="v-heading">
 												                    Informações 
 											                    </li>
@@ -376,18 +396,28 @@ var qtdeTag =  ListaTag.Length;
 							                <div class="alert alert-block alert-info fade in">								
 								                <h4 class="alert-heading">Editar o produto</h4>
 								                <p>Clique no botão abaixo para editar o produto </p>
-								                <p><a class="btn btn-inverse" href="#"><i class="splashy-check"></i> Editar o Produto</a> </p>
+								                <p><a class="btn btn-inverse" href="/sistema/produtos/editar/@produtoID"><i class="splashy-check"></i> Editar o Produto</a> </p>
 							                </div>
 						                </div>
 									</div>
 									<div class="tab-pane" id="tab_dr4">
-						                <div class="span12">
+                                        @if(produto.Ativo){<text>
+                                        <div class="span12">
 							                <div class="alert alert-block alert-warning fade in">								
 								                <h4 class="alert-heading">Desabilitar o produto</h4>
 								                <p>Tem certeza que deseja desabilitar o produto? </p>
 								                <p><a class="btn btn-inverse" href="#"><i class="splashy-check"></i> Desabilitar o Produto</a> </p>
 							                </div>
 						                </div>
+                                        </text>}else{<text>
+                                        <div class="span12">
+							                <div class="alert alert-block alert-warning fade in">								
+								                <h4 class="alert-heading">Habilitar o produto</h4>
+								                <p>Tem certeza que deseja habilitar o produto? </p>
+								                <p><a class="btn btn-inverse" href="#"><i class="splashy-check"></i> Ativar o Produto</a> </p>
+							                </div>
+						                </div>
+                                        </text>}
 									</div>
 									<div class="tab-pane" id="tab_dr5">
 						                <div class="span12">

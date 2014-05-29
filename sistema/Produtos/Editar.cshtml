@@ -1,0 +1,750 @@
+﻿@{
+    
+//-
+    
+
+var db = Database.Open("CeliaJoias");
+
+   var sqlProdutos = "SELECT * FROM Produtos WHERE CodProduto=@0";
+
+    var CodigoProduto  = UrlData[0];
+
+    if (CodigoProduto.IsEmpty()) {
+         Response.Redirect(@Href("~/sistema/produtos/"));
+     }
+
+
+
+
+//----------------------------------------------------------------------------------Retirar
+//var selectQueryStringCategoria = "select * from Categoria where Ativo = 'true'";
+//var selectQueryFabricante = "select * from Fabricantes where Ativo = 'true'";
+//----------------------------------------------------------------------------------Retirar
+
+//Categorias
+var slqSelectCategoria = "SELECT * FROM Categoria where Ativo = 'true' order by Titulo;";
+
+//Fabricante
+var slqSelectFabricante = "SELECT * FROM Fabricantes where Ativo = 'true' order by Nome;";
+
+
+
+
+
+var QtdeMaxMin = 50; //Numero máximo para select em Máx e Mín de compra de produtos
+
+//select * from Categoria where Ativo = 'true' order by Titulo
+
+var produtos = db.QuerySingle(sqlProdutos, CodigoProduto);
+
+
+var NomeProduto = produtos.Titulo;
+var Descricao = produtos.descricao;
+var DescricaoAbreviada = produtos.descricaoabreviada;
+var Categoria = produtos.categoria;
+var Fabricante = produtos.fabricante;
+var Referencia = produtos.CodReferencia;
+var Imagem01 = produtos.Imagem01;
+var Imagem02 = produtos.Imagem02;
+var Imagem03 = produtos.Imagem03;
+
+var DataCadastro = produtos.DataCadastro;
+
+var Ativo =  produtos.Ativo;
+bool AtivoVR = true;
+var Tag =  produtos.Tag;
+var Peso = produtos.Peso;
+var Preco_Compra =  produtos.Preco_Compra;
+var Preco_Venda =  produtos.Preco_Venda;
+var Estoque = produtos.Estoque;
+var QtdeMaxCompra = produtos.QtdeMaxCompra;
+var QtdeMinCompra = produtos.QtdeMinCompra;
+var Data_Ativacao =  String.Format("{0:dd/MM/yyyy}", produtos.DataAtivacao);
+var Data_Desativacao =  produtos.DataDesativacao;
+if(Data_Desativacao != null){
+Data_Desativacao =  String.Format("{0:dd/MM/yyyy}", produtos.DataDesativacao);    
+} 
+
+var Frete =  produtos.FreteCobrar;
+var Destaque =  produtos.Destaque;
+bool DestaqueVR = false; 
+var Anotacao = produtos.Anotacao;
+
+//Foto
+WebImage imagemOriginal = null;
+WebImage imagemMiniatura = null;
+var nomeArquivoImagem = "";
+
+string Foto = "";
+
+
+if (IsPost) {
+
+//Inicio alteração
+NomeProduto = Request["nomeproduto"];
+Descricao = Request["descricao"];
+Categoria = Request["categoria"];
+Referencia = Request["referencia"];
+
+
+DataCadastro = DateTime.Now;
+
+Fabricante =  Request["fabricante"];
+Ativo =  Request["produtoativo"];
+AtivoVR = true;
+//tag =  Request["tag"];
+Peso = Request["Peso"];
+Preco_Compra =  Request["precocompra"];
+Preco_Venda =  Request["precovenda"];
+Estoque = Request["estoque"];
+QtdeMaxCompra = Request["qtdemaxcompra"];
+QtdeMinCompra = Request["qtdemincompra"];
+Data_Ativacao =  Request["dataativacao"];
+Data_Desativacao =  Request["datadesativacao"];
+Frete =  Request["frete"];
+Destaque =  Request["destaque"];
+DestaqueVR = false; 
+Anotacao = Request["Anotacao"];
+
+//Foto
+//WebImage imagemOriginal = null;
+//WebImage imagemMiniatura = null;
+//nomeArquivoImagem = "";
+
+//Foto = "";
+
+
+
+//Final alteração
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Foto
+
+      
+    imagemOriginal = WebImage.GetImageFromRequest();
+    if(imagemOriginal != null)
+    {
+      nomeArquivoImagem = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal.FileName);
+      imagemOriginal.Save(@"~\image\produtos\" + nomeArquivoImagem);
+      imagemMiniatura = imagemOriginal.Resize(width: 60,height:60,preserveAspectRatio: true);
+      imagemMiniatura.Save(@"~\image\produtos\mini_" + nomeArquivoImagem);
+    }
+
+
+
+
+
+
+
+Foto = nomeArquivoImagem;
+
+
+
+
+
+
+
+// Le o nome do produto e realiza a validação não permitindo um nome vazio
+NomeProduto = Request["nomeproduto"];
+if (String.IsNullOrEmpty(NomeProduto)) {
+ModelState.AddError("NomeProduto", "O Nome do produto é obrigatório.");
+}
+
+
+// Le o nome do produto e realiza a validação não permitindo um nome vazio
+Descricao = Request["descricao"];
+if (String.IsNullOrEmpty(Descricao)) {
+ModelState.AddError("Descricao", "A Descrição do produto deve ser informado.");
+}
+
+
+// Le o nome do produto e realiza a validação não permitindo um nome vazio
+Categoria = Request["categoria"];
+if (String.IsNullOrEmpty(Categoria)) {
+ModelState.AddError("Categoria", "A Categoria deve ser informado.");
+}
+
+
+
+// Le o nome do produto e realiza a validação não permitindo um nome vazio
+Referencia = Request["Referencia"];
+if (String.IsNullOrEmpty(Referencia)) {
+ModelState.AddError("Referencia", "O Código de referencia deve ser informado.");
+}
+
+
+// Imagem
+
+if (String.IsNullOrEmpty(Foto)) {
+Foto = Imagem01;
+}
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------
+
+if (Estoque == "") {
+   Estoque = "0";
+}
+
+if (Preco_Compra == "") {
+  Preco_Compra = "0";
+}
+
+if (Data_Ativacao == "") {
+  Data_Ativacao = string.Format("{0:dd/MM/yyyy}", DataCadastro);
+}
+
+if (Data_Desativacao == "") {
+  //Data_Ativacao = string.Format("{0:dd/MM/yyyy}", DataCadastro);
+  Data_Desativacao = null;
+}
+
+if (Ativo == "true") {
+ 
+ AtivoVR = true;
+} else {
+    AtivoVR = false;
+}
+
+
+if (Destaque == "true") {
+  DestaqueVR = true;
+  } else
+  {
+  DestaqueVR = false;
+  }
+
+
+
+// Define a instrução SQL para incluir dados. Os valores para atribuir as colunas
+// na tabela Produtos são definidos como parâmetros usando a palavra-chave VALUES
+if(ModelState.IsValid) {
+  
+//  var inserirQuery = "INSERT INTO Produtos (Titulo, Descricao, CodReferencia, Categoria, Imagem01, Preco_venda, Preco_Compra, Anotacao, Peso, Fabricante, DataAtivacao, DataDesativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, Ativo, Destaque, Tag ) " + "VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17)";
+//  db.Execute(inserirQuery, NomeProduto, Descricao, Referencia, Categoria, Foto, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, Data_Ativacao, Data_Desativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, AtivoVR, DestaqueVR, Tag);
+
+
+  var updateQueryString = "UPDATE Produtos SET Titulo=@0, Descricao=@1, CodReferencia=@2, Categoria=@3, Imagem01=@4, Preco_venda=@5, Preco_Compra=@6, Anotacao=@7, Peso=@8, Fabricante=@9, DataAtivacao=@10, DataDesativacao=@11, Estoque=@12, QtdeMaxCompra=@13, QtdeMinCompra=@14, Ativo=@15, Destaque=@16, Tag=@17  WHERE CodProduto=@18";
+  db.Execute(updateQueryString, NomeProduto, Descricao, Referencia, Categoria, Foto, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, Data_Ativacao, Data_Desativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, AtivoVR, DestaqueVR, Tag, CodigoProduto);
+  
+
+  // Exibe a página que lista os protudosDisplay the page that lists products.,,
+  Response.Redirect(@Href("~/sistema/Produtos/Sucesso"));
+}
+}
+
+
+       
+      //      var updateQueryString =
+      //        "UPDATE Produtos SET Nome=@0, Descricao=@1, Preco=@2 WHERE Codigo=@3" ;
+       //     db.Execute(updateQueryString, Nome, Descricao, Preco, CodigoProduto);
+        //    Response.Redirect(@Href("~/EditarProdutos"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Produtos</title>
+    
+   <!-- Bootstrap framework -->
+            <link rel="stylesheet" href="~/sistema/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/sistema/bootstrap/css/bootstrap-responsive.min.css" />
+        <!-- jQuery UI theme-->
+            <link rel="stylesheet" href="~/sistema/lib/jquery-ui/css/Aristo/Aristo.css" />
+        <!-- gebo blue theme-->
+            <link rel="stylesheet" href="~/sistema/css/blue.css" id="link_theme" />
+        <!-- breadcrumbs-->
+            <link rel="stylesheet" href="~/sistema/lib/jBreadcrumbs/css/BreadCrumb.css" />
+        <!-- tooltips-->
+            <link rel="stylesheet" href="~/sistema/lib/qtip2/jquery.qtip.min.css" />
+        <!-- notifications -->
+            <link rel="stylesheet" href="~/sistema/lib/sticky/sticky.css" />
+        <!-- code prettify -->
+            <link rel="stylesheet" href="~/sistema/lib/google-code-prettify/prettify.css" />    
+        <!-- notifications -->
+            <link rel="stylesheet" href="~/sistema/lib/sticky/sticky.css" />    
+        <!-- splashy icons -->
+            <link rel="stylesheet" href="~/sistema/img/splashy/splashy.css" />
+		<!-- datepicker -->
+            <link rel="stylesheet" href="~/sistema/lib/datepicker/datepicker.css" />
+        <!-- tag handler -->
+            <link rel="stylesheet" href="~/sistema/lib/tag_handler/css/jquery.taghandler.css" />
+        <!-- nice form elements -->
+            <link rel="stylesheet" href="~/sistema/lib/uniform/Aristo/uniform.aristo.css" />
+		<!-- 2col multiselect -->
+            <link rel="stylesheet" href="~/sistema/lib/multiselect/css/multi-select.css" />
+		<!-- enhanced select -->
+            <link rel="stylesheet" href="~/sistema/lib/chosen/chosen.css" />
+        <!-- upload -->
+            <link rel="stylesheet" href="~/sistema/lib/plupload/js/jquery.plupload.queue/css/plupload-gebo.css" />
+		<!-- colorbox -->
+            <link rel="stylesheet" href="~/sistema/lib/colorbox/colorbox.css" />
+		<!-- colorpicker -->
+            <link rel="stylesheet" href="~/sistema/lib/colorpicker/css/colorpicker.css" />	
+		    
+        <!-- main styles -->
+            <link rel="stylesheet" href="~/sistema/css/style.css" />
+			
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans" />
+	
+        <!-- Favicon -->
+            <link rel="shortcut icon" href="favicon.ico" />
+		
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="~/sistema/css/ie.css" />
+            <script src="js/ie/html5.js"></script>
+			<script src="js/ie/respond.min.js"></script>
+        <![endif]-->
+		
+		<script>
+			//* hide all elements & show preloader
+			document.documentElement.className += 'js';
+		</script>
+    <body>
+		<div id="loading_layer" style="display:none"><img src="~/sistema/img/ajax_loader.gif" alt="" /></div>
+		<div class="style_switcher">
+			<div class="sepH_c">
+				<p>Colors:</p>
+				<div class="clearfix">
+					<a href="javascript:void(0)" class="style_item jQclr blue_theme style_active" title="blue">blue</a>
+					<a href="javascript:void(0)" class="style_item jQclr dark_theme" title="dark">dark</a>
+					<a href="javascript:void(0)" class="style_item jQclr green_theme" title="green">green</a>
+					<a href="javascript:void(0)" class="style_item jQclr brown_theme" title="brown">brown</a>
+					<a href="javascript:void(0)" class="style_item jQclr eastern_blue_theme" title="eastern_blue">eastern blue</a>
+					<a href="javascript:void(0)" class="style_item jQclr tamarillo_theme" title="tamarillo">tamarillo</a>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Backgrounds:</p>
+				<div class="clearfix">
+					<span class="style_item jQptrn style_active ptrn_def" title=""></span>
+					<span class="ssw_ptrn_a style_item jQptrn" title="ptrn_a"></span>
+					<span class="ssw_ptrn_b style_item jQptrn" title="ptrn_b"></span>
+					<span class="ssw_ptrn_c style_item jQptrn" title="ptrn_c"></span>
+					<span class="ssw_ptrn_d style_item jQptrn" title="ptrn_d"></span>
+					<span class="ssw_ptrn_e style_item jQptrn" title="ptrn_e"></span>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Layout:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_layout" id="ssw_layout_fluid" value="" checked /> Fluid</label>
+					<label class="radio inline"><input type="radio" name="ssw_layout" id="ssw_layout_fixed" value="gebo-fixed" /> Fixed</label>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Sidebar position:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_sidebar" id="ssw_sidebar_left" value="" checked /> Left</label>
+					<label class="radio inline"><input type="radio" name="ssw_sidebar" id="ssw_sidebar_right" value="sidebar_right" /> Right</label>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Show top menu on:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_menu" id="ssw_menu_click" value="" checked /> Click</label>
+					<label class="radio inline"><input type="radio" name="ssw_menu" id="ssw_menu_hover" value="menu_hover" /> Hover</label>
+				</div>
+			</div>
+			
+			<div class="gh_button-group">
+				<a href="#" id="showCss" class="btn btn-primary btn-mini">Show CSS</a>
+				<a href="#" id="resetDefault" class="btn btn-mini">Reset</a>
+			</div>
+			<div class="hide">
+				<ul id="ssw_styles">
+					<li class="small ssw_mbColor sepH_a" style="display:none">body {<span class="ssw_mColor sepH_a" style="display:none"> color: #<span></span>;</span> <span class="ssw_bColor" style="display:none">background-color: #<span></span> </span>}</li>
+					<li class="small ssw_lColor sepH_a" style="display:none">a { color: #<span></span> }</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="maincontainer" class="clearfix">
+			<!-- header -->
+            @RenderPage("~/sistema/Shared/Layout/_Top.cshtml")  
+            
+            <!-- main content -->
+            <div id="contentwrapper">
+                <div class="main_content">
+                    
+                    <nav>
+                        <div id="jCrumbs" class="breadCrumb module">
+                            <ul>
+                                <li>
+                                    <a href="~/sistema/"><i class="icon-home"></i></a>
+                                </li>
+                                <li>
+                                    <a href="~/sistema/produtos/">Produtos</a>
+                                </li>
+                                <li>
+                                    <a href="#">Editar</a>
+                                </li>
+                                <li>
+                                    @NomeProduto
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <h3 class="heading">Editar Produto</h3>
+                            <div class="row-fluid">
+									<div class="span6">
+
+									    <label>Nome do Produto</label>
+									    <input type="text" id="nomeproduto" name="nomeproduto" value="@NomeProduto" class="span8">
+									    <span class="help-inline"></span>									
+                                    
+                                        <br>
+                                        <label>Categoria</label>
+                                        <select class="span8" name="categoria" id="categoria">
+                                        @foreach (var categoria in db.Query(slqSelectCategoria))
+                                        {<text><option value="@categoria.CodCategoria">@categoria.Titulo</option> </text>}
+									    </select>
+
+                                        <br>
+                                        <label>Tag (palavras-chaves)</label>
+									    <textarea name="tag" id="tag" cols="10" rows="3" class="span8">@Tag</textarea>
+								
+                                        
+                                    </div>
+
+									<div class="span6">
+										<label>Breve Descrição do Produto</label>
+										<textarea name="descricaoabreviada" id="descricaoabreviada" cols="10" rows="2" class="span8">@DescricaoAbreviada</textarea>
+                                        <br>
+                                         <label>Descrição do Produto</label>
+										<textarea name="descricao" id="descricao" cols="10" rows="5" class="span8">@Descricao</textarea>
+									</div>
+								</div>
+                            
+
+
+
+                             <h4>Valores</h4>
+                             <hr>
+                            <div class="row-fluid">
+                               
+									<div class="span6">
+
+									<label>Preço de Venda</label>
+									<input type="text" name="precovenda" id="precovenda" value="@Preco_Venda" class="span8">
+									<span class="help-inline"></span>									
+                                    </div>
+
+									<div class="span6">
+
+									<label>Preço de Compra</label>
+									<input type="text" name="precocompra" id="precocompra" value="@Preco_Compra" class="span8">
+									<span class="help-inline"></span>	
+
+
+									</div>
+							</div>
+
+                            <br>
+                            <h4>Detalhes do Produtos</h4>
+                            <hr>
+                            <div class="row-fluid">
+                               
+						        <div class="span6">
+                                    <label>Peso Médio</label>
+									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+                                    <br>
+                                    <label>Tamanho (dimensão do produto)</label>
+									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+                                    <br>
+                                    <label>Acabamento</label>
+									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+                                </div>
+						        <div class="span6">
+                                    <label>Lapidação</label>
+									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+                                    <br>
+                                    <label>Cor</label>
+									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+                                    <br>
+                                    <label>Grama de Ouro</label>
+									<input type="text" value="@Peso" name="peso" id="peso" class="span8"> 
+                                    <span class="help-inline"><b>Nota:</b> A grama de ouro só será exibida aos administradores do site.</span>	
+                                    
+                                </div>
+
+                            </div>
+                            <br>
+                            <h4>Datas</h4>
+                             <hr>
+                            <div class="row-fluid">
+                               
+									<div class="span6">
+
+                                        <label for="mask_date">Data do inicio das vendas do produto</label>
+								        <input type="text" class="span8"value="@Data_Ativacao" name="dataativacao" id="dataativacao">
+		                                            
+                                        </div>
+
+										<div class="span6">
+
+						        
+                                        
+                                        <label for="mask_date">Data de encerramento das vendas do produto</label>
+								        <input type="text" class="span8" value="@Data_Desativacao" name="datadesativacao" id="datadesativacao">
+
+                                   
+                                        								
+
+
+										</div>
+									</div>
+
+
+                            <br>
+                             <h4>Opções</h4>
+                             <hr>
+                            <div class="row-fluid">
+										<div class="span6">
+											<label class="checkbox">
+												<input type="checkbox" value="option1" name="optionsCheckboxList1" checked="checked">
+												Produto Ativo.
+											</label>
+											<label class="checkbox">
+												<input type="checkbox" value="option2" name="optionsCheckboxList2">
+												Produto em Destaque.
+											</label>
+											<label class="checkbox">
+												<input type="checkbox" value="option3" name="optionsCheckboxList3">
+												Criar um <b>'post'</b> automaticamente no blog do site. 
+											</label>
+                                            <br>
+                                         <label>Anotação interna</label>
+										<textarea name="anotacao" id="anotacao" cols="10" rows="5" class="span8">@Anotacao</textarea>
+                                         <span class="help-inline"><b>Nota:</b> A anotação só será exibida aos administradores do site.</span>	
+										</div>
+
+										<div class="span6">
+											<label>Controle de Vendas</label>
+											<label class="radio">
+												<input type="radio" checked="" value="option1" id="optionsRadios1" name="optionsRadios">
+												Vender este produto sem controle de estoque.
+											</label>
+											<label class="radio">
+												<input type="radio" value="option2" id="optionsRadios2" name="optionsRadios">
+												Limitar vendas deste produto de acordo com estoque.
+											</label>
+											<label class="radio">
+												<input type="radio" value="option2" id="optionsRadios2" name="optionsRadios">
+												Vender este produto como "sob encomenda" automaticamente após zerar estoque.
+											</label>
+                                            <br>
+									        <label>Quantidade em estoque</label>
+									        <input type="text" name="estoque" id="estoque" value="@Estoque" class="span8">
+                                            <br>
+                                            <label>Fabricante</label>
+                                            <select class="span8" >
+                                            @foreach (var categoria in db.Query(slqSelectFabricante))
+                                            {<text><option value="@categoria.CodFabricante">@categoria.Nome</option> </text>}
+									        </select>
+										</div>
+									</div>
+
+                            <br>
+                            <h4>Imagens do Produto</h4>
+                             <hr>
+                            <div class="row-fluid">
+                               
+									<div class="span4">
+                                    <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
+									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                        @if(Imagem01 != ""){<text>
+                                        <img src="/images/produtos/@Imagem01" alt="">
+                                        </text>}else{<text>
+                                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+                                        </text>}
+                                    </div>
+									<div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
+									<div>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Nova Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover </a>
+									</div>
+								</div>
+
+                                        
+                                    </div>
+
+									<div class="span4">
+                                    <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
+									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                        @if(Imagem02 != ""){<text>
+                                        <img src="/images/produtos/@Imagem02" alt="">
+                                        </text>}else{<text>
+                                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+                                        </text>}
+                                    </div>									
+                                    <div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
+									<div>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Nova Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
+									</div>
+								</div>
+
+                                        
+                                    </div>
+
+                                <div class="span4">
+                                    <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
+									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                        @if(Imagem03 != ""){<text>
+                                        <img src="/images/produtos/@Imagem03" alt="">
+                                        </text>}else{<text>
+                                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+                                        </text>}
+                                    </div>
+									<div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
+									<div>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Nova Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
+									</div>
+								</div>
+
+                                        
+                                    </div>
+							</div>
+
+
+<!---------------Retirar-->
+
+<!---------------------Retirar>
+
+                        </div>
+                    </div>
+       
+                        
+                </div>
+            </div>
+            
+            @RenderPage("~/sistema/Shared/Layout/_MenuLateral.cshtml")  
+            
+
+            
+
+
+            <script src="~/sistema/js/jquery.min.js"></script>
+			<!-- smart resize event -->
+			<script src="~/sistema/js/jquery.debouncedresize.min.js"></script>
+			<!-- hidden elements width/height -->
+			<script src="~/sistema/js/jquery.actual.min.js"></script>
+			<!-- js cookie plugin -->
+			<script src="~/sistema/js/jquery.cookie.min.js"></script>
+			<!-- main bootstrap js -->
+			<script src="~/sistema/bootstrap/js/bootstrap.min.js"></script>
+			<!-- bootstrap plugins -->
+			<script src="~/sistema/js/bootstrap.plugins.min.js"></script>
+			<!-- tooltips -->
+			<script src="~/sistema/lib/qtip2/jquery.qtip.min.js"></script>
+			<!-- jBreadcrumbs -->
+			<script src="~/sistema/lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>
+			<!-- sticky messages -->
+            <script src="~/sistema/lib/sticky/sticky.min.js"></script>
+			<!-- fix for ios orientation change -->
+			<script src="~/sistema/js/ios-orientationchange-fix.js"></script>
+			<!-- scrollbar -->
+			<script src="~/sistema/lib/antiscroll/antiscroll.js"></script>
+			<script src="~/sistema/lib/antiscroll/jquery-mousewheel.js"></script>
+			<!-- lightbox -->
+            <script src="~/sistema/lib/colorbox/jquery.colorbox.min.js"></script>
+            <!-- common functions -->
+			<script src="~/sistema/js/gebo_common.js"></script>
+	
+            <script src="~/sistema/lib/jquery-ui/jquery-ui-1.8.20.custom.min.js"></script>
+            <!-- touch events for jquery ui-->
+            <script src="~/sistema/js/forms/jquery.ui.touch-punch.min.js"></script>
+            <!-- masked inputs -->
+            <script src="~/sistema/js/forms/jquery.inputmask.min.js"></script>
+            <!-- autosize textareas -->
+            <script src="~/sistema/js/forms/jquery.autosize.min.js"></script>
+            <!-- textarea limiter/counter -->
+            <script src="~/sistema/js/forms/jquery.counter.min.js"></script>
+            <!-- datepicker -->
+            <script src="~/sistema/lib/datepicker/bootstrap-datepicker.min.js"></script>
+            <!-- timepicker -->
+            <script src="~/sistema/lib/datepicker/bootstrap-timepicker.min.js"></script>
+            <!-- tag handler -->
+            <script src="~/sistema/lib/tag_handler/jquery.taghandler.min.js"></script>
+            <!-- input spinners -->
+            <script src="~/sistema/js/forms/jquery.spinners.min.js"></script>
+            <!-- styled form elements -->
+            <script src="~/sistema/lib/uniform/jquery.uniform.min.js"></script>
+            <!-- animated progressbars -->
+            <script src="~/sistema/js/forms/jquery.progressbar.anim.js"></script>
+            <!-- multiselect -->
+            <script src="~/sistema/lib/multiselect/js/jquery.multi-select.min.js"></script>
+            <!-- enhanced select (chosen) -->
+            <script src="~/sistema/lib/chosen/chosen.jquery.min.js"></script>
+            <!-- TinyMce WYSIWG editor -->
+            <script src="~/sistema/lib/tiny_mce/jquery.tinymce.js"></script>
+			<!-- plupload and all it's runtimes and the jQuery queue widget (attachments) -->
+			<script type="text/javascript" src="~/sistema/lib/plupload/js/plupload.full.js"></script>
+			<script type="text/javascript" src="~/sistema/lib/plupload/js/jquery.plupload.queue/jquery.plupload.queue.full.js"></script>
+            <!-- colorpicker -->
+			<script src="~/sistema/lib/colorpicker/bootstrap-colorpicker.js"></script>
+			<!-- form functions -->
+            <script src="~/sistema/js/gebo_forms.js"></script>
+    
+            
+			<script>
+				$(document).ready(function() {
+					//* show all elements & remove preloader
+					setTimeout('$("html").removeClass("js")',1000);
+				});
+			</script>
+            <script type="text/javascript">
+
+            window.onload = function() 
+            {
+            document.getElementById("categoria").options[@Categoria].selected = true;
+            document.getElementById("fabricante").options[@Fabricante].selected = true;
+            document.getElementById("qtdemincompra").options[1].selected = true;
+            document.getElementById("qtdemaxcompra").options[2].selected = true;
+            } 
+
+            </script>
+		
+		</div>
+	</body>
+</html>
