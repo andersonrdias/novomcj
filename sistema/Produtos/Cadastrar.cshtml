@@ -235,13 +235,10 @@ if (Destaque == "true") {
 // na tabela Produtos são definidos como parâmetros usando a palavra-chave VALUES
 if(ModelState.IsValid) {
   
-  var inserirQuery = "INSERT INTO Produtos (Titulo, Descricao, CodReferencia, Categoria, Imagem01, Imagem02, Imagem03, Imagem04, Imagem05,Preco_venda, Preco_Compra, Anotacao, Peso, Fabricante, DataAtivacao, DataDesativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, Ativo, Destaque, Tag, CadastradoPor, Acabamento, Tamanho, PesoMedio, Lapidacao, Cor, DescricaoAbreviada ) " + "VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17, @18, @19, @20, @21, @22, @23, @24, @25, @26, @27, @28 )";
+  var inserirQuery = "INSERT INTO Produtos (Titulo, Descricao, CodReferencia, Categoria, Imagem01, Imagem02, Imagem03, Imagem04, Imagem05, Preco_venda, Preco_Compra, Anotacao, Peso, Fabricante, DataAtivacao, DataDesativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, Ativo, Destaque, Tag, CadastradoPor, Acabamento, Tamanho, PesoMedio, Lapidacao, Cor, DescricaoAbreviada ) " + "VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17, @18, @19, @20, @21, @22, @23, @24, @25, @26, @27, @28 )";
   db.Execute(inserirQuery, NomeProduto, Descricao, Referencia, Categoria, Foto1, Foto2, Foto3, Foto4, Foto5, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, Data_Ativacao, Data_Desativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, AtivoVR, DestaqueVR, Tag, usuario, Acabamento,Tamanho, PesoMedio, Lapidacao, Cor, DescricaoAbreviada);
 
 
-//  var inserirQuery = "INSERT INTO Produtos (Titulo, Descricao, CodReferencia, Categoria, Imagem01, Preco_venda, Preco_Compra, Anotacao, Peso, Fabricante, Ativo, Destaque ) " + "VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11)";
-//  db.Execute(inserirQuery, NomeProduto, Descricao, Referencia, Categoria, Foto1, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, AtivoVR, DestaqueVR);
-  
 
 
 
@@ -411,7 +408,7 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
                                     <a href="~/sistema/produtos/">Produtos</a>
                                 </li>
                                 <li>
-                                   Novo @usuario
+                                   Novo
                                 </li>
                             </ul>
                         </div>

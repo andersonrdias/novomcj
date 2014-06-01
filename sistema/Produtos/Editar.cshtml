@@ -35,6 +35,8 @@ var QtdeMaxMin = 50; //Numero máximo para select em Máx e Mín de compra de pr
 
 //select * from Categoria where Ativo = 'true' order by Titulo
 
+int usuario = WebSecurity.CurrentUserId;
+
 var produtos = db.QuerySingle(sqlProdutos, CodigoProduto);
 
 
@@ -49,6 +51,14 @@ var Imagem02 = produtos.Imagem02;
 var Imagem03 = produtos.Imagem03;
 
 var DataCadastro = produtos.DataCadastro;
+
+//Novos campos
+var Acabamento = produtos.acabamento;
+var Tamanho = produtos.Tamanho;
+var PesoMedio = produtos.PesoMedio;
+var Lapidacao = produtos.Lapidacao;
+var Cor = produtos.cor;
+
 
 var Ativo =  produtos.Ativo;
 bool AtivoVR = true;
@@ -70,12 +80,40 @@ var Destaque =  produtos.Destaque;
 bool DestaqueVR = false; 
 var Anotacao = produtos.Anotacao;
 
-//Foto
-WebImage imagemOriginal = null;
-WebImage imagemMiniatura = null;
-var nomeArquivoImagem = "";
+//Foto -----------------------------------------
+//Foto 01
+WebImage imagemOriginal1 = null;
+WebImage imagemMiniatura1 = null;
+var nomeArquivoImagem1 = "";
+string Foto1 = "";
 
-string Foto = "";
+
+//Foto 02
+WebImage imagemOriginal2 = null;
+WebImage imagemMiniatura2 = null;
+var nomeArquivoImagem2 = "";
+string Foto2 = "";
+
+
+//Foto 03
+WebImage imagemOriginal3 = null;
+WebImage imagemMiniatura3 = null;
+var nomeArquivoImagem3 = "";
+string Foto3 = "";
+
+
+//Foto 04
+WebImage imagemOriginal4 = null;
+WebImage imagemMiniatura4 = null;
+var nomeArquivoImagem4 = "";
+string Foto4 = "";
+
+
+//Foto 05
+WebImage imagemOriginal5 = null;
+WebImage imagemMiniatura5 = null;
+var nomeArquivoImagem5 = "";
+string Foto5 = "";
 
 
 if (IsPost) {
@@ -88,6 +126,14 @@ Referencia = Request["referencia"];
 
 
 DataCadastro = DateTime.Now;
+
+//Novos campos
+Acabamento = Request["acabamento"];
+Tamanho = Request["Tamanho"];
+PesoMedio = Request["PesoMedio"];
+Lapidacao = Request["Lapidacao"];
+Cor = Request["cor"];
+
 
 Fabricante =  Request["fabricante"];
 Ativo =  Request["produtoativo"];
@@ -135,22 +181,72 @@ Anotacao = Request["Anotacao"];
         //Foto
 
       
-    imagemOriginal = WebImage.GetImageFromRequest();
-    if(imagemOriginal != null)
+
+    //Foto 01 
+    imagemOriginal1 = WebImage.GetImageFromRequest("imagefile1");
+    if(imagemOriginal1 != null)
     {
-      nomeArquivoImagem = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal.FileName);
-      imagemOriginal.Save(@"~\image\produtos\" + nomeArquivoImagem);
-      imagemMiniatura = imagemOriginal.Resize(width: 60,height:60,preserveAspectRatio: true);
-      imagemMiniatura.Save(@"~\image\produtos\mini_" + nomeArquivoImagem);
+      nomeArquivoImagem1 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal1.FileName);
+      imagemOriginal1.Save(@"~\images\produtos\" + nomeArquivoImagem1);
+      imagemMiniatura1 = imagemOriginal1.Resize(width: 60,height:60,preserveAspectRatio: true);
+      imagemMiniatura1.Save(@"~\images\produtos\mini_" + nomeArquivoImagem1);
     }
 
+    Foto1 = nomeArquivoImagem1;
 
 
 
+    //Foto 02 
+    imagemOriginal2 = WebImage.GetImageFromRequest("imagefile2");
+    if(imagemOriginal2 != null)
+    {
+      nomeArquivoImagem2 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal2.FileName);
+      imagemOriginal2.Save(@"~\images\produtos\" + nomeArquivoImagem2);
+      imagemMiniatura2 = imagemOriginal2.Resize(width: 60,height:60,preserveAspectRatio: true);
+      imagemMiniatura2.Save(@"~\images\produtos\mini_" + nomeArquivoImagem2);
+    }
+
+    Foto2 = nomeArquivoImagem2;
+
+
+    //Foto 03 
+    imagemOriginal3 = WebImage.GetImageFromRequest("imagefile3");
+    if(imagemOriginal3 != null)
+    {
+      nomeArquivoImagem3 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal3.FileName);
+      imagemOriginal3.Save(@"~\images\produtos\" + nomeArquivoImagem3);
+      imagemMiniatura3 = imagemOriginal3.Resize(width: 60,height:60,preserveAspectRatio: true);
+      imagemMiniatura3.Save(@"~\images\produtos\mini_" + nomeArquivoImagem3);
+    }
+
+    Foto3 = nomeArquivoImagem3;
 
 
 
-Foto = nomeArquivoImagem;
+    //Foto 04 
+    imagemOriginal4 = WebImage.GetImageFromRequest("imagefile4");
+    if(imagemOriginal4 != null)
+    {
+      nomeArquivoImagem4 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal4.FileName);
+      imagemOriginal4.Save(@"~\images\produtos\" + nomeArquivoImagem4);
+      imagemMiniatura4 = imagemOriginal4.Resize(width: 60,height:60,preserveAspectRatio: true);
+      imagemMiniatura4.Save(@"~\images\produtos\mini_" + nomeArquivoImagem4);
+    }
+
+    Foto4 = nomeArquivoImagem4;
+
+
+    //Foto 05 
+    imagemOriginal5 = WebImage.GetImageFromRequest("imagefile5");
+    if(imagemOriginal5 != null)
+    {
+      nomeArquivoImagem5 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal5.FileName);
+      imagemOriginal5.Save(@"~\images\produtos\" + nomeArquivoImagem5);
+      imagemMiniatura5 = imagemOriginal5.Resize(width: 60,height:60,preserveAspectRatio: true);
+      imagemMiniatura5.Save(@"~\images\produtos\mini_" + nomeArquivoImagem5);
+    }
+
+    Foto5 = nomeArquivoImagem5;
 
 
 
@@ -180,22 +276,22 @@ ModelState.AddError("Categoria", "A Categoria deve ser informado.");
 
 
 
-// Le o nome do produto e realiza a validação não permitindo um nome vazio
-Referencia = Request["Referencia"];
-if (String.IsNullOrEmpty(Referencia)) {
-ModelState.AddError("Referencia", "O Código de referencia deve ser informado.");
-}
+
 
 
 // Imagem
 
-if (String.IsNullOrEmpty(Foto)) {
-Foto = Imagem01;
+if (String.IsNullOrEmpty(Foto1)) {
+Foto1 = Imagem01;
 }
 
+if (String.IsNullOrEmpty(Foto2)) {
+Foto2 = Imagem02;
+}
 
-
-
+if (String.IsNullOrEmpty(Foto3)) {
+Foto3 = Imagem03;
+}
 
 
 //----------------------------------------------------------------------------------------------------
@@ -237,29 +333,20 @@ if (Destaque == "true") {
 // Define a instrução SQL para incluir dados. Os valores para atribuir as colunas
 // na tabela Produtos são definidos como parâmetros usando a palavra-chave VALUES
 if(ModelState.IsValid) {
+
+
+  var updateQueryString = "UPDATE Produtos SET Titulo=@0, Descricao=@1, Categoria=@2, Imagem01=@3, Imagem02=@4, Imagem03=@5, Imagem04=@6, Imagem05=@7, Preco_venda=@8, Preco_Compra=@9, Anotacao=@10, Peso=@11, Fabricante=@12, DataAtivacao=@13, DataDesativacao=@14, Estoque=@15, QtdeMaxCompra=@16, QtdeMinCompra=@17, Ativo=@18, Destaque=@19, Tag=@20, CadastradoPor=@21, Acabamento=@22, Tamanho=@23, PesoMedio=@24, Lapidacao=@25, Cor=@26, DescricaoAbreviada=@27   WHERE CodProduto=@28";
+  db.Execute(updateQueryString, NomeProduto, Descricao, Categoria, Foto1, Foto2, Foto3, Foto4, Foto5, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, Data_Ativacao, Data_Desativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, AtivoVR, DestaqueVR, Tag, usuario, Acabamento,Tamanho, PesoMedio, Lapidacao, Cor, DescricaoAbreviada, CodigoProduto);
+
+
   
-//  var inserirQuery = "INSERT INTO Produtos (Titulo, Descricao, CodReferencia, Categoria, Imagem01, Preco_venda, Preco_Compra, Anotacao, Peso, Fabricante, DataAtivacao, DataDesativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, Ativo, Destaque, Tag ) " + "VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17)";
-//  db.Execute(inserirQuery, NomeProduto, Descricao, Referencia, Categoria, Foto, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, Data_Ativacao, Data_Desativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, AtivoVR, DestaqueVR, Tag);
 
-
-  var updateQueryString = "UPDATE Produtos SET Titulo=@0, Descricao=@1, CodReferencia=@2, Categoria=@3, Imagem01=@4, Preco_venda=@5, Preco_Compra=@6, Anotacao=@7, Peso=@8, Fabricante=@9, DataAtivacao=@10, DataDesativacao=@11, Estoque=@12, QtdeMaxCompra=@13, QtdeMinCompra=@14, Ativo=@15, Destaque=@16, Tag=@17  WHERE CodProduto=@18";
-  db.Execute(updateQueryString, NomeProduto, Descricao, Referencia, Categoria, Foto, Preco_Venda, Preco_Compra, Anotacao, Peso, Fabricante, Data_Ativacao, Data_Desativacao, Estoque, QtdeMaxCompra, QtdeMinCompra, AtivoVR, DestaqueVR, Tag, CodigoProduto);
-  
-
-  // Exibe a página que lista os protudosDisplay the page that lists products.,,
-  Response.Redirect(@Href("~/sistema/Produtos/Sucesso"));
+  Response.Redirect(@Href("~/sistema/Produtos/Sucesso/"+ CodigoProduto));
 }
 }
 
 
-       
-      //      var updateQueryString =
-      //        "UPDATE Produtos SET Nome=@0, Descricao=@1, Preco=@2 WHERE Codigo=@3" ;
-       //     db.Execute(updateQueryString, Nome, Descricao, Preco, CodigoProduto);
-        //    Response.Redirect(@Href("~/EditarProdutos"));
-
-
-
+    
 
 
 
@@ -421,9 +508,10 @@ if(ModelState.IsValid) {
                         </div>
                     </nav>
                     
+<form method="post" action="#" enctype="multipart/form-data">    
                     <div class="row-fluid">
                         <div class="span12">
-                            <h3 class="heading">Editar Produto</h3>
+                            <h3 class="heading">Cadastrar Produto</h3>
                             <div class="row-fluid">
 									<div class="span6">
 
@@ -440,14 +528,19 @@ if(ModelState.IsValid) {
 
                                         <br>
                                         <label>Tag (palavras-chaves)</label>
-									    <textarea name="tag" id="tag" cols="10" rows="3" class="span8">@Tag</textarea>
-								
+									    <textarea name="tag" id="tag" cols="10" rows="2" class="span8">@Tag</textarea>
+								        <br>
+                                        <label>Fabricante</label>
+                                        <select class="span8" name="fabricante" id="fabricante">
+                                        @foreach (var categoria in db.Query(slqSelectFabricante))
+                                        {<text><option value="@categoria.CodFabricante">@categoria.Nome</option> </text>}
+									    </select>
                                         
                                     </div>
 
 									<div class="span6">
 										<label>Breve Descrição do Produto</label>
-										<textarea name="descricaoabreviada" id="descricaoabreviada" cols="10" rows="2" class="span8">@DescricaoAbreviada</textarea>
+										<textarea name="descricaoabreviada" id="descricaoabreviada" cols="10" rows="3" class="span8">@DescricaoAbreviada</textarea>
                                         <br>
                                          <label>Descrição do Produto</label>
 										<textarea name="descricao" id="descricao" cols="10" rows="5" class="span8">@Descricao</textarea>
@@ -455,8 +548,7 @@ if(ModelState.IsValid) {
 								</div>
                             
 
-
-
+                            <br>
                              <h4>Valores</h4>
                              <hr>
                             <div class="row-fluid">
@@ -485,20 +577,20 @@ if(ModelState.IsValid) {
                                
 						        <div class="span6">
                                     <label>Peso Médio</label>
-									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+									<input type="text" value="@PesoMedio" name="pesomedio" id="pesomedio" class="span8">                                    
                                     <br>
                                     <label>Tamanho (dimensão do produto)</label>
-									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+									<input type="text" value="@Tamanho" name="tamanho" id="tamanno" class="span8">                                    
                                     <br>
                                     <label>Acabamento</label>
-									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+									<input type="text" value="@Acabamento" name="acabamento" id="acabamento" class="span8">                                    
                                 </div>
 						        <div class="span6">
                                     <label>Lapidação</label>
-									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+									<input type="text" value="@Lapidacao" name="lapidacao" id="lapidacao" class="span8">                                    
                                     <br>
                                     <label>Cor</label>
-									<input type="text" value="@Peso" name="peso" id="peso" class="span8">                                    
+									<input type="text" value="@Cor" name="cor" id="cor" class="span8">                                    
                                     <br>
                                     <label>Grama de Ouro</label>
 									<input type="text" value="@Peso" name="peso" id="peso" class="span8"> 
@@ -540,15 +632,15 @@ if(ModelState.IsValid) {
                             <div class="row-fluid">
 										<div class="span6">
 											<label class="checkbox">
-												<input type="checkbox" value="option1" name="optionsCheckboxList1" checked="checked">
+												<input type="checkbox" checked="checked" id="produtoativo" value="true" name="produtoativo">
 												Produto Ativo.
 											</label>
 											<label class="checkbox">
-												<input type="checkbox" value="option2" name="optionsCheckboxList2">
+												<input type="checkbox" value="true" name="destaque" id="destaque">
 												Produto em Destaque.
 											</label>
 											<label class="checkbox">
-												<input type="checkbox" value="option3" name="optionsCheckboxList3">
+												<input type="checkbox" value="true" name="blog">
 												Criar um <b>'post'</b> automaticamente no blog do site. 
 											</label>
                                             <br>
@@ -572,14 +664,13 @@ if(ModelState.IsValid) {
 												Vender este produto como "sob encomenda" automaticamente após zerar estoque.
 											</label>
                                             <br>
-									        <label>Quantidade em estoque</label>
+									        <label>Quantidade mímina em estoque</label>
 									        <input type="text" name="estoque" id="estoque" value="@Estoque" class="span8">
+                                             
                                             <br>
-                                            <label>Fabricante</label>
-                                            <select class="span8" >
-                                            @foreach (var categoria in db.Query(slqSelectFabricante))
-                                            {<text><option value="@categoria.CodFabricante">@categoria.Nome</option> </text>}
-									        </select>
+									        <label>Quantidade inicial em estoque</label>
+									        <input type="text" name="estoque" id="estoque" value="@Estoque" class="span8">
+                                            <span class="help-inline"><b>Nota:</b> A "quantidade inicial" em estoque serve para adicionar automaticamente a "entrada" do produto no ato de cadastro.</span>	
 										</div>
 									</div>
 
@@ -591,7 +682,7 @@ if(ModelState.IsValid) {
 									<div class="span4">
                                     <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
 									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                        @if(Imagem01 != ""){<text>
+                                      @if(Imagem01 != ""){<text>
                                         <img src="/images/produtos/@Imagem01" alt="">
                                         </text>}else{<text>
                                         <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
@@ -599,7 +690,7 @@ if(ModelState.IsValid) {
                                     </div>
 									<div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
 									<div>
-										<span class="btn btn-file"><span class="fileupload-new">Selecionar Nova Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" id="imagefile1" name="imagefile1"></span>
 										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover </a>
 									</div>
 								</div>
@@ -610,15 +701,15 @@ if(ModelState.IsValid) {
 									<div class="span4">
                                     <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
 									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                        @if(Imagem02 != ""){<text>
+                                      @if(Imagem02 != ""){<text>
                                         <img src="/images/produtos/@Imagem02" alt="">
                                         </text>}else{<text>
                                         <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
-                                        </text>}
-                                    </div>									
+                                        </text>}    
+                                    </div>						
                                     <div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
 									<div>
-										<span class="btn btn-file"><span class="fileupload-new">Selecionar Nova Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" id="imagefile2" name="imagefile2"></span>
 										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
 									</div>
 								</div>
@@ -626,33 +717,42 @@ if(ModelState.IsValid) {
                                         
                                     </div>
 
-                                <div class="span4">
-                                    <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
-									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                        @if(Imagem03 != ""){<text>
+                                    <div class="span4">
+                                        <div data-fileupload="image" class="fileupload fileupload-new"><input type="hidden"><input type="hidden">
+                                        <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                          @if(Imagem03 != ""){<text>
                                         <img src="/images/produtos/@Imagem03" alt="">
                                         </text>}else{<text>
                                         <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
                                         </text>}
-                                    </div>
-									<div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
-									<div>
-										<span class="btn btn-file"><span class="fileupload-new">Selecionar Nova Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
-										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
-									</div>
-								</div>
+                                        </div>
+									    <div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
+									    <div>
+										    <span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" id="imagefile3" name="imagefile3"></span>
+										    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
+									    </div>
+								    </div>
 
                                         
-                                    </div>
+                                        </div>
+
+
+
+
+
+
 							</div>
 
+                            <div class="form-actions" style="text-align: right">
 
-<!---------------Retirar-->
+									<a href="/sistema/produtos/visualizar/@CodigoProduto" class="btn">Cancelar</a>
+									<button type="submit" class="btn btn-inverse">Cadastrar Produto</button>
 
-<!---------------------Retirar>
+								</div>
 
                         </div>
                     </div>
+                    </form>                    
        
                         
                 </div>
@@ -746,5 +846,8 @@ if(ModelState.IsValid) {
             </script>
 		
 		</div>
-	</body>
+	
+    
+    
+    </body>
 </html>

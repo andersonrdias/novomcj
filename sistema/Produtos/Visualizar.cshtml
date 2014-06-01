@@ -23,7 +23,7 @@ var totalpedidos = db.QueryValue("SELECT COUNT (CodProduto) FROM PedidoItens Whe
 //Separação das Tag do produto
 string[] ListaTag = produto.Tag.Split(',');
 var qtdeTag =  ListaTag.Length;
-}
+
 
 
 
@@ -164,6 +164,7 @@ var qtdeTag =  ListaTag.Length;
 								<ul class="nav nav-tabs">
 									<li class="active"><a href="#tab_dr1" data-toggle="tab">Informações</a></li>
 									<li><a href="#tab_dr2" data-toggle="tab">Imagens</a></li>
+									<li><a href="#tab_dr6" data-toggle="tab">Promoção</a></li>
 									<li class="dropdown">
 										<a href="#" data-toggle="dropdown" class="dropdown-toggle">Menu <b class="caret"></b></a>
 										<ul class="dropdown-menu">
@@ -391,7 +392,16 @@ var qtdeTag =  ListaTag.Length;
 						                                        </div>
 					                                        </div>
 									</div>
-									<div class="tab-pane" id="tab_dr3">
+                                    <div class="tab-pane" id="tab_dr6">
+                                        <div class="span12">
+							                
+
+
+
+
+						                </div>
+									</div>									
+                                    <div class="tab-pane" id="tab_dr3">
                                         <div class="span12">
 							                <div class="alert alert-block alert-info fade in">								
 								                <h4 class="alert-heading">Editar o produto</h4>
