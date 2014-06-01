@@ -129,8 +129,36 @@ public static bool Promocao_Pesquisa (int _produtoID)
 
 
 
+public static int Estoque_Pedidos (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQuery = "select count(CodProduto) as Qtde from pedidoItens where codproduto = @0";
 
+ return  db.QuerySingle(sqlQuery, produtoID).Qtde;
+}
 
+public static int Estoque_Consulta (int produtoID)
+{
+  var db = Database.Open("CeliaJoias");
+  var sqlQueryEntrada = "select sum(quantidade) as Qtde from Movimento where entrada = 'true' and produtoId = @0";
+  var sqlQuerySaida = "select sum(quantidade) as Qtde from Movimento where entrada = 'false' and produtoId = @0";
+
+  var entrada = db.QuerySingle(sqlQueryEntrada, produtoID).Qtde;
+  var saida =  db.QuerySingle(sqlQuerySaida, produtoID).Qtde;
+
+  int QtdeEntrada =  0;
+  int QtdeSaida = 0;
+  if(entrada != null)
+  {
+      QtdeEntrada = entrada;
+  }
+
+  if(saida != null){
+      QtdeSaida = saida;
+  }
+
+ return QtdeEntrada - QtdeSaida;
+}
 
 
 

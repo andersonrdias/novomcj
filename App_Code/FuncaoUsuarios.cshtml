@@ -14,7 +14,22 @@ return Nome;
 
 public static string NomeComepleto_PeloCod (int usuario)
 {
-//var xx = "'03/01/2013'";
+var db = Database.Open("CeliaJoias");
+var row = db.QuerySingle("select * from UserProfile where UserId = '" + usuario +"'");
+
+string Nome = ""; 
+if(row.Nome != null){
+Nome = row.Nome;    
+}
+
+return Nome;
+}
+
+public static string Status (int usuario)
+{
+
+//Criar resposta caso o usuario esteja logado ou não.
+
 var db = Database.Open("CeliaJoias");
 var row = db.QuerySingle("select * from UserProfile where UserId = '" + usuario +"'");
 string Nome = row.Nome;

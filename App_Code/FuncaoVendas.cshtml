@@ -1,0 +1,44 @@
+﻿@functions {
+
+
+public static decimal VendasUltimos (int dias)
+{
+
+DateTime Data = DateTime.Now;
+
+Data = Data.AddDays(-dias);
+
+var db = Database.Open("CeliaJoias");
+var sqlQuery = "select sum (PedidoTotal) as Total from Pedidos where PedidoCancelado = 'false' and PedidoEnviado = 'true' and PedidoDataHora >= @0";
+
+var valor = db.QuerySingle(sqlQuery,Data).Total;
+decimal retorno = 0;
+
+if(valor != null){
+retorno = valor;    
+}
+
+return retorno;
+
+
+}
+
+
+
+public static int PedidosNaoEnviados ()
+{
+
+
+var db = Database.Open("CeliaJoias");
+var sqlQuery = "Select count(PedidoEnviado) as Total from Pedidos Where PedidoEnviado = 'false' and PedidoCancelado = 'false'";
+
+
+return db.QuerySingle(sqlQuery).Total;
+
+
+}
+
+
+    
+}
+

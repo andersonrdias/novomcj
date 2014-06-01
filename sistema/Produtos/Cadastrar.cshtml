@@ -102,9 +102,9 @@ if (IsPost) {
     if(imagemOriginal1 != null)
     {
       nomeArquivoImagem1 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal1.FileName);
-      imagemOriginal1.Save(@"~\image\produtos\" + nomeArquivoImagem1);
+      imagemOriginal1.Save(@"~\images\produtos\" + nomeArquivoImagem1);
       imagemMiniatura1 = imagemOriginal1.Resize(width: 60,height:60,preserveAspectRatio: true);
-      imagemMiniatura1.Save(@"~\image\produtos\mini_" + nomeArquivoImagem1);
+      imagemMiniatura1.Save(@"~\images\produtos\mini_" + nomeArquivoImagem1);
     }
 
     Foto1 = nomeArquivoImagem1;
@@ -116,9 +116,9 @@ if (IsPost) {
     if(imagemOriginal2 != null)
     {
       nomeArquivoImagem2 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal2.FileName);
-      imagemOriginal2.Save(@"~\image\produtos\" + nomeArquivoImagem2);
+      imagemOriginal2.Save(@"~\images\produtos\" + nomeArquivoImagem2);
       imagemMiniatura2 = imagemOriginal2.Resize(width: 60,height:60,preserveAspectRatio: true);
-      imagemMiniatura2.Save(@"~\image\produtos\mini_" + nomeArquivoImagem2);
+      imagemMiniatura2.Save(@"~\images\produtos\mini_" + nomeArquivoImagem2);
     }
 
     Foto2 = nomeArquivoImagem2;
@@ -129,9 +129,9 @@ if (IsPost) {
     if(imagemOriginal3 != null)
     {
       nomeArquivoImagem3 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal3.FileName);
-      imagemOriginal3.Save(@"~\image\produtos\" + nomeArquivoImagem3);
+      imagemOriginal3.Save(@"~\images\produtos\" + nomeArquivoImagem3);
       imagemMiniatura3 = imagemOriginal3.Resize(width: 60,height:60,preserveAspectRatio: true);
-      imagemMiniatura3.Save(@"~\image\produtos\mini_" + nomeArquivoImagem3);
+      imagemMiniatura3.Save(@"~\images\produtos\mini_" + nomeArquivoImagem3);
     }
 
     Foto3 = nomeArquivoImagem3;
@@ -143,9 +143,9 @@ if (IsPost) {
     if(imagemOriginal4 != null)
     {
       nomeArquivoImagem4 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal4.FileName);
-      imagemOriginal4.Save(@"~\image\produtos\" + nomeArquivoImagem4);
+      imagemOriginal4.Save(@"~\images\produtos\" + nomeArquivoImagem4);
       imagemMiniatura4 = imagemOriginal4.Resize(width: 60,height:60,preserveAspectRatio: true);
-      imagemMiniatura4.Save(@"~\image\produtos\mini_" + nomeArquivoImagem4);
+      imagemMiniatura4.Save(@"~\images\produtos\mini_" + nomeArquivoImagem4);
     }
 
     Foto4 = nomeArquivoImagem4;
@@ -156,9 +156,9 @@ if (IsPost) {
     if(imagemOriginal5 != null)
     {
       nomeArquivoImagem5 = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imagemOriginal5.FileName);
-      imagemOriginal5.Save(@"~\image\produtos\" + nomeArquivoImagem5);
+      imagemOriginal5.Save(@"~\images\produtos\" + nomeArquivoImagem5);
       imagemMiniatura5 = imagemOriginal5.Resize(width: 60,height:60,preserveAspectRatio: true);
-      imagemMiniatura5.Save(@"~\image\produtos\mini_" + nomeArquivoImagem5);
+      imagemMiniatura5.Save(@"~\images\produtos\mini_" + nomeArquivoImagem5);
     }
 
     Foto5 = nomeArquivoImagem5;
@@ -436,14 +436,19 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
 
                                         <br>
                                         <label>Tag (palavras-chaves)</label>
-									    <textarea name="tag" id="tag" cols="10" rows="3" class="span8">@Tag</textarea>
-								
+									    <textarea name="tag" id="tag" cols="10" rows="2" class="span8">@Tag</textarea>
+								        <br>
+                                        <label>Fabricante</label>
+                                        <select class="span8" name="fabricante" id="fabricante">
+                                        @foreach (var categoria in db.Query(slqSelectFabricante))
+                                        {<text><option value="@categoria.CodFabricante">@categoria.Nome</option> </text>}
+									    </select>
                                         
                                     </div>
 
 									<div class="span6">
 										<label>Breve Descrição do Produto</label>
-										<textarea name="descricaoabreviada" id="descricaoabreviada" cols="10" rows="2" class="span8">@DescricaoAbreviada</textarea>
+										<textarea name="descricaoabreviada" id="descricaoabreviada" cols="10" rows="3" class="span8">@DescricaoAbreviada</textarea>
                                         <br>
                                          <label>Descrição do Produto</label>
 										<textarea name="descricao" id="descricao" cols="10" rows="5" class="span8">@Descricao</textarea>
@@ -451,8 +456,7 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
 								</div>
                             
 
-
-
+                            <br>
                              <h4>Valores</h4>
                              <hr>
                             <div class="row-fluid">
@@ -568,14 +572,13 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
 												Vender este produto como "sob encomenda" automaticamente após zerar estoque.
 											</label>
                                             <br>
-									        <label>Quantidade em estoque</label>
+									        <label>Quantidade mímina em estoque</label>
 									        <input type="text" name="estoque" id="estoque" value="@Estoque" class="span8">
+                                             
                                             <br>
-                                            <label>Fabricante</label>
-                                            <select class="span8" name="fabricante" id="fabricante">
-                                            @foreach (var categoria in db.Query(slqSelectFabricante))
-                                            {<text><option value="@categoria.CodFabricante">@categoria.Nome</option> </text>}
-									        </select>
+									        <label>Quantidade inicial em estoque</label>
+									        <input type="text" name="estoque" id="estoque" value="@Estoque" class="span8">
+                                            <span class="help-inline"><b>Nota:</b> A "quantidade inicial" em estoque serve para adicionar automaticamente a "entrada" do produto no ato de cadastro.</span>	
 										</div>
 									</div>
 
@@ -589,7 +592,7 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
 									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail"><img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt=""></div>
 									<div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
 									<div>
-										<span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" id="imagefile1" name="imagefile1"></span>
 										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover </a>
 									</div>
 								</div>
@@ -602,7 +605,7 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
 									<div style="width: 200px; height: 150px;" class="fileupload-new thumbnail"><img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt=""></div>						
                                     <div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
 									<div>
-										<span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										<span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" id="imagefile2" name="imagefile2"></span>
 										<a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
 									</div>
 								</div>
@@ -615,7 +618,7 @@ int Codigo = db.QueryValue("select max(CodProduto) as codigo from produtos where
                                         <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail"><img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt=""></div>
 									    <div style="max-width: 200px; max-height: 150px; line-height: 0px;" class="fileupload-preview fileupload-exists thumbnail"></div>
 									    <div>
-										    <span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" name=""></span>
+										    <span class="btn btn-file"><span class="fileupload-new">Selecionar Imagem</span><span class="fileupload-exists">Trocar Imagem</span><input type="file" id="imagefile3" name="imagefile3"></span>
 										    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remover</a>
 									    </div>
 								    </div>
